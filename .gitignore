@@ -1,0 +1,7 @@
+PSkbsPicSpace.xcodeproj/xcuserdata/
+PSkbsPicSpace.xcworkspace/
+Pods/
+*.swp
+Podfile.lock
+.DS_Store
+PSkbsPicSpace.xcodeproj/project.xcworkspace/xcuserdata/
