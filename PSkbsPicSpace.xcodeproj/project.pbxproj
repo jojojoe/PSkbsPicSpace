@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,27 +13,9 @@
 		041901B5272C0B02001DC3B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 041901B3272C0B02001DC3B9 /* Main.storyboard */; };
 		041901B7272C0B03001DC3B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 041901B6272C0B03001DC3B9 /* Assets.xcassets */; };
 		041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */; };
-		041901C5272C0B03001DC3B9 /* PSkbsPicSpaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041901C4272C0B03001DC3B9 /* PSkbsPicSpaceTests.swift */; };
-		041901D0272C0B03001DC3B9 /* PSkbsPicSpaceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041901CF272C0B03001DC3B9 /* PSkbsPicSpaceUITests.swift */; };
 		DBE20E04214C9A7F82DF1DC6 /* Pods_PSkbsPicSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */; };
+		EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B38B5272C0EE50001C20B /* PSMainVC.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		041901C1272C0B03001DC3B9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 041901A2272C0B02001DC3B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 041901A9272C0B02001DC3B9;
-			remoteInfo = PSkbsPicSpace;
-		};
-		041901CC272C0B03001DC3B9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 041901A2272C0B02001DC3B9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 041901A9272C0B02001DC3B9;
-			remoteInfo = PSkbsPicSpace;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		041901AA272C0B02001DC3B9 /* PSkbsPicSpace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PSkbsPicSpace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,14 +26,9 @@
 		041901B6272C0B03001DC3B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		041901B9272C0B03001DC3B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		041901BB272C0B03001DC3B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		041901C0272C0B03001DC3B9 /* PSkbsPicSpaceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PSkbsPicSpaceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		041901C4272C0B03001DC3B9 /* PSkbsPicSpaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkbsPicSpaceTests.swift; sourceTree = "<group>"; };
-		041901C6272C0B03001DC3B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		041901CB272C0B03001DC3B9 /* PSkbsPicSpaceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PSkbsPicSpaceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		041901CF272C0B03001DC3B9 /* PSkbsPicSpaceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkbsPicSpaceUITests.swift; sourceTree = "<group>"; };
-		041901D1272C0B03001DC3B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A0BA9E30F5CEDCF1B74EB53 /* Pods-PSkbsPicSpace.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.debug.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.debug.xcconfig"; sourceTree = "<group>"; };
 		5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PSkbsPicSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB8B38B5272C0EE50001C20B /* PSMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSMainVC.swift; sourceTree = "<group>"; };
 		F77BB9F8ECC3CDCF84595DB1 /* Pods-PSkbsPicSpace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.release.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,20 +41,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		041901BD272C0B03001DC3B9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		041901C8272C0B03001DC3B9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -85,8 +48,6 @@
 			isa = PBXGroup;
 			children = (
 				041901AC272C0B02001DC3B9 /* PSkbsPicSpace */,
-				041901C3272C0B03001DC3B9 /* PSkbsPicSpaceTests */,
-				041901CE272C0B03001DC3B9 /* PSkbsPicSpaceUITests */,
 				041901AB272C0B02001DC3B9 /* Products */,
 				E3226525E0DCD38892CCDC95 /* Pods */,
 				5A2FFA1FE1B93AF26E473ACC /* Frameworks */,
@@ -97,8 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				041901AA272C0B02001DC3B9 /* PSkbsPicSpace.app */,
-				041901C0272C0B03001DC3B9 /* PSkbsPicSpaceTests.xctest */,
-				041901CB272C0B03001DC3B9 /* PSkbsPicSpaceUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,33 +65,10 @@
 		041901AC272C0B02001DC3B9 /* PSkbsPicSpace */ = {
 			isa = PBXGroup;
 			children = (
-				041901AD272C0B02001DC3B9 /* AppDelegate.swift */,
-				041901AF272C0B02001DC3B9 /* SceneDelegate.swift */,
-				041901B1272C0B02001DC3B9 /* ViewController.swift */,
-				041901B3272C0B02001DC3B9 /* Main.storyboard */,
-				041901B6272C0B03001DC3B9 /* Assets.xcassets */,
-				041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */,
-				041901BB272C0B03001DC3B9 /* Info.plist */,
+				EB8B38B4272C0ED00001C20B /* MainVC */,
+				EB8B38B3272C0EC40001C20B /* Root */,
 			);
 			path = PSkbsPicSpace;
-			sourceTree = "<group>";
-		};
-		041901C3272C0B03001DC3B9 /* PSkbsPicSpaceTests */ = {
-			isa = PBXGroup;
-			children = (
-				041901C4272C0B03001DC3B9 /* PSkbsPicSpaceTests.swift */,
-				041901C6272C0B03001DC3B9 /* Info.plist */,
-			);
-			path = PSkbsPicSpaceTests;
-			sourceTree = "<group>";
-		};
-		041901CE272C0B03001DC3B9 /* PSkbsPicSpaceUITests */ = {
-			isa = PBXGroup;
-			children = (
-				041901CF272C0B03001DC3B9 /* PSkbsPicSpaceUITests.swift */,
-				041901D1272C0B03001DC3B9 /* Info.plist */,
-			);
-			path = PSkbsPicSpaceUITests;
 			sourceTree = "<group>";
 		};
 		5A2FFA1FE1B93AF26E473ACC /* Frameworks */ = {
@@ -149,8 +85,29 @@
 				1A0BA9E30F5CEDCF1B74EB53 /* Pods-PSkbsPicSpace.debug.xcconfig */,
 				F77BB9F8ECC3CDCF84595DB1 /* Pods-PSkbsPicSpace.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		EB8B38B3272C0EC40001C20B /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				041901AD272C0B02001DC3B9 /* AppDelegate.swift */,
+				041901AF272C0B02001DC3B9 /* SceneDelegate.swift */,
+				041901B1272C0B02001DC3B9 /* ViewController.swift */,
+				041901B3272C0B02001DC3B9 /* Main.storyboard */,
+				041901B6272C0B03001DC3B9 /* Assets.xcassets */,
+				041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */,
+				041901BB272C0B03001DC3B9 /* Info.plist */,
+			);
+			name = Root;
+			sourceTree = "<group>";
+		};
+		EB8B38B4272C0ED00001C20B /* MainVC */ = {
+			isa = PBXGroup;
+			children = (
+				EB8B38B5272C0EE50001C20B /* PSMainVC.swift */,
+			);
+			path = MainVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,42 +132,6 @@
 			productReference = 041901AA272C0B02001DC3B9 /* PSkbsPicSpace.app */;
 			productType = "com.apple.product-type.application";
 		};
-		041901BF272C0B03001DC3B9 /* PSkbsPicSpaceTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 041901D7272C0B03001DC3B9 /* Build configuration list for PBXNativeTarget "PSkbsPicSpaceTests" */;
-			buildPhases = (
-				041901BC272C0B03001DC3B9 /* Sources */,
-				041901BD272C0B03001DC3B9 /* Frameworks */,
-				041901BE272C0B03001DC3B9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				041901C2272C0B03001DC3B9 /* PBXTargetDependency */,
-			);
-			name = PSkbsPicSpaceTests;
-			productName = PSkbsPicSpaceTests;
-			productReference = 041901C0272C0B03001DC3B9 /* PSkbsPicSpaceTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		041901CA272C0B03001DC3B9 /* PSkbsPicSpaceUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 041901DA272C0B03001DC3B9 /* Build configuration list for PBXNativeTarget "PSkbsPicSpaceUITests" */;
-			buildPhases = (
-				041901C7272C0B03001DC3B9 /* Sources */,
-				041901C8272C0B03001DC3B9 /* Frameworks */,
-				041901C9272C0B03001DC3B9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				041901CD272C0B03001DC3B9 /* PBXTargetDependency */,
-			);
-			name = PSkbsPicSpaceUITests;
-			productName = PSkbsPicSpaceUITests;
-			productReference = 041901CB272C0B03001DC3B9 /* PSkbsPicSpaceUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -222,14 +143,6 @@
 				TargetAttributes = {
 					041901A9272C0B02001DC3B9 = {
 						CreatedOnToolsVersion = 12.5.1;
-					};
-					041901BF272C0B03001DC3B9 = {
-						CreatedOnToolsVersion = 12.5.1;
-						TestTargetID = 041901A9272C0B02001DC3B9;
-					};
-					041901CA272C0B03001DC3B9 = {
-						CreatedOnToolsVersion = 12.5.1;
-						TestTargetID = 041901A9272C0B02001DC3B9;
 					};
 				};
 			};
@@ -247,8 +160,6 @@
 			projectRoot = "";
 			targets = (
 				041901A9272C0B02001DC3B9 /* PSkbsPicSpace */,
-				041901BF272C0B03001DC3B9 /* PSkbsPicSpaceTests */,
-				041901CA272C0B03001DC3B9 /* PSkbsPicSpaceUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -261,20 +172,6 @@
 				041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */,
 				041901B7272C0B03001DC3B9 /* Assets.xcassets in Resources */,
 				041901B5272C0B02001DC3B9 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		041901BE272C0B03001DC3B9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		041901C9272C0B03001DC3B9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,40 +226,12 @@
 			files = (
 				041901B2272C0B02001DC3B9 /* ViewController.swift in Sources */,
 				041901AE272C0B02001DC3B9 /* AppDelegate.swift in Sources */,
+				EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */,
 				041901B0272C0B02001DC3B9 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		041901BC272C0B03001DC3B9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				041901C5272C0B03001DC3B9 /* PSkbsPicSpaceTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		041901C7272C0B03001DC3B9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				041901D0272C0B03001DC3B9 /* PSkbsPicSpaceUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		041901C2272C0B03001DC3B9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 041901A9272C0B02001DC3B9 /* PSkbsPicSpace */;
-			targetProxy = 041901C1272C0B03001DC3B9 /* PBXContainerItemProxy */;
-		};
-		041901CD272C0B03001DC3B9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 041901A9272C0B02001DC3B9 /* PSkbsPicSpace */;
-			targetProxy = 041901CC272C0B03001DC3B9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		041901B3272C0B02001DC3B9 /* Main.storyboard */ = {
@@ -538,86 +407,6 @@
 			};
 			name = Release;
 		};
-		041901D8272C0B03001DC3B9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = PSkbsPicSpaceTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kbs.PSkbsPicSpaceTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PSkbsPicSpace.app/PSkbsPicSpace";
-			};
-			name = Debug;
-		};
-		041901D9272C0B03001DC3B9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = PSkbsPicSpaceTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kbs.PSkbsPicSpaceTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PSkbsPicSpace.app/PSkbsPicSpace";
-			};
-			name = Release;
-		};
-		041901DB272C0B03001DC3B9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = PSkbsPicSpaceUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kbs.PSkbsPicSpaceUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = PSkbsPicSpace;
-			};
-			name = Debug;
-		};
-		041901DC272C0B03001DC3B9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = PSkbsPicSpaceUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = kbs.PSkbsPicSpaceUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = PSkbsPicSpace;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -635,24 +424,6 @@
 			buildConfigurations = (
 				041901D5272C0B03001DC3B9 /* Debug */,
 				041901D6272C0B03001DC3B9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		041901D7272C0B03001DC3B9 /* Build configuration list for PBXNativeTarget "PSkbsPicSpaceTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				041901D8272C0B03001DC3B9 /* Debug */,
-				041901D9272C0B03001DC3B9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		041901DA272C0B03001DC3B9 /* Build configuration list for PBXNativeTarget "PSkbsPicSpaceUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				041901DB272C0B03001DC3B9 /* Debug */,
-				041901DC272C0B03001DC3B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

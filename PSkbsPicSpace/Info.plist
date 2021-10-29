@@ -18,8 +18,45 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fbapi20130214</string>
+		<string>fbapi20130410</string>
+		<string>fbapi20130702</string>
+		<string>fbapi20131010</string>
+		<string>fbapi20131219</string>
+		<string>fbapi20140410</string>
+		<string>fbapi20140116</string>
+		<string>fbapi20150313</string>
+		<string>fbapi20150629</string>
+		<string>fbapi20160328</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>App needs your camera permission to record video and edit it shape, mask, cut it, add stickers, text, music and other effect.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>App needs your photo gallery permission to choose video, and apply the shape editor, video cut, sticker, text, music and other effect.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App needs your photo gallery permission to choose and save video, and apply the shape editor, video cut, sticker, text, music and other effect.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This identifier will be used to personalize ads to you</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Creepster-Regular.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -62,5 +99,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
