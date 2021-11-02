@@ -15,6 +15,8 @@
 		041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */; };
 		DBE20E04214C9A7F82DF1DC6 /* Pods_PSkbsPicSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */; };
 		EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B38B5272C0EE50001C20B /* PSMainVC.swift */; };
+		EB9D62C2273150C600F97FAF /* LPySliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9D62C0273150C600F97FAF /* LPySliderView.swift */; };
+		EB9D62C3273150C600F97FAF /* LPySliderSaveVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9D62C1273150C600F97FAF /* LPySliderSaveVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		1A0BA9E30F5CEDCF1B74EB53 /* Pods-PSkbsPicSpace.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.debug.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.debug.xcconfig"; sourceTree = "<group>"; };
 		5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PSkbsPicSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB8B38B5272C0EE50001C20B /* PSMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSMainVC.swift; sourceTree = "<group>"; };
+		EB9D62C0273150C600F97FAF /* LPySliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LPySliderView.swift; sourceTree = "<group>"; };
+		EB9D62C1273150C600F97FAF /* LPySliderSaveVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LPySliderSaveVC.swift; sourceTree = "<group>"; };
 		F77BB9F8ECC3CDCF84595DB1 /* Pods-PSkbsPicSpace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.release.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				EB8B38B5272C0EE50001C20B /* PSMainVC.swift */,
+				EB9D62C1273150C600F97FAF /* LPySliderSaveVC.swift */,
+				EB9D62C0273150C600F97FAF /* LPySliderView.swift */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -224,7 +230,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB9D62C3273150C600F97FAF /* LPySliderSaveVC.swift in Sources */,
 				041901B2272C0B02001DC3B9 /* ViewController.swift in Sources */,
+				EB9D62C2273150C600F97FAF /* LPySliderView.swift in Sources */,
 				041901AE272C0B02001DC3B9 /* AppDelegate.swift in Sources */,
 				EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */,
 				041901B0272C0B02001DC3B9 /* SceneDelegate.swift in Sources */,
