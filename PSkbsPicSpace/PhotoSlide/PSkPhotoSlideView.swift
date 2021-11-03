@@ -1,20 +1,22 @@
 //
-//  LPySliderView.swift
-//  LpymLpost
+//  PSkPhotoSlideView.swift
+//  PSkbsPicSpace
 //
-//  Created by JOJO on 2021/11/2.
+//  Created by JOJO on 2021/11/3.
 //
 
 import UIKit
-
+ 
 
 enum SliderType {
     case slider1_3
     case slider2_3
     case slider3_3
+    case slider3_2
+    case slider3_1
 }
 
-class LPySliderView: UIView, UIScrollViewDelegate {
+class PSkPhotoSlideView: UIView, UIScrollViewDelegate {
     var sliderType: SliderType = .slider1_3
     
     let scrolleView = UIScrollView.init()
@@ -65,7 +67,7 @@ class LPySliderView: UIView, UIScrollViewDelegate {
     
 }
 
-extension LPySliderView {
+extension PSkPhotoSlideView {
     func processSlideImages() -> [UIImage] {
         let resultImage = contentImage.originImageToScaleSize(size: CGSize(width: contentImage.size.width * scrollZoomScale, height: contentImage.size.height * scrollZoomScale))
         let scale = resultImage.size.height / self.contentImageView.frame.size.height
@@ -77,8 +79,8 @@ extension LPySliderView {
         
         
         for subView in sliderAreaViews {
-            let areaX = subView.frame.origin.x * scale  - leftOffset
-            let areaY = subView.frame.origin.y - topOffset
+            let areaX = subView.frame.origin.x * scale - leftOffset * scale
+            let areaY = subView.frame.origin.y * scale - topOffset * scale
             let pointX: CGFloat = areaX + imgOffsetLeft
             let pointY: CGFloat = areaY + imgOffsetTop
             let width: CGFloat = subView.size.width * scale
@@ -92,7 +94,7 @@ extension LPySliderView {
     }
 }
 
-extension LPySliderView {
+extension PSkPhotoSlideView {
     func updateSliderStyle(sliderType: SliderType) {
         //
         for area in sliderAreaViews {
@@ -101,6 +103,9 @@ extension LPySliderView {
         for area in maskLayerViews {
             area.removeFromSuperview()
         }
+        
+        sliderAreaViews = []
+        maskLayerViews = []
         
         scrolleView.zoomScale = 1
         
@@ -112,6 +117,10 @@ extension LPySliderView {
             updateSlider2_3()
         case .slider3_3:
             updateSlider3_3()
+        case .slider3_2:
+            updateSlider3_2()
+        case .slider3_1:
+            updateSlider3_1()
         }
         
          
@@ -310,8 +319,6 @@ extension LPySliderView {
         }
         slideRect6.layer.borderWidth = 0.5
         slideRect6.layer.borderColor = UIColor.white.cgColor
-        
-        
         
         //
         let maskVleft = UIView()
@@ -557,9 +564,263 @@ extension LPySliderView {
         contentImageView.frame = CGRect(x: leftOffset, y: topOffset, width: frame.size.width, height: frame.size.height)
         scrolleView.contentOffset = CGPoint(x: leftOffset, y: topOffset)
     }
+    func updateSlider3_2() {
+        var lengthPer: CGFloat = frame.size.height / 3
+        if lengthPer * 2 > frame.size.width {
+            lengthPer = frame.size.width / 2
+        }
+        leftOffset = (frame.size.width - (lengthPer * 2)) / 2
+        topOffset = (frame.size.height - lengthPer * 3) / 2
+        
+        //
+        let slideRect1 = UIView()
+        slideRect1
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect1.snp.makeConstraints {
+            $0.left.equalTo(self.snp.left).offset(leftOffset)
+            $0.top.equalTo(self.snp.top).offset(topOffset)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect1.layer.borderWidth = 0.5
+        slideRect1.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect2 = UIView()
+        slideRect2
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect2.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.right).offset(0)
+            $0.top.equalTo(self.snp.top).offset(topOffset)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect2.layer.borderWidth = 0.5
+        slideRect2.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect3 = UIView()
+        slideRect3
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect3.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left).offset(0)
+            $0.top.equalTo(slideRect1.snp.bottom)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect3.layer.borderWidth = 0.5
+        slideRect3.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect4 = UIView()
+        slideRect4
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect4.snp.makeConstraints {
+            $0.left.equalTo(slideRect2.snp.left).offset(0)
+            $0.bottom.equalTo(slideRect3.snp.bottom)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect4.layer.borderWidth = 0.5
+        slideRect4.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect5 = UIView()
+        slideRect5
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect5.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left).offset(0)
+            $0.top.equalTo(slideRect3.snp.bottom).offset(0)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect5.layer.borderWidth = 0.5
+        slideRect5.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect6 = UIView()
+        slideRect6
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect6.snp.makeConstraints {
+            $0.left.equalTo(slideRect2.snp.left).offset(0)
+            $0.bottom.equalTo(slideRect5.snp.bottom).offset(0)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect6.layer.borderWidth = 0.5
+        slideRect6.layer.borderColor = UIColor.white.cgColor
+        
+        //
+        let maskVleft = UIView()
+        let maskVright = UIView()
+        let maskVtop = UIView()
+        let maskVbottom = UIView()
+        maskVleft.isUserInteractionEnabled = false
+        maskVright.isUserInteractionEnabled = false
+        maskVtop.isUserInteractionEnabled = false
+        maskVbottom.isUserInteractionEnabled = false
+        //
+        maskVleft
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVright
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVtop
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVbottom
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        
+        maskVleft.snp.makeConstraints {
+            $0.left.equalTo(self.snp.left)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.right.equalTo(slideRect1.snp.left)
+        }
+        maskVright.snp.makeConstraints {
+            $0.left.equalTo(slideRect2.snp.right)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.right.equalTo(self.snp.right)
+        }
+        maskVtop.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(slideRect1.snp.top)
+            $0.right.equalTo(slideRect2.snp.right)
+        }
+        maskVbottom.snp.makeConstraints {
+            $0.left.equalTo(slideRect5.snp.left)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.top.equalTo(slideRect5.snp.bottom)
+            $0.right.equalTo(slideRect6.snp.right)
+        }
+        
+        sliderAreaViews = [slideRect1, slideRect2, slideRect3, slideRect4, slideRect5, slideRect6]
+        maskLayerViews = [maskVleft, maskVright, maskVtop, maskVbottom]
+        
+        //
+        let scrollWidth: CGFloat = frame.size.width + leftOffset * 2
+        let scrollHeight: CGFloat = frame.size.height + topOffset * 2
+        scrolleView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
+        contentImageView.frame = CGRect(x: leftOffset, y: topOffset, width: frame.size.width, height: frame.size.height)
+        scrolleView.contentOffset = CGPoint(x: leftOffset, y: topOffset)
+    }
+    
+    func updateSlider3_1() {
+        var lengthPer: CGFloat = frame.size.height / 3
+        if lengthPer > frame.size.width {
+            lengthPer = frame.size.width
+        }
+        leftOffset = (frame.size.width - (lengthPer * 1)) / 2
+        topOffset = (frame.size.height - lengthPer * 3) / 2
+        
+        //
+        let slideRect1 = UIView()
+        slideRect1
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect1.snp.makeConstraints {
+            $0.left.equalTo(self.snp.left).offset(leftOffset)
+            $0.top.equalTo(self.snp.top).offset(topOffset)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect1.layer.borderWidth = 0.5
+        slideRect1.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect2 = UIView()
+        slideRect2
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect2.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left).offset(0)
+            $0.top.equalTo(slideRect1.snp.bottom).offset(0)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect2.layer.borderWidth = 0.5
+        slideRect2.layer.borderColor = UIColor.white.cgColor
+        //
+        let slideRect3 = UIView()
+        slideRect3
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: self)
+        slideRect3.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left).offset(0)
+            $0.top.equalTo(slideRect2.snp.bottom).offset(0)
+            $0.width.height.equalTo(lengthPer)
+        }
+        slideRect3.layer.borderWidth = 0.5
+        slideRect3.layer.borderColor = UIColor.white.cgColor
+        
+        //
+        let maskVleft = UIView()
+        let maskVright = UIView()
+        let maskVtop = UIView()
+        let maskVbottom = UIView()
+        maskVleft.isUserInteractionEnabled = false
+        maskVright.isUserInteractionEnabled = false
+        maskVtop.isUserInteractionEnabled = false
+        maskVbottom.isUserInteractionEnabled = false
+        //
+        maskVleft
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVright
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVtop
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        maskVbottom
+            .backgroundColor(UIColor.white.withAlphaComponent(0.4))
+            .adhere(toSuperview: self)
+        
+        maskVleft.snp.makeConstraints {
+            $0.left.equalTo(self.snp.left)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.right.equalTo(slideRect1.snp.left)
+        }
+        maskVright.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.right)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.right.equalTo(self.snp.right)
+        }
+        maskVtop.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left)
+            $0.top.equalTo(self.snp.top)
+            $0.bottom.equalTo(slideRect1.snp.top)
+            $0.right.equalTo(slideRect1.snp.right)
+        }
+        maskVbottom.snp.makeConstraints {
+            $0.left.equalTo(slideRect1.snp.left)
+            $0.bottom.equalTo(self.snp.bottom)
+            $0.top.equalTo(slideRect3.snp.bottom)
+            $0.right.equalTo(slideRect1.snp.right)
+        }
+        
+        sliderAreaViews = [slideRect1, slideRect2, slideRect3]
+        maskLayerViews = [maskVleft, maskVright, maskVtop, maskVbottom]
+        
+        //
+        let scrollWidth: CGFloat = frame.size.width + leftOffset * 2
+        let scrollHeight: CGFloat = frame.size.height + topOffset * 2
+        scrolleView.contentSize = CGSize(width: scrollWidth, height: scrollHeight)
+        contentImageView.frame = CGRect(x: leftOffset, y: topOffset, width: frame.size.width, height: frame.size.height)
+        
+        scrolleView.contentOffset = CGPoint(x: leftOffset, y: topOffset)
+    }
+    
 }
 
-extension LPySliderView {
+extension PSkPhotoSlideView {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         debugPrint(scrollView.contentOffset)

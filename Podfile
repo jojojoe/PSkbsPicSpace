@@ -16,4 +16,7 @@ target 'PSkbsPicSpace' do
   pod 'Alamofire'
   pod 'SwiftyStoreKit'
   pod 'Defaults'
+  
+  pod 'LookinServer', :configurations => ['Debug']
+  
 end
