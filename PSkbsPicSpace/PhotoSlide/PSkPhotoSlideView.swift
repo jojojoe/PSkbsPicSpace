@@ -92,10 +92,56 @@ extension PSkPhotoSlideView {
         
         return imgs
     }
+    
+    func processFullImage() -> UIImage {
+        let resultImage = contentImage.originImageToScaleSize(size: CGSize(width: contentImage.size.width * scrollZoomScale, height: contentImage.size.height * scrollZoomScale))
+        let scale = resultImage.size.height / self.contentImageView.frame.size.height
+        
+        let imgOffsetLeft: CGFloat = scrolleView.contentOffset.x * scale
+        let imgOffsetTop: CGFloat = scrolleView.contentOffset.y * scale
+        
+        
+        
+
+        if let subView = sliderAreaViews.first {
+            let areaX = subView.frame.origin.x * scale - leftOffset * scale
+            let areaY = subView.frame.origin.y * scale - topOffset * scale
+            let pointX: CGFloat = areaX + imgOffsetLeft
+            let pointY: CGFloat = areaY + imgOffsetTop
+            
+            var imgWidth: CGFloat = 1
+            var imgHeight: CGFloat = 1
+            
+            switch sliderType {
+            case .slider1_3:
+                imgWidth = (subView.size.width * scale) * 3
+                imgHeight = (subView.size.width * scale)
+            case .slider2_3:
+                imgWidth = (subView.size.width * scale) * 3
+                imgHeight = (subView.size.width * scale) * 2
+            case .slider3_3:
+                imgWidth = (subView.size.width * scale) * 3
+                imgHeight = (subView.size.width * scale) * 3
+            case .slider3_2:
+                imgWidth = (subView.size.width * scale) * 2
+                imgHeight = (subView.size.width * scale) * 3
+            case .slider3_1:
+                imgWidth = (subView.size.width * scale) * 1
+                imgHeight = (subView.size.width * scale) * 3
+                
+            }
+            let rect = CGRect(x: pointX, y: pointY , width: imgWidth, height: imgHeight)
+            let fullImg = UIImage.init(cgImage: ((resultImage.cgImage?.cropping(to: rect))!))
+            return fullImg
+        }
+        
+        return resultImage
+    }
 }
 
 extension PSkPhotoSlideView {
     func updateSliderStyle(sliderType: SliderType) {
+        self.sliderType = sliderType
         //
         for area in sliderAreaViews {
             area.removeFromSuperview()
@@ -125,6 +171,8 @@ extension PSkPhotoSlideView {
         
          
     }
+    
+     
     
     func updateSlider1_3() {
         var lengthPer: CGFloat = frame.size.width / 3

@@ -11,14 +11,14 @@ import UIKit
 
 class PSkSlideSaveView: UIView {
     
-    init(frame: CGRect, fullImg: UIImage, slideImgs: [UIImage]) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    func setupView() {
-        
-    }
+//    init(frame: CGRect, fullImg: UIImage, slideImgs: [UIImage]) {
+//        super.init(frame: frame)
+//        setupView()
+//    }
+//    
+//    func setupView() {
+//        
+//    }
     
 }
 

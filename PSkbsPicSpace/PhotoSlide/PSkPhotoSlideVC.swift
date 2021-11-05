@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Photos
+
 
 struct PhotoSlideItem {
     var slideType: SliderType = .slider1_3
@@ -18,10 +20,11 @@ class PSkPhotoSlideVC: UIViewController {
     var originalImg: UIImage
     
     var slideItemList: [PhotoSlideItem] = []
+    var currentSlideItem: PhotoSlideItem!
     
     let backBtn = UIButton(type: .custom)
     let bottomBar = UIView()
- 
+    var collection: UICollectionView!
     let canvasBgView = UIView()
     var viewDidLayoutSubviewsOnce: Once = Once()
     var slideView: PSkPhotoSlideView?
@@ -80,8 +83,9 @@ class PSkPhotoSlideVC: UIViewController {
                 let slideView = PSkPhotoSlideView(frame: CGRect(x: 0, y: 0, width: fineW, height: fineH), contentImage: self.originalImg)
                 self.slideView = slideView
                 slideView.adhere(toSuperview: self.canvasBgView)
-                slideView.updateSliderStyle(sliderType: .slider1_3)
-                 
+                slideView.updateSliderStyle(sliderType: self.currentSlideItem.slideType)
+                self.collection.selectItem(at: IndexPath(item: 2, section: 0), animated: false, scrollPosition: .centeredHorizontally)
+                
             }
         }
     }
@@ -93,7 +97,7 @@ class PSkPhotoSlideVC: UIViewController {
         let slideType4 = PhotoSlideItem(slideType: .slider3_2, iconName: "", titleStr: "3x2")
         let slideType5 = PhotoSlideItem(slideType: .slider3_1, iconName: "", titleStr: "3x1")
         slideItemList = [slideType1, slideType2, slideType3, slideType4, slideType5]
-        
+        currentSlideItem = slideType3
     }
     
     func setupView() {
@@ -153,7 +157,7 @@ class PSkPhotoSlideVC: UIViewController {
 
 extension PSkPhotoSlideVC {
     func setupCollection() {
-        var collection: UICollectionView!
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
@@ -175,6 +179,11 @@ extension PSkPhotoSlideVC: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withClass: PSkSlideTypeCell.self, for: indexPath)
         let item = slideItemList[indexPath.item]
         cell.udpateSlideType(slide: item)
+        if item.slideType == currentSlideItem.slideType {
+            cell.setupSelecStatus(isSele: true)
+        } else {
+            cell.setupSelecStatus(isSele: false)
+        }
         
         return cell
     }
@@ -213,7 +222,9 @@ extension PSkPhotoSlideVC: UICollectionViewDelegateFlowLayout {
 extension PSkPhotoSlideVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = slideItemList[indexPath.item]
+        currentSlideItem = item
         slideView?.updateSliderStyle(sliderType: item.slideType)
+        collectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -223,25 +234,7 @@ extension PSkPhotoSlideVC: UICollectionViewDelegate {
 
 
 extension PSkPhotoSlideVC {
-//    @objc func slide1_3Click(sender: LPySliderTypeBtn) {
-//        slide1_3.setupSelecStatus(isSele: true)
-//        slide2_3.setupSelecStatus(isSele: false)
-//        slide3_3.setupSelecStatus(isSele: false)
-//        slideView?.updateSliderStyle(sliderType: .slider1_3)
-//    }
-//    @objc func slide2_3Click(sender: LPySliderTypeBtn) {
-//        slide2_3.setupSelecStatus(isSele: true)
-//        slide1_3.setupSelecStatus(isSele: false)
-//        slide3_3.setupSelecStatus(isSele: false)
-//        slideView?.updateSliderStyle(sliderType: .slider2_3)
-//    }
-//    @objc func slide3_3Click(sender: LPySliderTypeBtn) {
-//        slide3_3.setupSelecStatus(isSele: true)
-//        slide2_3.setupSelecStatus(isSele: false)
-//        slide1_3.setupSelecStatus(isSele: false)
-//        slideView?.updateSliderStyle(sliderType: .slider3_3)
-//    }
-    
+ 
     @objc func backBtnClick(sender: UIButton) {
         
         if self.navigationController != nil {
@@ -252,22 +245,134 @@ extension PSkPhotoSlideVC {
     }
     
     @objc func saveBtnClick(sender: UIButton) {
-        if let imgs = slideView?.processSlideImages(), let areas = slideView?.sliderAreaViews {
-            var rec: [CGRect] = []
-            
-            for area in areas {
-                if let rect = self.slideView?.convert(area.frame, to: view) {
-                    rec.append(rect)
-                }
-                
-            }
- 
+        if let imgs = slideView?.processSlideImages(), let fullImg = slideView?.processFullImage() {
+            showSavePopupView(images: imgs, fullImg: fullImg)
             
         }
         
     }
+    
+    func showSavePopupView(images: [UIImage], fullImg: UIImage) {
+        let popupView = PSkPhotoSlideSavePopupView(frame: .zero, slideImgs: images, slideType: currentSlideItem.slideType)
+        view.addSubview(popupView)
+        popupView.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        popupView.backBtnClickBlock = {
+            UIView.animate(withDuration: 0.25) {
+                popupView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    popupView.removeFromSuperview()
+                }
+            }
+        }
+        popupView.okBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            if popupView.fullBtnOpen.isOn == true {
+                // save full
+                self.saveImgsToAlbum(imgs: [fullImg])
+            } else {
+                self.saveImgsToAlbum(imgs: images)
+            }
+            
+            
+            UIView.animate(withDuration: 0.25) {
+                popupView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    popupView.removeFromSuperview()
+                }
+            }
+        }
+    }
+    
 }
 
+
+extension PSkPhotoSlideVC {
+    func saveImgsToAlbum(imgs: [UIImage]) {
+        HUD.hide()
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .authorized {
+            saveToAlbumPhotoAction(images: imgs)
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({[weak self] (status) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if status != .authorized {
+                        return
+                    }
+                    self.saveToAlbumPhotoAction(images: imgs)
+                }
+            })
+        } else {
+            // 权限提示
+            albumPermissionsAlet()
+        }
+    }
+    
+    func saveToAlbumPhotoAction(images: [UIImage]) {
+        DispatchQueue.main.async(execute: {
+            PHPhotoLibrary.shared().performChanges({
+                [weak self] in
+                guard let `self` = self else {return}
+                for img in images {
+                    PHAssetChangeRequest.creationRequestForAsset(from: img)
+                }
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.showSaveSuccessAlert()
+                }
+                
+            }) { (finish, error) in
+                if error != nil {
+                    HUD.error("Sorry! please try again")
+                }
+            }
+        })
+    }
+    
+    func showSaveSuccessAlert() {
+        
+        DispatchQueue.main.async {
+            let title = ""
+            let message = "Photo saved successfully!"
+            let okText = "OK"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
+                 DispatchQueue.main.async {
+                 }
+            })
+            alert.addAction(okButton)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    func albumPermissionsAlet() {
+        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+            self?.openSystemAppSetting()
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openSystemAppSetting() {
+        let url = NSURL.init(string: UIApplication.openSettingsURLString)
+        let canOpen = UIApplication.shared.canOpenURL(url! as URL)
+        if canOpen {
+            UIApplication.shared.open(url! as URL, options: [:], completionHandler: nil)
+        }
+    }
+ 
+}
 
 
 
@@ -319,81 +424,11 @@ class PSkSlideTypeCell: UICollectionViewCell {
     }
     func setupSelecStatus(isSele: Bool) {
         if isSele {
-            contentView.backgroundColor(UIColor(hexString: "#D9FF66")!)
+            contentView.backgroundColor(UIColor(hexString: "#11F151")!)
         } else {
             contentView.backgroundColor(UIColor(hexString: "#F7FAED")!)
         }
     }
     
 }
-
-
-
-
-//class LPySliderTypeBtn: UIButton {
-//    let iconImageV = UIImageView()
-//    let nameLabel = UILabel()
-//
-//    var sliderType: SliderType = .slider1_3
-//
-//    init(frame: CGRect, typeItem: SliderType) {
-//        sliderType = typeItem
-//        super.init(frame: frame)
-//        setupView()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//
-//
-//    func setupView() {
-//        var iconName: String = ""
-//        var name: String = ""
-//        switch sliderType {
-//        case .slider1_3:
-//            iconName = "editor_girds1"
-//            name = "1x3"
-//        case .slider2_3:
-//            iconName = "editor_girds2"
-//            name = "2x3"
-//        case .slider3_3:
-//            iconName = "editor_girds3"
-//            name = "3x3"
-//        }
-//        //
-//        nameLabel
-//            .textAlignment(.center)
-//            .text(name)
-//            .fontName(16, "AvenirNext-Regular")
-//            .color(UIColor(hexString: "#454D3D")!)
-//            .adhere(toSuperview: self)
-//        nameLabel.snp.makeConstraints {
-//            $0.centerX.equalToSuperview()
-//            $0.bottom.equalToSuperview().offset(-16)
-//            $0.width.height.greaterThanOrEqualTo(1)
-//        }
-//        //
-//        iconImageV
-//            .image(iconName)
-//            .contentMode(.scaleAspectFit)
-//            .adhere(toSuperview: self)
-//        iconImageV.snp.makeConstraints {
-//            $0.centerX.equalToSuperview()
-//            $0.bottom.equalTo(nameLabel.snp.top).offset(-6)
-//            $0.width.height.equalTo(37)
-//        }
-//        setupSelecStatus(isSele: false)
-//    }
-//
-//    func setupSelecStatus(isSele: Bool) {
-//        if isSele {
-//            self.backgroundColor(UIColor(hexString: "#D9FF66")!)
-//        } else {
-//            self.backgroundColor(UIColor(hexString: "#F7FAED")!)
-//        }
-//    }
-//
-//
-//}
 

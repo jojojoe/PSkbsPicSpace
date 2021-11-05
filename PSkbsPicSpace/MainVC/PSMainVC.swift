@@ -34,17 +34,41 @@ extension PSMainVC {
         view
             .backgroundColor(UIColor.white)
         //
-        let zapanBtn = UIButton(type: .custom)
-        zapanBtn
+        let settingBtn = UIButton(type: .custom)
+        settingBtn
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
-        zapanBtn.snp.makeConstraints {
+        settingBtn.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(10)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.width.equalTo(44)
+            $0.height.equalTo(44)
+        }
+        //
+        let vipBtn = UIButton(type: .custom)
+        vipBtn
+            .backgroundColor(UIColor.lightGray)
+            .adhere(toSuperview: view)
+        vipBtn.snp.makeConstraints {
+            $0.right.equalToSuperview().offset(-10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            $0.width.equalTo(64)
+            $0.height.equalTo(64)
+        }
+        
+        //
+        //
+        let magicCamBtn = UIButton(type: .custom)
+        magicCamBtn
+            .backgroundColor(UIColor.lightGray)
+            .adhere(toSuperview: view)
+        magicCamBtn.snp.makeConstraints {
             $0.right.equalTo(view.snp.centerX).offset(-20)
             $0.bottom.equalTo(view.snp.centerY).offset(-20)
-            $0.width.equalTo(100)
-            $0.height.equalTo(150)
+            $0.width.equalTo(140)
+            $0.height.equalTo(60)
         }
-        zapanBtn.addTarget(self, action: #selector(zapanBtnClick(sender: )), for: .touchUpInside)
+        magicCamBtn.addTarget(self, action: #selector(magicCamBtnClick(sender: )), for: .touchUpInside)
         
         //
         let slideBtn = UIButton(type: .custom)
@@ -53,13 +77,37 @@ extension PSMainVC {
             .adhere(toSuperview: view)
         slideBtn.snp.makeConstraints {
             $0.left.equalTo(view.snp.centerX).offset(20)
-            $0.bottom.equalTo(view.snp.centerY).offset(-20)
-            $0.width.equalTo(100)
-            $0.height.equalTo(150)
+            $0.top.equalTo(view.snp.centerY).offset(20)
+            $0.width.equalTo(140)
+            $0.height.equalTo(60)
         }
         slideBtn.addTarget(self, action: #selector(slideBtnClick(sender: )), for: .touchUpInside)
         
+        //
+        let customPhotoBtn = UIButton(type: .custom)
+        customPhotoBtn
+            .backgroundColor(UIColor.lightGray)
+            .adhere(toSuperview: view)
+        customPhotoBtn.snp.makeConstraints {
+            $0.left.equalTo(view.snp.centerX).offset(20)
+            $0.bottom.equalTo(magicCamBtn.snp.top).offset(-40)
+            $0.width.equalTo(140)
+            $0.height.equalTo(60)
+        }
+        customPhotoBtn.addTarget(self, action: #selector(customPhotoBtnClick(sender: )), for: .touchUpInside)
         
+        //
+        let profileMakerBtn = UIButton(type: .custom)
+        profileMakerBtn
+            .backgroundColor(UIColor.lightGray)
+            .adhere(toSuperview: view)
+        profileMakerBtn.snp.makeConstraints {
+            $0.right.equalTo(view.snp.centerX).offset(-20)
+            $0.top.equalTo(slideBtn.snp.bottom).offset(40)
+            $0.width.equalTo(140)
+            $0.height.equalTo(60)
+        }
+        profileMakerBtn.addTarget(self, action: #selector(profileMakerBtnClick(sender: )), for: .touchUpInside)
         
         
         
@@ -74,8 +122,15 @@ extension PSMainVC {
         isActionType = "slide"
         checkAlbumAuthorization()
     }
-    @objc func zapanBtnClick(sender: UIButton) {
+    @objc func magicCamBtnClick(sender: UIButton) {
         
+    }
+    @objc func customPhotoBtnClick(sender: UIButton) {
+        
+    }
+    @objc func profileMakerBtnClick(sender: UIButton) {
+        let vc = PSkProfileMakerVC()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
