@@ -60,6 +60,7 @@ extension PSMainVC {
         //
         let magicCamBtn = UIButton(type: .custom)
         magicCamBtn
+            .text("Cam")
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
         magicCamBtn.snp.makeConstraints {
@@ -73,6 +74,7 @@ extension PSMainVC {
         //
         let slideBtn = UIButton(type: .custom)
         slideBtn
+            .text("Slide")
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
         slideBtn.snp.makeConstraints {
@@ -86,6 +88,7 @@ extension PSMainVC {
         //
         let customPhotoBtn = UIButton(type: .custom)
         customPhotoBtn
+            .text("Custom")
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
         customPhotoBtn.snp.makeConstraints {
@@ -99,6 +102,7 @@ extension PSMainVC {
         //
         let profileMakerBtn = UIButton(type: .custom)
         profileMakerBtn
+            .text("Profile")
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
         profileMakerBtn.snp.makeConstraints {
@@ -143,63 +147,118 @@ extension PSMainVC: UIImagePickerControllerDelegate {
     func checkAlbumAuthorization() {
         
         if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
-                switch status {
-                case .authorized:
-                    DispatchQueue.main.async {
-                        self.presentPhotoPickerController()
-                    }
-                case .limited:
-                    DispatchQueue.main.async {
-                        self.presentLimitedPhotoPickerController()
-                    }
-                case .notDetermined:
-                    if status == PHAuthorizationStatus.authorized {
+            if #available(iOS 14, *) {
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                    switch status {
+                    case .authorized:
                         DispatchQueue.main.async {
-                            self.presentPhotoPickerController()
+//                            self.presentPhotoPickerController()
+                            self.presentLimitedPhotoPickerController()
                         }
-                    } else if status == PHAuthorizationStatus.limited {
+                    case .limited:
                         DispatchQueue.main.async {
                             self.presentLimitedPhotoPickerController()
                         }
-                    }
-                case .denied:
-                    DispatchQueue.main.async {
-                        [weak self] in
-                        guard let `self` = self else {return}
-                        let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                        let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                    case .notDetermined:
+                        if status == PHAuthorizationStatus.authorized {
                             DispatchQueue.main.async {
-                                let url = URL(string: UIApplication.openSettingsURLString)!
-                                UIApplication.shared.open(url, options: [:])
+//                                self.presentPhotoPickerController()
+                                self.presentLimitedPhotoPickerController()
                             }
-                        })
-                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-                        alert.addAction(confirmAction)
-                        alert.addAction(cancelAction)
-                        
-                        self.present(alert, animated: true)
-                    }
-                    
-                case .restricted:
-                    DispatchQueue.main.async {
-                        [weak self] in
-                        guard let `self` = self else {return}
-                        let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                        let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                        } else if status == PHAuthorizationStatus.limited {
                             DispatchQueue.main.async {
-                                let url = URL(string: UIApplication.openSettingsURLString)!
-                                UIApplication.shared.open(url, options: [:])
+                                self.presentLimitedPhotoPickerController()
                             }
-                        })
-                        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-                        alert.addAction(confirmAction)
-                        alert.addAction(cancelAction)
+                        }
+                    case .denied:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
                         
-                        self.present(alert, animated: true)
+                    case .restricted:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                    default: break
                     }
-                default: break
                 }
+            } else {
+                
+                PHPhotoLibrary.requestAuthorization { status in
+                    switch status {
+                    case .authorized:
+                        DispatchQueue.main.async {
+                            self.presentPhotoPickerController()
+                        }
+                    case .limited:
+                        DispatchQueue.main.async {
+                            self.presentLimitedPhotoPickerController()
+                        }
+                    case .denied:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                        
+                    case .restricted:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                    default: break
+                    }
+                }
+                
             }
         }
     }
