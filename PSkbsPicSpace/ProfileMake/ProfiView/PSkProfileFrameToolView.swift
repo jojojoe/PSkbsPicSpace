@@ -76,9 +76,11 @@ class PSkProfileFrameToolView: UIView {
         }
         
         //
-        let frameTypeList: [] = []
+        let frameTypeList: [PSkProfileFrameItem] = PSkDataManager.default.profileMakeFrameItems
         
         
+        
+        //
         let pointPixLabel = UILabel()
         pointPixLabel
             .text("分辨率/尺寸")
@@ -88,6 +90,32 @@ class PSkProfileFrameToolView: UIView {
             .adhere(toSuperview: contentV)
         pointPixLabel.snp.makeConstraints {
             $0.left.equalTo(contentV.snp.left).offset(30)
+        }
+        
+        //
+        let sizeWidthLabel = UILabel()
+        sizeWidthLabel
+            .fontName(15, "AvenirNext-DemiBold")
+            .color(UIColor.black)
+            .text("1024")
+            .adhere(toSuperview: contentV)
+        sizeWidthLabel.snp.makeConstraints {
+            $0.left.equalTo(pointPixLabel.snp.left)
+            $0.top.equalTo(pointPixLabel.snp.bottom).offset(20)
+            $0.width.height.greaterThanOrEqualTo(1)
+        }
+        
+        //
+        let sizeHeightLabel = UILabel()
+        sizeHeightLabel
+            .fontName(15, "AvenirNext-DemiBold")
+            .color(UIColor.black)
+            .text("1024")
+            .adhere(toSuperview: contentV)
+        sizeHeightLabel.snp.makeConstraints {
+            $0.left.equalTo(sizeWidthLabel.snp.right).offset(100)
+            $0.top.equalTo(pointPixLabel.snp.bottom).offset(20)
+            $0.width.height.greaterThanOrEqualTo(1)
         }
         
     }
