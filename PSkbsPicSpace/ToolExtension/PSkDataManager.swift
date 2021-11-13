@@ -9,6 +9,9 @@ import Foundation
 class PSkDataManager: NSObject {
     static let `default` = PSkDataManager()
     
+    var profileMakeFrameItems: [PSkProfileFrameItem] = []
+    
+    
     override init() {
         super.init()
         
