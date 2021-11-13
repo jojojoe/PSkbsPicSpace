@@ -11,6 +11,7 @@ class PSkProfileMakerVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         processRemoveImageBg()
         
     }
@@ -18,6 +19,14 @@ class PSkProfileMakerVC: UIViewController {
 
      
 
+}
+
+extension PSkProfileMakerVC {
+    func setupView() {
+        view.backgroundColor(.white)
+        //
+        
+    }
 }
 
 extension PSkProfileMakerVC {

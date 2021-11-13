@@ -61,6 +61,7 @@ extension PSMainVC {
         let magicCamBtn = UIButton(type: .custom)
         magicCamBtn
             .backgroundColor(UIColor.lightGray)
+            .text("Cam")
             .adhere(toSuperview: view)
         magicCamBtn.snp.makeConstraints {
             $0.right.equalTo(view.snp.centerX).offset(-20)
@@ -74,6 +75,7 @@ extension PSMainVC {
         let slideBtn = UIButton(type: .custom)
         slideBtn
             .backgroundColor(UIColor.lightGray)
+            .text("Slid")
             .adhere(toSuperview: view)
         slideBtn.snp.makeConstraints {
             $0.left.equalTo(view.snp.centerX).offset(20)
@@ -87,6 +89,7 @@ extension PSMainVC {
         let customPhotoBtn = UIButton(type: .custom)
         customPhotoBtn
             .backgroundColor(UIColor.lightGray)
+            .text("Custom")
             .adhere(toSuperview: view)
         customPhotoBtn.snp.makeConstraints {
             $0.left.equalTo(view.snp.centerX).offset(20)
@@ -100,6 +103,7 @@ extension PSMainVC {
         let profileMakerBtn = UIButton(type: .custom)
         profileMakerBtn
             .backgroundColor(UIColor.lightGray)
+            .text("ProfileMake")
             .adhere(toSuperview: view)
         profileMakerBtn.snp.makeConstraints {
             $0.right.equalTo(view.snp.centerX).offset(-20)
