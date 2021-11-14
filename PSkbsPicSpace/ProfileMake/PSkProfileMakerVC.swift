@@ -27,7 +27,7 @@ class PSkProfileMakerVC: UIViewController {
         super.viewDidLoad()
         setupView()
 
-        processRemoveImageBg()
+//        processRemoveImageBg()
 
         setupToolView()
     }
@@ -63,9 +63,6 @@ class PSkProfileMakerVC: UIViewController {
             })
         }
         
->>>>>>> a2a5789489c02733a86769832b122d3b55ac7008
-        
-
     }
     
    
@@ -174,7 +171,16 @@ class PSkProfileMakerVC: UIViewController {
     }
 
     func setupToolView() {
-        
+        let frameBar = PSkProfileFrameToolView()
+        frameBar.adhere(toSuperview: view)
+        frameBar.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            
+        }
+        frameBar.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
     }
      
 
@@ -182,11 +188,6 @@ class PSkProfileMakerVC: UIViewController {
 
 extension PSkProfileMakerVC {
 
-    func setupView() {
-        view.backgroundColor(.white)
-        //
-        
-    }
 
     @objc func backBtnClick(sender: UIButton) {
         
