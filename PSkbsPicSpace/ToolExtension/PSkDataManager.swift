@@ -22,6 +22,7 @@ class PSkDataManager: NSObject {
     static let `default` = PSkDataManager()
     
     var profileMakeFrameItems: [PSkProfileFrameItem] = []
+    var profileBgColors: [String] = []
     
     
     override init() {
@@ -39,6 +40,9 @@ class PSkDataManager: NSObject {
         
         
         profileMakeFrameItems = [item1, item2, item3, item4]
+        
+        
+        profileBgColors = ["#FFFFFF", "#9E0000", "#163AB8", "#1190EF", "#1D9265", "#D2A647", "#D87B22", "#00BDA6", "#602BB9"]
     }
     
     

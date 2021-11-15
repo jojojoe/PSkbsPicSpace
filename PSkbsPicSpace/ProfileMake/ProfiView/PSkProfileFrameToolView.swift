@@ -6,16 +6,12 @@
 //
 
 import UIKit
-
-
-
-
-
+import ZKProgressHUD
 
 class PSkProfileFrameToolView: UIView {
 
     var backBtnClickBlock: (()->Void)?
-    let frameTypeList: [PSkProfileFrameItem] = PSkDataManager.default.profileMakeFrameItems
+    var frameTypeList: [PSkProfileFrameItem] = []
     
     let sizeWidthCountLabel = UILabel()
     let widthAddBtn = UIButton(type: .custom)
@@ -26,11 +22,17 @@ class PSkProfileFrameToolView: UIView {
     var collection: UICollectionView!
     var currentWidth: CGFloat = 0
     var currentHeight: CGFloat = 0
+    let maxV: CGFloat = 2000
+    let minV: CGFloat = 100
+    let limitRatio: CGFloat = 2
+    
+    var timer: Timer?
+    var isHoldLongPress: Bool = false
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        loadData()
         setupView()
         setupDefault()
     }
@@ -39,6 +41,10 @@ class PSkProfileFrameToolView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
         
+    }
+    
+    func loadData() {
+        frameTypeList = PSkDataManager.default.profileMakeFrameItems
     }
     
     func setupDefault() {
@@ -151,9 +157,11 @@ class PSkProfileFrameToolView: UIView {
             .text("+")
             .titleColor(UIColor.orange)
             .adhere(toSuperview: contentV)
-        widthAddBtn.addTarget(self, action: #selector(widthAddBtnClickTouchDown(sender: )), for: .touchDown)
         widthAddBtn.addTarget(self, action: #selector(widthAddBtnClickTouchUp(sender: )), for: .touchUpInside)
-        widthAddBtn.addTarget(self, action: #selector(widthAddBtnClickTouchUp(sender: )), for: .touchUpOutside)
+        let widthAddLongGes = UILongPressGestureRecognizer()
+        widthAddLongGes.addTarget(self, action: #selector(widthAddLongGesAction(ges: )))
+        widthAddBtn.addGestureRecognizer(widthAddLongGes)
+        
         widthAddBtn.snp.makeConstraints {
             $0.centerY.equalTo(sizeWidthCountLabel.snp.centerY)
             $0.left.equalTo(sizeWidthCountLabel.snp.right).offset(2)
@@ -165,9 +173,12 @@ class PSkProfileFrameToolView: UIView {
             .text("-")
             .titleColor(UIColor.orange)
             .adhere(toSuperview: contentV)
-        widthJianBtn.addTarget(self, action: #selector(widthJianBtnClickTouchDown(sender: )), for: .touchDown)
         widthJianBtn.addTarget(self, action: #selector(widthJianBtnClickTouchUp(sender: )), for: .touchUpInside)
-        widthJianBtn.addTarget(self, action: #selector(widthJianBtnClickTouchUp(sender: )), for: .touchUpOutside)
+        
+        let widthJianLongGes = UILongPressGestureRecognizer()
+        widthJianLongGes.addTarget(self, action: #selector(widthJianLongGesAction(ges: )))
+        widthJianBtn.addGestureRecognizer(widthJianLongGes)
+        
         widthJianBtn.snp.makeConstraints {
             $0.centerY.equalTo(sizeWidthCountLabel.snp.centerY)
             $0.right.equalTo(sizeWidthCountLabel.snp.left).offset(-2)
@@ -208,9 +219,13 @@ class PSkProfileFrameToolView: UIView {
             .text("+")
             .titleColor(UIColor.orange)
             .adhere(toSuperview: contentV)
-        heightAddBtn.addTarget(self, action: #selector(heightAddBtnClickTouchDown(sender: )), for: .touchDown)
         heightAddBtn.addTarget(self, action: #selector(heightAddBtnClickTouchUp(sender: )), for: .touchUpInside)
-        heightAddBtn.addTarget(self, action: #selector(heightAddBtnClickTouchUp(sender: )), for: .touchUpOutside)
+
+        //
+        let heightAddLongGes = UILongPressGestureRecognizer()
+        heightAddLongGes.addTarget(self, action: #selector(heightAddLongGesAction(ges: )))
+        heightAddBtn.addGestureRecognizer(heightAddLongGes)
+        
         heightAddBtn.snp.makeConstraints {
             $0.centerY.equalTo(sizeHeightCountLabel.snp.centerY)
             $0.left.equalTo(sizeHeightCountLabel.snp.right).offset(2)
@@ -222,9 +237,14 @@ class PSkProfileFrameToolView: UIView {
             .text("-")
             .titleColor(UIColor.orange)
             .adhere(toSuperview: contentV)
-        heightJianBtn.addTarget(self, action: #selector(heightJianBtnClickTouchDown(sender: )), for: .touchDown)
         heightJianBtn.addTarget(self, action: #selector(heightJianBtnClickTouchUp(sender: )), for: .touchUpInside)
-        heightJianBtn.addTarget(self, action: #selector(heightJianBtnClickTouchUp(sender: )), for: .touchUpOutside)
+
+        //
+        let heightJianLongGes = UILongPressGestureRecognizer()
+        heightJianLongGes.addTarget(self, action: #selector(heightJianLongGesAction(ges: )))
+        heightJianBtn.addGestureRecognizer(heightJianLongGes)
+        
+        //
         heightJianBtn.snp.makeConstraints {
             $0.centerY.equalTo(sizeHeightCountLabel.snp.centerY)
             $0.right.equalTo(sizeHeightCountLabel.snp.left).offset(-2)
@@ -237,20 +257,102 @@ class PSkProfileFrameToolView: UIView {
 
 
 extension PSkProfileFrameToolView {
-    func autoWidthAdd() {
+    @objc func autoWidthAdd() {
+        var step: CGFloat = 1
+        if isHoldLongPress == true {
+            step = 100
+        }
+        var value = currentWidth + step
+        let limitV = currentHeight * limitRatio
         
+        if value >= maxV || value >= limitV {
+            if limitV > maxV {
+                value = maxV
+            } else {
+                value = limitV
+            }
+            if !ZKProgressHUD.isShowing {
+                ZKProgressHUD.showMessage("Max Value")
+            }
+        } else {
+            
+        }
+        currentWidth = value
+        sizeWidthCountLabel.text("\(currentWidth)")
     }
     
-    func autoWidthJian() {
-        
+    @objc func autoWidthJian() {
+        var step: CGFloat = 1
+        if isHoldLongPress == true {
+            step = 100
+        }
+        var value = currentWidth - step
+        let limitV = currentHeight / limitRatio
+        if value <= minV || value <= limitV {
+            if limitV > minV {
+                value = limitV
+            } else {
+                value = minV
+            }
+            if !ZKProgressHUD.isShowing {
+                ZKProgressHUD.showMessage("Max Value")
+            }
+            
+        } else {
+            
+        }
+        currentWidth = value
+        sizeWidthCountLabel.text("\(currentWidth)")
     }
     
-    func autoHeightAdd() {
+    @objc func autoHeightAdd() {
+        var step: CGFloat = 1
         
+        if isHoldLongPress == true {
+            step = 100
+        }
+        var value = currentHeight + step
+        let limitV = currentWidth * limitRatio
+        
+        if value >= maxV || value >= limitV {
+            if limitV > maxV {
+                value = maxV
+            } else {
+                value = limitV
+            }
+            if !ZKProgressHUD.isShowing {
+                ZKProgressHUD.showMessage("Max Value")
+            }
+        } else {
+            
+        }
+        currentHeight = value
+        sizeHeightCountLabel.text("\(currentHeight)")
     }
     
-    func autoHeightJian() {
+    @objc func autoHeightJian() {
+        var step: CGFloat = 1
         
+        if isHoldLongPress == true {
+            step = 100
+        }
+        var value = currentHeight - step
+        let limitV = currentWidth / limitRatio
+        
+        if value <= minV || value <= limitV {
+            if limitV > minV {
+                value = limitV
+            } else {
+                value = minV
+            }
+            if !ZKProgressHUD.isShowing {
+                ZKProgressHUD.showMessage("Max Value")
+            }
+        } else {
+            
+        }
+        currentHeight = value
+        sizeHeightCountLabel.text("\(currentHeight)")
     }
 }
 
@@ -261,44 +363,119 @@ extension PSkProfileFrameToolView {
     
     
     
-    @objc func widthAddBtnClickTouchDown(sender: UIButton) {
+ 
+    @objc func widthAddBtnClickTouchUp(sender: UIButton) {
         autoWidthAdd()
     }
     
-    @objc func widthAddBtnClickTouchUp(sender: UIButton) {
-        currentWidth = currentWidth + 1
-        sizeWidthCountLabel.text("\(currentWidth)")
-    }
-    
-    @objc func widthJianBtnClickTouchDown(sender: UIButton) {
+ 
+    @objc func widthJianBtnClickTouchUp(sender: UIButton) {
         autoWidthJian()
     }
     
-    @objc func widthJianBtnClickTouchUp(sender: UIButton) {
-        currentWidth = currentWidth - 1
-        sizeWidthCountLabel.text("\(currentWidth)")
-    }
+ 
     
-    @objc func heightAddBtnClickTouchDown(sender: UIButton) {
+    @objc func heightAddBtnClickTouchUp(sender: UIButton) {
         autoHeightAdd()
     }
     
-    @objc func heightAddBtnClickTouchUp(sender: UIButton) {
-        currentHeight = currentHeight + 1
-        sizeHeightCountLabel.text("\(currentHeight)")
-    }
     
-    
-    @objc func heightJianBtnClickTouchDown(sender: UIButton) {
+    @objc func heightJianBtnClickTouchUp(sender: UIButton) {
         autoHeightJian()
     }
     
-    @objc func heightJianBtnClickTouchUp(sender: UIButton) {
-        currentHeight = currentHeight - 1
-        sizeHeightCountLabel.text("\(currentHeight)")
+    @objc func widthAddLongGesAction(ges: UIGestureRecognizer) {
+        
+        if ges.state == .began {
+            
+            timer = Timer.init(timeInterval: 0.1, target: self, selector: #selector(autoWidthAdd), userInfo: nil, repeats: true)
+            if let timer_m = timer {
+                RunLoop.main.add(timer_m, forMode: .common)
+            }
+            
+            isHoldLongPress = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.isHoldLongPress = true
+            }
+        }
+        
+        if ges.state == .ended {
+            timer?.invalidate()
+            timer = nil
+            isHoldLongPress = false
+        }
     }
     
-     
+    @objc func widthJianLongGesAction(ges: UIGestureRecognizer) {
+        if ges.state == .began {
+            
+            timer = Timer.init(timeInterval: 0.1, target: self, selector: #selector(autoWidthJian), userInfo: nil, repeats: true)
+            if let timer_m = timer {
+                RunLoop.main.add(timer_m, forMode: .common)
+            }
+            
+            isHoldLongPress = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.isHoldLongPress = true
+            }
+        }
+        
+        if ges.state == .ended {
+            timer?.invalidate()
+            timer = nil
+            isHoldLongPress = false
+        }
+    }
+    
+    @objc func heightAddLongGesAction(ges: UIGestureRecognizer) {
+        if ges.state == .began {
+            
+            timer = Timer.init(timeInterval: 0.1, target: self, selector: #selector(autoHeightAdd), userInfo: nil, repeats: true)
+            if let timer_m = timer {
+                RunLoop.main.add(timer_m, forMode: .common)
+            }
+            
+            isHoldLongPress = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.isHoldLongPress = true
+            }
+        }
+        
+        if ges.state == .ended {
+            timer?.invalidate()
+            timer = nil
+            isHoldLongPress = false
+        }
+    }
+    
+    @objc func heightJianLongGesAction(ges: UIGestureRecognizer) {
+        if ges.state == .began {
+            
+            timer = Timer.init(timeInterval: 0.1, target: self, selector: #selector(autoHeightJian), userInfo: nil, repeats: true)
+            if let timer_m = timer {
+                RunLoop.main.add(timer_m, forMode: .common)
+            }
+            
+            isHoldLongPress = false
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.isHoldLongPress = true
+            }
+        }
+        
+        if ges.state == .ended {
+            timer?.invalidate()
+            timer = nil
+            isHoldLongPress = false
+        }
+    }
     
 }
 
@@ -311,6 +488,7 @@ extension PSkProfileFrameToolView: UICollectionViewDataSource {
         let item = frameTypeList[indexPath.item]
         cell.nameLabel.text(item.titleStr)
         cell.contentImgV.image(item.iconImgStr)
+        cell.contentImgV.backgroundColor(.darkGray)
         return cell
     }
     

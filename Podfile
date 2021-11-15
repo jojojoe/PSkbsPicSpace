@@ -17,7 +17,7 @@ target 'PSkbsPicSpace' do
   pod 'SwiftyStoreKit'
   pod 'Defaults'
   pod 'MaLiang'
-  
+  pod 'FlexColorPicker'
   
   pod 'LookinServer', :configurations => ['Debug']
   

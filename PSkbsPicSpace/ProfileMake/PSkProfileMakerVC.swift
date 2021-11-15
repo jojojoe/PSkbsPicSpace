@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ZKProgressHUD
 
 class PSkProfileMakerVC: UIViewController {
 
@@ -181,6 +182,25 @@ class PSkProfileMakerVC: UIViewController {
         frameBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
+        frameBar.isHidden = true
+        //
+        let bgColorBar = PSkProfileBgToolView()
+        bgColorBar.adhere(toSuperview: view)
+        bgColorBar.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            
+        }
+        bgColorBar.selectColorBlock = {
+            [weak self] bgColor in
+            guard let `self` = self else {return}
+            self.canvasV.backgroundColor(bgColor)
+        }
+        bgColorBar.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        
+        
     }
      
 
