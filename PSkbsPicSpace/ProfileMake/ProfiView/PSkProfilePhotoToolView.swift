@@ -169,6 +169,13 @@ extension PSkProfilePhotoToolView: UICollectionViewDelegate {
 class PSkProfilePhotoToolCell: UICollectionViewCell {
     let contentImgV = UIImageView()
     
+    let deleteBtn = UIButton(type: .custom)
+    let removeBgBtn = UIButton(type: .custom)
+    let beautyBtn = UIButton(type: .custom)
+    let mirrorBtn = UIButton(type: .custom)
+    let upMoveBtn = UIButton(type: .custom)
+    let bottomMoveBtn = UIButton(type: .custom)
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
