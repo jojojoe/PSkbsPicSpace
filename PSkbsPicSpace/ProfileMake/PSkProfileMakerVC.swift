@@ -17,8 +17,10 @@ class PSkProfileMakerVC: UIViewController {
     let frameBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Frame")
     let bgBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "BgColor")
     let photoBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Photo")
-    
-    
+    let frameBar = PSkProfileFrameToolView()
+    let bgColorBar = PSkProfileBgToolView()
+    let profileBar = PSkProfilePhotoToolView()
+    let touchMoveCanvasV = PSkTouchMoveCanvasView()
     var viewDidLayoutSubviewsOnce: Once = Once()
     
     var canvasTargetWH: CGFloat = 1 // 1 , 3/4 9/16 16/9
@@ -27,7 +29,7 @@ class PSkProfileMakerVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-
+        setupTouchMoveCanvasV()
 //        processRemoveImageBg()
 
         setupToolView()
@@ -172,24 +174,26 @@ class PSkProfileMakerVC: UIViewController {
     }
 
     func setupToolView() {
-        let frameBar = PSkProfileFrameToolView()
+
         frameBar.adhere(toSuperview: view)
         frameBar.backBtnClickBlock = {
             [weak self] in
             guard let `self` = self else {return}
-            
+            DispatchQueue.main.async {
+                self.showFrameBarStatus(isShow: false)
+            }
         }
         frameBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
         frameBar.isHidden = true
         //
-        let bgColorBar = PSkProfileBgToolView()
+
         bgColorBar.adhere(toSuperview: view)
         bgColorBar.backBtnClickBlock = {
             [weak self] in
             guard let `self` = self else {return}
-            
+            self.showBgBarStatus(isShow: false)
         }
         bgColorBar.selectColorBlock = {
             [weak self] bgColor in
@@ -201,9 +205,43 @@ class PSkProfileMakerVC: UIViewController {
         }
         
         
+        //
+        
+        profileBar.adhere(toSuperview: view)
+        profileBar.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        profileBar.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.showPhotoBarStatus(isShow: false)
+        }
+        
+        frameBar.isHidden = true
+        bgColorBar.isHidden = true
+        profileBar.isHidden = true
+        
     }
      
+    func setupTouchMoveCanvasV() {
+        
+        touchMoveCanvasV.adhere(toSuperview: canvasV)
+        touchMoveCanvasV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+    }
+}
 
+extension PSkProfileMakerVC {
+    func showFrameBarStatus(isShow: Bool) {
+        frameBar.showStatus(isShow: isShow)
+    }
+    func showBgBarStatus(isShow: Bool) {
+        bgColorBar.showStatus(isShow: isShow)
+    }
+    func showPhotoBarStatus(isShow: Bool) {
+        profileBar.showStatus(isShow: isShow)
+    }
 }
 
 extension PSkProfileMakerVC {
@@ -225,16 +263,17 @@ extension PSkProfileMakerVC {
     
     @objc func frameBtnClick(sender: UIButton) {
         
+        showFrameBarStatus(isShow: true)
         
     }
     
     @objc func bgBtnClick(sender: UIButton) {
-        
+        showBgBarStatus(isShow: true)
         
     }
     
     @objc func photoBtnClick(sender: UIButton) {
-        
+        showPhotoBarStatus(isShow: true)
         
     }
     
@@ -244,28 +283,7 @@ extension PSkProfileMakerVC {
 }
 
 extension PSkProfileMakerVC {
-    func processRemoveImageBg() -> UIImage {
-        
-        let sourceImg = UIImage(named: "profile3.jpg")!
-        
-        
-        if let img = sourceImg.segmentationDeepLabV3(), let cgImg = img.resize(size: sourceImg.size)?.cgImage {
-            
-            let filter = GraySegmentFilter()
-            filter.inputImage = CIImage.init(cgImage: sourceImg.cgImage!)
-            filter.maskImage = CIImage.init(cgImage: cgImg)
-            let output = filter.value(forKey:kCIOutputImageKey) as! CIImage
-            
-            let ciContext = CIContext(options: nil)
-            let cgImage = ciContext.createCGImage(output, from: output.extent)!
-            let result = UIImage(cgImage: cgImage)
-            
-            return result
-            
-        } else {
-            return sourceImg
-        }
-    }
+    
 }
 
 

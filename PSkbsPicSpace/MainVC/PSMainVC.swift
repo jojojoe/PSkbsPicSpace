@@ -9,7 +9,7 @@ import UIKit
 import Photos
 import YPImagePicker
 import DeviceKit
-
+import SnapKit
 
 
 class PSMainVC: UIViewController, UINavigationControllerDelegate {
@@ -20,11 +20,21 @@ class PSMainVC: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         setupView()
+        
+        setupTEst()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.isLock = false
+    }
+    
+    func setupTEst() {
+//        let touchMoveV = PSkTouchMoveCanvasView()
+//        touchMoveV.adhere(toSuperview: view)
+//        touchMoveV.snp.makeConstraints {
+//            $0.left.right.top.bottom.equalToSuperview()
+//        }
     }
     
 }

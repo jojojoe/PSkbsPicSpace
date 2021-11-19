@@ -20,6 +20,8 @@ class PSkProfileFrameToolView: UIView {
     let heightAddBtn = UIButton(type: .custom)
     let heightJianBtn = UIButton(type: .custom)
     var collection: UICollectionView!
+    let contentV = UIView()
+    
     var currentWidth: CGFloat = 0
     var currentHeight: CGFloat = 0
     let maxV: CGFloat = 2000
@@ -29,6 +31,36 @@ class PSkProfileFrameToolView: UIView {
     var timer: Timer?
     var isHoldLongPress: Bool = false
     
+    var contentHeight: CGFloat = 330
+    var isShow: Bool = false
+    
+    
+    func showStatus(isShow: Bool) {
+        self.isShow = isShow
+        if isShow {
+            self.isHidden = false
+            contentV.snp.makeConstraints {
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview()
+                $0.height.equalTo(contentHeight)
+            }
+        } else {
+            contentV.snp.remakeConstraints {
+                $0.left.right.equalToSuperview()
+                $0.bottom.equalToSuperview().offset(contentHeight)
+                $0.height.equalTo(contentHeight)
+            }
+        }
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.layoutIfNeeded()
+        } completion: { finished in
+            if finished {
+                if isShow == false {
+                    self.isHidden = true
+                }
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,14 +103,25 @@ class PSkProfileFrameToolView: UIView {
         }
         
         //
-        let contentV = UIView()
+        contentV
             .backgroundColor(UIColor.white)
             .adhere(toSuperview: self)
         contentV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-330)
+            $0.bottom.equalToSuperview().offset(contentHeight)
+            $0.height.equalTo(contentHeight)
         }
+        //
+        let masktBV = UIView()
+        masktBV
+            .backgroundColor(UIColor.white)
+            .adhere(toSuperview: self)
+        masktBV.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom)
+        }
+        //
         //
         let backBtn = UIButton(type: .custom)
         backBtn
