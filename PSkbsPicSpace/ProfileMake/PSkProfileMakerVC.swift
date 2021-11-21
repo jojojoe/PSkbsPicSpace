@@ -7,8 +7,11 @@
 
 import UIKit
 import ZKProgressHUD
+import YPImagePicker
+import Photos
 
-class PSkProfileMakerVC: UIViewController {
+
+class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
 
     let backBtn = UIButton(type: .custom)
     
@@ -19,12 +22,13 @@ class PSkProfileMakerVC: UIViewController {
     let photoBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Photo")
     let frameBar = PSkProfileFrameToolView()
     let bgColorBar = PSkProfileBgToolView()
-    let profileBar = PSkProfilePhotoToolView()
+    let photoBar = PSkProfilePhotoToolView()
     let touchMoveCanvasV = PSkTouchMoveCanvasView()
     var viewDidLayoutSubviewsOnce: Once = Once()
     
     var canvasTargetWH: CGFloat = 1 // 1 , 3/4 9/16 16/9
-    
+    var currentCanvasWidth: CGFloat?
+    var currentCanvasHeight: CGFloat?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +42,11 @@ class PSkProfileMakerVC: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        updateCanvasFrame()
+        
+    }
+    
+    func updateCanvasFrame() {
         let canvasLeft: CGFloat = 20
         let canvasheight: CGFloat = contentBgV.frame.maxY - contentBgV.frame.minY
         let canvaswidth: CGFloat = (UIScreen.main.bounds.width - canvasLeft * 2)
@@ -65,9 +74,7 @@ class PSkProfileMakerVC: UIViewController {
                 
             })
         }
-        
     }
-    
    
     
     func setupView() {
@@ -103,8 +110,6 @@ class PSkProfileMakerVC: UIViewController {
         
         //
         
-        
-        contentBgV
         contentBgV.backgroundColor(.lightGray)
             .adhere(toSuperview: view)
         contentBgV.snp.makeConstraints {
@@ -183,6 +188,19 @@ class PSkProfileMakerVC: UIViewController {
                 self.showFrameBarStatus(isShow: false)
             }
         }
+        frameBar.selectProfileFrameBlock = {
+            [weak self] fWidth, fHeight in
+            guard let `self` = self else {return}
+            self.currentCanvasWidth = fWidth
+            self.currentCanvasHeight = fHeight
+            self.canvasTargetWH = fWidth / fHeight
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.updateCanvasFrame()
+            }
+            
+        }
         frameBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
@@ -198,7 +216,14 @@ class PSkProfileMakerVC: UIViewController {
         bgColorBar.selectColorBlock = {
             [weak self] bgColor in
             guard let `self` = self else {return}
-            self.canvasV.backgroundColor(bgColor)
+            DispatchQueue.main.async {
+                [weak self] in
+                guard let `self` = self else {return}
+                self.canvasV.backgroundColor(bgColor)
+                PSkProfileManager.default.bgColorPhotoItem.bgColor = bgColor
+                self.photoBar.collection.reloadData()
+            }
+            
         }
         bgColorBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
@@ -207,24 +232,29 @@ class PSkProfileMakerVC: UIViewController {
         
         //
         
-        profileBar.adhere(toSuperview: view)
-        profileBar.snp.makeConstraints {
+        photoBar.adhere(toSuperview: view)
+        photoBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
-        profileBar.backBtnClickBlock = {
+        photoBar.backBtnClickBlock = {
             [weak self] in
             guard let `self` = self else {return}
             self.showPhotoBarStatus(isShow: false)
         }
+        photoBar.addNewPhotoBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            
+        }
         
         frameBar.isHidden = true
         bgColorBar.isHidden = true
-        profileBar.isHidden = true
+        photoBar.isHidden = true
         
     }
      
     func setupTouchMoveCanvasV() {
-        
+        touchMoveCanvasV.backgroundColor(.clear)
         touchMoveCanvasV.adhere(toSuperview: canvasV)
         touchMoveCanvasV.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
@@ -240,7 +270,7 @@ extension PSkProfileMakerVC {
         bgColorBar.showStatus(isShow: isShow)
     }
     func showPhotoBarStatus(isShow: Bool) {
-        profileBar.showStatus(isShow: isShow)
+        photoBar.showStatus(isShow: isShow)
     }
 }
 
@@ -283,6 +313,21 @@ extension PSkProfileMakerVC {
 }
 
 extension PSkProfileMakerVC {
+    func addNewPhotos(img: UIImage) {
+        let item = ProfilePhotoItem()
+        item.bgColor = nil
+        item.originImg = img
+        item.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img)
+        item.isRemoveBg = true
+        item.isSkinBeauty = true
+        item.isMirror = false
+        PSkProfileManager.default.userPhotosItem.append(item)
+        
+        
+        
+    }
+    
+    
     
 }
 
@@ -334,3 +379,223 @@ class PSkProfileMakerBottomBtn: UIButton {
     }
     
 }
+
+
+
+
+
+extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
+    
+    func checkAlbumAuthorization() {
+        
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            if #available(iOS 14, *) {
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                    switch status {
+                    case .authorized:
+                        DispatchQueue.main.async {
+//                            self.presentPhotoPickerController()
+                            self.presentLimitedPhotoPickerController()
+                        }
+                    case .limited:
+                        DispatchQueue.main.async {
+                            self.presentLimitedPhotoPickerController()
+                        }
+                    case .notDetermined:
+                        if status == PHAuthorizationStatus.authorized {
+                            DispatchQueue.main.async {
+//                                self.presentPhotoPickerController()
+                                self.presentLimitedPhotoPickerController()
+                            }
+                        } else if status == PHAuthorizationStatus.limited {
+                            DispatchQueue.main.async {
+                                self.presentLimitedPhotoPickerController()
+                            }
+                        }
+                    case .denied:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                        
+                    case .restricted:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                    default: break
+                    }
+                }
+            } else {
+                
+                PHPhotoLibrary.requestAuthorization { status in
+                    switch status {
+                    case .authorized:
+                        DispatchQueue.main.async {
+//                            self.presentPhotoPickerController()
+                            self.presentLimitedPhotoPickerController()
+                        }
+                    case .limited:
+                        DispatchQueue.main.async {
+                            self.presentLimitedPhotoPickerController()
+                        }
+                    case .denied:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                        
+                    case .restricted:
+                        DispatchQueue.main.async {
+                            [weak self] in
+                            guard let `self` = self else {return}
+                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                                DispatchQueue.main.async {
+                                    let url = URL(string: UIApplication.openSettingsURLString)!
+                                    UIApplication.shared.open(url, options: [:])
+                                }
+                            })
+                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            alert.addAction(confirmAction)
+                            alert.addAction(cancelAction)
+                            
+                            self.present(alert, animated: true)
+                        }
+                    default: break
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    func presentLimitedPhotoPickerController() {
+        var config = YPImagePickerConfiguration()
+        config.library.maxNumberOfItems = 1
+        config.screens = [.library]
+        config.library.defaultMultipleSelection = false
+        config.library.isSquareByDefault = false
+        config.showsPhotoFilters = false
+        config.library.preselectedItems = nil
+        let picker = YPImagePicker(configuration: config)
+        picker.view.backgroundColor(UIColor.white)
+        picker.didFinishPicking { [unowned picker] items, cancelled in
+            var imgs: [UIImage] = []
+            for item in items {
+                switch item {
+                case .photo(let photo):
+                    if let img = photo.image.scaled(toWidth: 1800) {
+                        imgs.append(img)
+                    }
+                    print(photo)
+                case .video(let video):
+                    print(video)
+                }
+            }
+            picker.dismiss(animated: true, completion: nil)
+            if !cancelled {
+                if let image = imgs.first {
+                    self.showEditVC(image: image)
+                }
+            }
+        }
+        picker.navigationBar.backgroundColor = UIColor.white
+//        self.navigationController?.pushViewController(picker, animated: true)
+        present(picker, animated: true, completion: nil)
+    }
+    
+    
+    
+//    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+//        picker.dismiss(animated: true, completion: nil)
+//        var imgList: [UIImage] = []
+//
+//        for result in results {
+//            result.itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { (object, error) in
+//                if let image = object as? UIImage {
+//                    DispatchQueue.main.async {
+//                        // Use UIImage
+//                        print("Selected image: \(image)")
+//                        imgList.append(image)
+//                    }
+//                }
+//            })
+//        }
+//        if let image = imgList.first {
+//            self.showEditVC(image: image)
+//        }
+//    }
+    
+ 
+    func presentPhotoPickerController() {
+        let myPickerController = UIImagePickerController()
+        myPickerController.allowsEditing = false
+        myPickerController.delegate = self
+        myPickerController.sourceType = .photoLibrary
+        self.present(myPickerController, animated: true, completion: nil)
+
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        dismiss(animated: true, completion: nil)
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.showEditVC(image: image)
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.showEditVC(image: image)
+        }
+
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func showEditVC(image: UIImage) {
+        
+        DispatchQueue.main.async {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.addNewPhotos(img: image)
+        }
+    }
+}
+
+
+

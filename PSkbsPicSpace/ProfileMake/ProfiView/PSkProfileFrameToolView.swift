@@ -11,6 +11,9 @@ import ZKProgressHUD
 class PSkProfileFrameToolView: UIView {
 
     var backBtnClickBlock: (()->Void)?
+    var selectProfileFrameBlock: ((CGFloat, CGFloat)->Void)?
+    
+    
     var frameTypeList: [PSkProfileFrameItem] = []
     
     let sizeWidthCountLabel = UILabel()
@@ -84,8 +87,8 @@ class PSkProfileFrameToolView: UIView {
         let item = frameTypeList[indexP.item]
         currentWidth = item.pixWidth
         currentHeight = item.pixHeight
-        sizeWidthCountLabel.text("\(item.pixWidth)")
-        sizeHeightCountLabel.text("\(item.pixHeight)")
+        updateWidthHeight()
+        
         collection.selectItem(at: indexP, animated: true, scrollPosition: .centeredHorizontally)
     }
     
@@ -321,7 +324,7 @@ extension PSkProfileFrameToolView {
             
         }
         currentWidth = value
-        sizeWidthCountLabel.text("\(currentWidth)")
+        updateWidthHeight()
     }
     
     @objc func autoWidthJian() {
@@ -345,7 +348,7 @@ extension PSkProfileFrameToolView {
             
         }
         currentWidth = value
-        sizeWidthCountLabel.text("\(currentWidth)")
+        updateWidthHeight()
     }
     
     @objc func autoHeightAdd() {
@@ -370,7 +373,7 @@ extension PSkProfileFrameToolView {
             
         }
         currentHeight = value
-        sizeHeightCountLabel.text("\(currentHeight)")
+        updateWidthHeight()
     }
     
     @objc func autoHeightJian() {
@@ -395,7 +398,7 @@ extension PSkProfileFrameToolView {
             
         }
         currentHeight = value
-        sizeHeightCountLabel.text("\(currentHeight)")
+        updateWidthHeight()
     }
 }
 
@@ -520,6 +523,12 @@ extension PSkProfileFrameToolView {
         }
     }
     
+    func updateWidthHeight()  {
+        sizeWidthCountLabel.text("\(currentWidth)")
+        sizeHeightCountLabel.text("\(currentHeight)")
+        selectProfileFrameBlock?(currentWidth, currentHeight)
+    }
+    
 }
 
 
@@ -572,19 +581,20 @@ extension PSkProfileFrameToolView: UICollectionViewDelegate {
         currentWidth = item.pixWidth
         currentHeight = item.pixHeight
         
-        sizeWidthCountLabel.text("\(item.pixWidth)")
-        sizeHeightCountLabel.text("\(item.pixHeight)")
+        self.updateWidthHeight()
+        
         
         if item.itemId == "0" {
-            widthAddBtn.isHidden = true
-            widthJianBtn.isHidden = true
-            heightAddBtn.isHidden = true
-            heightJianBtn.isHidden = true
-        } else {
             widthAddBtn.isHidden = false
             widthJianBtn.isHidden = false
             heightAddBtn.isHidden = false
             heightJianBtn.isHidden = false
+        } else {
+            widthAddBtn.isHidden = true
+            widthJianBtn.isHidden = true
+            heightAddBtn.isHidden = true
+            heightJianBtn.isHidden = true
+            
         }
         
     }

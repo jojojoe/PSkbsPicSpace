@@ -27,46 +27,55 @@ class PSkProfileManager {
     var currentItem: ProfilePhotoItem?
     var photoItemList: [ProfilePhotoItem] = []
     
+    var bgColorPhotoItem = ProfilePhotoItem()
+    var addNewPhotoItem = ProfilePhotoItem()
+    
+    var userPhotosItem: [ProfilePhotoItem] = []
+    
+    
     func setupTestPhotoItemList() {
         
-        let item1 = ProfilePhotoItem()
-        item1.bgColor = UIColor.purple
+        bgColorPhotoItem.bgColor = UIColor.white
+        photoItemList = [bgColorPhotoItem, addNewPhotoItem]
         
-        let item2 = ProfilePhotoItem()
-        item2.bgColor = nil
-        
-        item2.originImg = UIImage(named: "profile3.jpg")
-        if let img1 = UIImage(named: "profile3.jpg") {
-            item2.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-        }
-        
-        item2.isRemoveBg = true
-        item2.isMirror = true
-        item2.isSkinBeauty = true
-        
-        let item3 = ProfilePhotoItem()
-        item3.bgColor = nil
-        item3.originImg = UIImage(named: "profile3.jpg")
-        if let img1 = UIImage(named: "profile3.jpg") {
-            item3.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-        }
-        item3.isRemoveBg = true
-        item3.isMirror = false
-        item3.isSkinBeauty = true
-        
-        let item4 = ProfilePhotoItem()
-        item4.bgColor = nil
-        item4.originImg = UIImage(named: "profile3.jpg")
-        if let img1 = UIImage(named: "profile3.jpg") {
-            item4.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-        }
-        item4.isRemoveBg = false
-        item4.isMirror = true
-        item4.isSkinBeauty = true
-        
-        let item5 = ProfilePhotoItem()
-        
-        photoItemList = [item1, item2, item3, item4, item5]
+//        let item1 = ProfilePhotoItem()
+//        item1.bgColor = UIColor.purple
+//
+//        let item2 = ProfilePhotoItem()
+//        item2.bgColor = nil
+//
+//        item2.originImg = UIImage(named: "profile3.jpg")
+//        if let img1 = UIImage(named: "profile3.jpg") {
+//            item2.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
+//        }
+//
+//        item2.isRemoveBg = true
+//        item2.isMirror = true
+//        item2.isSkinBeauty = true
+//
+//        let item3 = ProfilePhotoItem()
+//        item3.bgColor = nil
+//        item3.originImg = UIImage(named: "profile3.jpg")
+//        if let img1 = UIImage(named: "profile3.jpg") {
+//            item3.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
+//        }
+//        item3.isRemoveBg = true
+//        item3.isMirror = false
+//        item3.isSkinBeauty = true
+//
+//        let item4 = ProfilePhotoItem()
+//        item4.bgColor = nil
+//        item4.originImg = UIImage(named: "profile3.jpg")
+//        if let img1 = UIImage(named: "profile3.jpg") {
+//            item4.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
+//        }
+//        item4.isRemoveBg = false
+//        item4.isMirror = true
+//        item4.isSkinBeauty = true
+//
+//        let item5 = ProfilePhotoItem()
+//
+//        photoItemList = [item1, item2, item3, item4, item5]
         
     }
     

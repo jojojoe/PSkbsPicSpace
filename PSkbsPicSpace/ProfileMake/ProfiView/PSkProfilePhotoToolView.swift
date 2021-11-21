@@ -12,6 +12,7 @@ import UIKit
 class PSkProfilePhotoToolView: UIView {
 
     var backBtnClickBlock: (()->Void)?
+    var addNewPhotoBlock: (()->Void)?
     let contentV = UIView()
     var collection: UICollectionView!
     
@@ -244,8 +245,15 @@ extension PSkProfilePhotoToolView: UICollectionViewDelegateFlowLayout {
 extension PSkProfilePhotoToolView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = PSkProfileManager.default.photoItemList[indexPath.item]
-        PSkProfileManager.default.currentItem = item
-        collectionView.reloadData()
+        if item == PSkProfileManager.default.addNewPhotoItem {
+            addNewPhotoBlock?()
+        } else if item == PSkProfileManager.default.bgColorPhotoItem {
+            
+        } else {
+            PSkProfileManager.default.currentItem = item
+            collectionView.reloadData()
+        }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
