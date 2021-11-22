@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import YUCIHighPassSkinSmoothing
+
 
 class ProfilePhotoItem: NSObject {
     
@@ -32,51 +34,26 @@ class PSkProfileManager {
     
     var userPhotosItem: [ProfilePhotoItem] = []
     
+    var currentCanvasWidth: CGFloat?
+    var currentCanvasHeight: CGFloat?
     
     func setupTestPhotoItemList() {
         
         bgColorPhotoItem.bgColor = UIColor.white
         photoItemList = [bgColorPhotoItem, addNewPhotoItem]
+         
+    }
+    
+    func processUserPhotosItemList() {
         
-//        let item1 = ProfilePhotoItem()
-//        item1.bgColor = UIColor.purple
-//
-//        let item2 = ProfilePhotoItem()
-//        item2.bgColor = nil
-//
-//        item2.originImg = UIImage(named: "profile3.jpg")
-//        if let img1 = UIImage(named: "profile3.jpg") {
-//            item2.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-//        }
-//
-//        item2.isRemoveBg = true
-//        item2.isMirror = true
-//        item2.isSkinBeauty = true
-//
-//        let item3 = ProfilePhotoItem()
-//        item3.bgColor = nil
-//        item3.originImg = UIImage(named: "profile3.jpg")
-//        if let img1 = UIImage(named: "profile3.jpg") {
-//            item3.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-//        }
-//        item3.isRemoveBg = true
-//        item3.isMirror = false
-//        item3.isSkinBeauty = true
-//
-//        let item4 = ProfilePhotoItem()
-//        item4.bgColor = nil
-//        item4.originImg = UIImage(named: "profile3.jpg")
-//        if let img1 = UIImage(named: "profile3.jpg") {
-//            item4.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img1)
-//        }
-//        item4.isRemoveBg = false
-//        item4.isMirror = true
-//        item4.isSkinBeauty = true
-//
-//        let item5 = ProfilePhotoItem()
-//
-//        photoItemList = [item1, item2, item3, item4, item5]
-        
+        if PSkProfileManager.default.userPhotosItem.count == 3 {
+            PSkProfileManager.default.photoItemList = [PSkProfileManager.default.bgColorPhotoItem]
+            PSkProfileManager.default.photoItemList.append(contentsOf: PSkProfileManager.default.userPhotosItem)
+        } else {
+            PSkProfileManager.default.photoItemList = [PSkProfileManager.default.bgColorPhotoItem]
+            PSkProfileManager.default.photoItemList.append(contentsOf: PSkProfileManager.default.userPhotosItem)
+            PSkProfileManager.default.photoItemList.append(PSkProfileManager.default.addNewPhotoItem)
+        }
     }
     
     func processRemoveImageBg(originImg: UIImage) -> UIImage {
@@ -101,7 +78,27 @@ class PSkProfileManager {
         }
     }
     
-    
+    func processSkinBeautyFilterImageBg(originImg: UIImage) -> UIImage {
+        guard let originImgcg = originImg.cgImage else {
+            return originImg
+        }
+        let context = CIContext(options: [CIContextOption.workingColorSpace: CGColorSpaceCreateDeviceRGB()])
+        let filter = YUCIHighPassSkinSmoothing()
+        let inputCIImage = CIImage(cgImage: originImgcg)
+        
+        
+        filter.inputImage = inputCIImage
+        filter.inputAmount = NSNumber(value: 0.7) //self.amountSlider.value as NSNumber
+        filter.inputRadius = 7.0 * inputCIImage.extent.width/750.0 as NSNumber
+        let outputCIImage = filter.outputImage!
+        
+        let outputCGImage = context.createCGImage(outputCIImage, from: outputCIImage.extent)
+        let outputUIImage = UIImage(cgImage: outputCGImage!, scale: originImg.scale, orientation: originImg.imageOrientation)
+        
+        
+        return outputUIImage
+        
+    }
     
 }
 

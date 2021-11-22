@@ -87,6 +87,10 @@ class PSkProfileFrameToolView: UIView {
         let item = frameTypeList[indexP.item]
         currentWidth = item.pixWidth
         currentHeight = item.pixHeight
+        
+        PSkProfileManager.default.currentCanvasWidth = currentWidth
+        PSkProfileManager.default.currentCanvasHeight = currentHeight
+        
         updateWidthHeight()
         
         collection.selectItem(at: indexP, animated: true, scrollPosition: .centeredHorizontally)

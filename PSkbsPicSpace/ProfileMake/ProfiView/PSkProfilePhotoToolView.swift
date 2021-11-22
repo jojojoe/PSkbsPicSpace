@@ -13,8 +13,20 @@ class PSkProfilePhotoToolView: UIView {
 
     var backBtnClickBlock: (()->Void)?
     var addNewPhotoBlock: (()->Void)?
+    
     let contentV = UIView()
     var collection: UICollectionView!
+    
+    var selectUserPhotoBlock: ((ProfilePhotoItem)->Void)?
+    
+    var deleteBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var resetBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var removeBgBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var beautyBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var mirrorBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var upMoveBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var downMoveBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    
     
     var contentHeight: CGFloat = 500
     var isShow: Bool = false
@@ -155,11 +167,12 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: PSkProfilePhotoToolCell.self, for: indexPath)
         let item = PSkProfileManager.default.photoItemList[indexPath.item]
+        cell.photoItem = item
         if let bgColor = item.bgColor {
             cell.contentImgV.backgroundColor(bgColor)
         }
         if let isRemoveBg = item.isRemoveBg {
-            if let removeImg = item.smartImg {
+            if isRemoveBg == true, let removeImg = item.smartImg {
                 cell.photoImgV.image = removeImg
             } else {
                 cell.photoImgV.image = item.originImg
@@ -168,6 +181,11 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
         }
         if let isMirror = item.isMirror {
             cell.mirrorBtn.isSelected = isMirror
+            if isMirror == true {
+                cell.photoImgV.transform = CGAffineTransform(scaleX: -1, y: 1)
+            } else {
+                cell.photoImgV.transform = CGAffineTransform.identity
+            }
         }
         if let isSkinBeauty = item.isSkinBeauty {
             cell.beautyBtn.isSelected = isSkinBeauty
@@ -180,15 +198,117 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
             cell.selectV.isHidden = true
         }
         
-        var isAddNewItem = false
-        if item.originImg == nil && item.bgColor == nil  {
-            isAddNewItem = true
+        
+        if item == PSkProfileManager.default.bgColorPhotoItem {
+            cell.bgColorFrameView.isHidden = false
+            let wS = "\(PSkProfileManager.default.currentCanvasWidth ?? 0)"
+            let hS = "\(PSkProfileManager.default.currentCanvasHeight ?? 0)"
+                
+            cell.bgColorFrameTitleLabel
+                .text("\(wS) x \(hS)")
+                .backgroundColor(UIColor.white)
+                .color(UIColor.black)
+            cell.canvasV.isHidden = true
+            cell.addNewImgV.isHidden = true
+        } else if item == PSkProfileManager.default.addNewPhotoItem {
+            cell.bgColorFrameView.isHidden = true
+            cell.canvasV.isHidden = true
+            cell.addNewImgV.isHidden = false
+        } else {
+            cell.bgColorFrameView.isHidden = true
+            cell.canvasV.isHidden = false
+            cell.addNewImgV.isHidden = true
         }
         
-        if indexPath.item == 0 || isAddNewItem {
-            cell.canvasV.isHidden = true
+        
+        
+        if PSkProfileManager.default.userPhotosItem.count == 0 {
+            
+        } else if PSkProfileManager.default.userPhotosItem.count == 1 {
+            cell.upMoveBtn.isHidden = true
+            cell.downMoveBtn.isHidden = true
+        } else if PSkProfileManager.default.userPhotosItem.count == 2 {
+            if item == PSkProfileManager.default.userPhotosItem[0] {
+                cell.upMoveBtn.isHidden = true
+                cell.downMoveBtn.isHidden = false
+            } else {
+                cell.upMoveBtn.isHidden = false
+                cell.downMoveBtn.isHidden = true
+            }
         } else {
-            cell.canvasV.isHidden = false
+            if item == PSkProfileManager.default.userPhotosItem[0] {
+                cell.upMoveBtn.isHidden = true
+                cell.downMoveBtn.isHidden = false
+            } else if item == PSkProfileManager.default.userPhotosItem[PSkProfileManager.default.userPhotosItem.count - 1] {
+                cell.upMoveBtn.isHidden = false
+                cell.downMoveBtn.isHidden = true
+            } else {
+                cell.upMoveBtn.isHidden = false
+                cell.downMoveBtn.isHidden = false
+            }
+        }
+        //
+        cell.deleteBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.deleteBtnClickBlock?(item)
+            }
+            
+        }
+        cell.resetBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.resetBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
+        }
+        cell.removeBgBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.removeBgBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
+        }
+        cell.beautyBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.beautyBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
+        }
+        cell.mirrorBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.mirrorBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
+        }
+        cell.upMoveBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.upMoveBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
+        }
+        cell.downMoveBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            DispatchQueue.main.async {
+                self.downMoveBtnClickBlock?(item)
+                self.selectUserPhotoBlock?(item_m)
+            }
         }
         
         return cell
@@ -250,8 +370,9 @@ extension PSkProfilePhotoToolView: UICollectionViewDelegate {
         } else if item == PSkProfileManager.default.bgColorPhotoItem {
             
         } else {
-            PSkProfileManager.default.currentItem = item
+            
             collectionView.reloadData()
+            selectUserPhotoBlock?(item)
         }
 
     }
@@ -269,9 +390,17 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
     let contentImgV = UIImageView()
     
     let canvasV = UIView()
+    let addNewImgV = UIImageView()
+    
+    var bgColorFrameView = UIView()
+    var bgColorFrameTitleLabel = UILabel()
+    
+    
     var selectV = UIView()
     
     let deleteBtn = UIButton(type: .custom)
+    let resetBtn = UIButton(type: .custom)
+    
     let photoImgV = UIImageView()
     
     let removeBgBtn = UIButton(type: .custom)
@@ -279,6 +408,18 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
     let mirrorBtn = UIButton(type: .custom)
     let upMoveBtn = UIButton(type: .custom)
     let downMoveBtn = UIButton(type: .custom)
+    
+    var photoItem: ProfilePhotoItem?
+    
+    var deleteBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var resetBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var removeBgBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var beautyBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var mirrorBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var upMoveBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+    var downMoveBtnClickBlock: ((ProfilePhotoItem?)->Void)?
+   
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -292,6 +433,8 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
     func setupView() {
         // 100
         contentView.backgroundColor(UIColor.lightGray)
+        
+        
         //
         contentImgV.contentMode = .scaleAspectFill
         contentImgV.clipsToBounds = true
@@ -299,18 +442,55 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         contentImgV.snp.makeConstraints {
             $0.top.right.bottom.left.equalToSuperview()
         }
+        
+        //
+         bgColorFrameView
+            .backgroundColor(UIColor.white)
+            .adhere(toSuperview: contentView)
+        bgColorFrameView.snp.makeConstraints {
+            $0.top.right.bottom.left.equalToSuperview()
+        }
+        bgColorFrameTitleLabel
+            .fontName(20, "AvenirNext-DemiBold")
+            .textAlignment(.center)
+            .adhere(toSuperview: bgColorFrameView)
+        bgColorFrameView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(120)
+            $0.width.equalTo(30)
+        }
+        
         //
         canvasV
-            .backgroundColor(.clear)
+            .backgroundColor(.white)
             .adhere(toSuperview: contentView)
         canvasV.snp.makeConstraints {
             $0.top.right.bottom.left.equalToSuperview()
         }
-        contentImgV.layer.borderColor = UIColor.black.cgColor
-        contentImgV.layer.borderWidth = 3
         
         
         //
+        addNewImgV
+            .backgroundColor(UIColor(hexString: "#A0A0A0")!)
+            .adhere(toSuperview: contentView)
+        addNewImgV.snp.makeConstraints {
+            $0.top.right.bottom.left.equalToSuperview()
+        }
+        
+        //
+        let bgBorderV = UIView()
+        bgBorderV
+            .isUserInteractionEnabled(false)
+            .backgroundColor(UIColor.clear)
+            .adhere(toSuperview: contentView)
+        bgBorderV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        bgBorderV.layer.borderColor = UIColor.black.cgColor
+        bgBorderV.layer.borderWidth = 3
+        
+        //
+        selectV.isUserInteractionEnabled = false
         selectV.layer.borderColor = UIColor.yellow.cgColor
         selectV.layer.borderWidth = 3
         selectV
@@ -322,16 +502,30 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         //
         
         deleteBtn
-            .title("Dele")
+            .title("D")
             .titleColor(UIColor.orange)
             .backgroundColor(UIColor.purple)
             .adhere(toSuperview: canvasV)
         deleteBtn.addTarget(self, action: #selector(deleteBtnClick(sender: )), for: .touchUpInside)
         deleteBtn.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+            $0.bottom.equalTo(contentView.snp.centerY).offset(-2)
             $0.left.equalTo(10)
             $0.width.height.equalTo(30)
         }
+        
+        //
+        resetBtn
+            .title("R")
+            .titleColor(UIColor.orange)
+            .backgroundColor(UIColor.purple)
+            .adhere(toSuperview: canvasV)
+        resetBtn.addTarget(self, action: #selector(resetBtnClick(sender: )), for: .touchUpInside)
+        resetBtn.snp.makeConstraints {
+            $0.top.equalTo(contentView.snp.centerY).offset(2)
+            $0.left.equalTo(10)
+            $0.width.height.equalTo(30)
+        }
+        
         //
         photoImgV
             .contentMode(.scaleAspectFill)
@@ -422,29 +616,26 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         
     }
     
-    
-    
-    
-    
-    
-    
     @objc func deleteBtnClick(sender: UIButton) {
-        
+        deleteBtnClickBlock?(photoItem)
+    }
+    @objc func resetBtnClick(sender: UIButton) {
+        resetBtnClickBlock?(photoItem)
     }
     @objc func removeBgBtnClick(sender: UIButton) {
-        
+        removeBgBtnClickBlock?(photoItem)
     }
     @objc func skinBeautyBtnClick(sender: UIButton) {
-        
+        beautyBtnClickBlock?(photoItem)
     }
     @objc func mirrorBtnClick(sender: UIButton) {
-        
+        mirrorBtnClickBlock?(photoItem)
     }
     @objc func moveUpBtnClick(sender: UIButton) {
-        
+        upMoveBtnClickBlock?(photoItem)
     }
     @objc func moveDownBtnClick(sender: UIButton) {
-        
+        downMoveBtnClickBlock?(photoItem)
     }
     
     

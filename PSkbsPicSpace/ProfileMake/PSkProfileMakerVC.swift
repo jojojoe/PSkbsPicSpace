@@ -9,6 +9,7 @@ import UIKit
 import ZKProgressHUD
 import YPImagePicker
 import Photos
+import CoreML
 
 
 class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
@@ -26,17 +27,18 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     let touchMoveCanvasV = PSkTouchMoveCanvasView()
     var viewDidLayoutSubviewsOnce: Once = Once()
     
+    
+    
     var canvasTargetWH: CGFloat = 1 // 1 , 3/4 9/16 16/9
-    var currentCanvasWidth: CGFloat?
-    var currentCanvasHeight: CGFloat?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupTouchMoveCanvasV()
-//        processRemoveImageBg()
-
         setupToolView()
+        setupBarBlockAction()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -45,6 +47,8 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         updateCanvasFrame()
         
     }
+    
+    
     
     func updateCanvasFrame() {
         let canvasLeft: CGFloat = 20
@@ -191,8 +195,8 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         frameBar.selectProfileFrameBlock = {
             [weak self] fWidth, fHeight in
             guard let `self` = self else {return}
-            self.currentCanvasWidth = fWidth
-            self.currentCanvasHeight = fHeight
+            PSkProfileManager.default.currentCanvasWidth = fWidth
+            PSkProfileManager.default.currentCanvasHeight = fHeight
             self.canvasTargetWH = fWidth / fHeight
             DispatchQueue.main.async {
                 [weak self] in
@@ -236,16 +240,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         photoBar.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
-        photoBar.backBtnClickBlock = {
-            [weak self] in
-            guard let `self` = self else {return}
-            self.showPhotoBarStatus(isShow: false)
-        }
-        photoBar.addNewPhotoBlock = {
-            [weak self] in
-            guard let `self` = self else {return}
-            
-        }
+        
         
         frameBar.isHidden = true
         bgColorBar.isHidden = true
@@ -254,8 +249,11 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     }
      
     func setupTouchMoveCanvasV() {
-        touchMoveCanvasV.backgroundColor(.clear)
-        touchMoveCanvasV.adhere(toSuperview: canvasV)
+        
+        touchMoveCanvasV
+            .clipsToBounds()
+            .backgroundColor(.clear)
+            .adhere(toSuperview: canvasV)
         touchMoveCanvasV.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
         }
@@ -275,8 +273,7 @@ extension PSkProfileMakerVC {
 }
 
 extension PSkProfileMakerVC {
-
-
+    
     @objc func backBtnClick(sender: UIButton) {
         
         if self.navigationController != nil {
@@ -322,12 +319,214 @@ extension PSkProfileMakerVC {
         item.isSkinBeauty = true
         item.isMirror = false
         PSkProfileManager.default.userPhotosItem.append(item)
+        PSkProfileManager.default.currentItem = item
+        PSkProfileManager.default.processUserPhotosItemList()
+        photoBar.collection.reloadData()
         
+        //
+        var wi: CGFloat = 0
+        var he: CGFloat = 0
+        if img.size.width / img.size.height > touchMoveCanvasV.frame.size.width / touchMoveCanvasV.frame.size.height {
+            wi = touchMoveCanvasV.frame.size.width
+            he = touchMoveCanvasV.frame.size.width * (img.size.height / img.size.width)
+        } else {
+            he = touchMoveCanvasV.frame.size.height
+            wi = touchMoveCanvasV.frame.size.height * (img.size.width / img.size.height)
+        }
+        let moveImgVFrame = CGRect(x: 0, y: 0, width: he, height: wi)
         
+        //
+        guard let img = item.smartImg else { return }
+        let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
+        let moveImgV = UIImageView(image: skinBeautyImg)
+        moveImgV.frame = moveImgVFrame
+        moveImgV
+            .contentMode(.scaleAspectFill)
+            .adhere(toSuperview: self.touchMoveCanvasV)
+        self.touchMoveCanvasV.moveV = moveImgV
+        self.touchMoveCanvasV.subViewList.append(moveImgV)
         
+    }
+    func setupBarBlockAction() {
+        photoBar.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            self.showPhotoBarStatus(isShow: false)
+        }
+        photoBar.addNewPhotoBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.checkAlbumAuthorization()
+            }
+        }
+        photoBar.selectUserPhotoBlock = {
+            [weak self] item_m in
+            guard let `self` = self else {return}
+            PSkProfileManager.default.currentItem = item_m
+            let index = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m)
+            if let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)] as? UIImageView {
+                self.touchMoveCanvasV.moveV = imgV
+            }
+        }
+        
+        photoBar.deleteBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            let index = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m)
+            
+            PSkProfileManager.default.userPhotosItem.removeAll(item_m)
+            PSkProfileManager.default.processUserPhotosItemList()
+            
+            //
+            let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)]
+            imgV.removeFromSuperview()
+            self.touchMoveCanvasV.subViewList.removeAll(imgV)
+            
+            //
+            if PSkProfileManager.default.currentItem == item_m {
+                if PSkProfileManager.default.userPhotosItem.count >= 1 {
+                    let lastIndex = PSkProfileManager.default.userPhotosItem.count - 1
+                    let lastItem = PSkProfileManager.default.userPhotosItem[lastIndex]
+                    PSkProfileManager.default.currentItem = lastItem
+                    
+                    //
+                    let imgV = self.touchMoveCanvasV.subViewList[lastIndex]
+                    self.touchMoveCanvasV.moveV = imgV
+                    
+                } else {
+                    PSkProfileManager.default.currentItem = nil
+                    self.touchMoveCanvasV.moveV = nil
+                }
+                
+            }
+            
+            self.photoBar.collection.reloadData()
+            
+        }
+        photoBar.resetBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            item_m.isRemoveBg = true
+            item_m.isSkinBeauty = true
+            item_m.isMirror = false
+            self.photoBar.collection.reloadData()
+            //
+            //
+            let index = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m)
+            if let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)] as? UIImageView, let img = item_m.smartImg {
+                let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
+                imgV.image = skinBeautyImg
+            }
+            
+        }
+        photoBar.removeBgBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            item_m.isRemoveBg = !(item_m.isRemoveBg ?? true)
+            self.photoBar.collection.reloadData()
+            //
+            self.processTouchCanvasViewImageViewStatus(item_m: item_m)
+            //
+
+        }
+        photoBar.beautyBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            item_m.isSkinBeauty = !(item_m.isSkinBeauty ?? true)
+            self.photoBar.collection.reloadData()
+            //
+            self.processTouchCanvasViewImageViewStatus(item_m: item_m)
+        }
+        photoBar.mirrorBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            item_m.isMirror = !(item_m.isMirror ?? true)
+            self.photoBar.collection.reloadData()
+            //
+            self.processTouchCanvasViewImageViewStatus(item_m: item_m)
+        }
+        photoBar.upMoveBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            if let itemIndex = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m) {
+                PSkProfileManager.default.userPhotosItem.removeAll(item_m)
+                PSkProfileManager.default.userPhotosItem.insert(item_m, at: itemIndex - 1)
+                PSkProfileManager.default.processUserPhotosItemList()
+                self.photoBar.collection.reloadData()
+                
+                //
+                let imgV = self.touchMoveCanvasV.subViewList[itemIndex]
+                self.touchMoveCanvasV.subViewList.remove(at: itemIndex)
+                self.touchMoveCanvasV.subViewList.insert(imgV, at: itemIndex - 1)
+                //
+                imgV.removeFromSuperview()
+                self.touchMoveCanvasV.insertSubview(imgV, at: itemIndex - 1)
+                
+            }
+        }
+        photoBar.downMoveBtnClickBlock = {
+            [weak self] item in
+            guard let `self` = self else {return}
+            guard let item_m = item else { return }
+            if let itemIndex = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m) {
+                PSkProfileManager.default.userPhotosItem.removeAll(item_m)
+                if itemIndex + 1 == PSkProfileManager.default.userPhotosItem.count {
+                    PSkProfileManager.default.userPhotosItem.append(item_m)
+                } else {
+                    PSkProfileManager.default.userPhotosItem.insert(item_m, at: itemIndex + 1)
+                }
+                PSkProfileManager.default.processUserPhotosItemList()
+                self.photoBar.collection.reloadData()
+                
+                //
+                let imgV = self.touchMoveCanvasV.subViewList[itemIndex]
+                self.touchMoveCanvasV.subViewList.remove(at: itemIndex)
+                if itemIndex + 1 == self.touchMoveCanvasV.subViewList.count {
+                    self.touchMoveCanvasV.subViewList.append(imgV)
+                } else {
+                    self.touchMoveCanvasV.subViewList.insert(imgV, at: itemIndex + 1)
+                }
+                
+                //
+                imgV.removeFromSuperview()
+                if itemIndex + 1 == self.touchMoveCanvasV.subviews.count {
+                    self.touchMoveCanvasV.addSubview(imgV)
+                } else {
+                    self.touchMoveCanvasV.insertSubview(imgV, at: itemIndex + 1)
+                }
+            }
+        }
     }
     
     
+    
+    func processTouchCanvasViewImageViewStatus(item_m: ProfilePhotoItem) {
+        let index = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m)
+        if let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)] as? UIImageView {
+            var proImg: UIImage?
+            
+            if item_m.isRemoveBg == true {
+                proImg = item_m.smartImg
+            } else {
+                proImg = item_m.originImg
+            }
+            if item_m.isSkinBeauty == true, let proImg_m = proImg {
+                proImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: proImg_m)
+            }
+            if item_m.isMirror == true, let proImg_m = proImg {
+                proImg = proImg_m.withHorizontallyFlippedOrientation()
+            }
+             
+            imgV.image = proImg
+        }
+    }
     
 }
 

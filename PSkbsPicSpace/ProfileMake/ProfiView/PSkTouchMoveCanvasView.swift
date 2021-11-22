@@ -10,8 +10,12 @@ import UIKit
 class PSkTouchMoveCanvasView: UIView {
 
     var moveV: UIView?
-    var minScale: CGFloat = 0.1
+    var minScale: CGFloat = 0.3
     var maxScale: CGFloat = 1.5
+    
+    var subViewList: [UIView] = []
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -102,12 +106,19 @@ extension PSkTouchMoveCanvasView {
                 debugPrint("sizeDifference = \(sizeDifference)")
                 
                 // scale
-                if moveV_m.frame.width <= self.frame.width * minScale || moveV_m.frame.width >= self.frame.width * maxScale {
-                    
+                if sizeDifference >= 1 {
+                    if moveV_m.frame.width >= self.frame.width * maxScale {
+                        
+                    } else {
+                        moveV_m.transform = moveV_m.transform.scaledBy(x: sizeDifference, y: sizeDifference)
+                    }
                 } else {
-                    moveV_m.transform = moveV_m.transform.scaledBy(x: sizeDifference, y: sizeDifference)
+                    if moveV_m.frame.width <= self.frame.width * minScale {
+                        
+                    } else {
+                        moveV_m.transform = moveV_m.transform.scaledBy(x: sizeDifference, y: sizeDifference)
+                    }
                 }
-                
                 
                 let prevAngle = angleBetween(point1: prevPoint1, point2: prevPoint2)
                 let curAngle = angleBetween(point1: curPoint1, point2: curPoint2)

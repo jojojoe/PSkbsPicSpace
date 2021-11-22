@@ -30,6 +30,10 @@ class PSMainVC: UIViewController, UINavigationControllerDelegate {
     }
     
     func setupTEst() {
+        
+//        let img =  PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: UIImage(named: "SampleImage")!)
+//        debugPrint("img = \(img)")
+        
 //        let touchMoveV = PSkTouchMoveCanvasView()
 //        touchMoveV.adhere(toSuperview: view)
 //        touchMoveV.snp.makeConstraints {
