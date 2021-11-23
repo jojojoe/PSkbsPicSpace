@@ -39,6 +39,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         setupToolView()
         setupBarBlockAction()
         
+        setupDefaultStatus()
     }
     
     override func viewDidLayoutSubviews() {
@@ -48,7 +49,10 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         
     }
     
-    
+    func setupDefaultStatus() {
+        self.touchMoveCanvasV.backgroundColor(UIColor.white)
+        self.canvasV.backgroundColor(UIColor.white)
+    }
     
     func updateCanvasFrame() {
         let canvasLeft: CGFloat = 20
@@ -125,6 +129,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         //
         
         canvasV
+            .clipsToBounds()
             .backgroundColor(.white)
             .adhere(toSuperview: contentBgV)
         canvasV.layer.shadowColor = UIColor.darkGray.withAlphaComponent(0.5).cgColor
@@ -223,6 +228,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
             DispatchQueue.main.async {
                 [weak self] in
                 guard let `self` = self else {return}
+                self.touchMoveCanvasV.backgroundColor(bgColor)
                 self.canvasV.backgroundColor(bgColor)
                 PSkProfileManager.default.bgColorPhotoItem.bgColor = bgColor
                 self.photoBar.collection.reloadData()
@@ -251,8 +257,8 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     func setupTouchMoveCanvasV() {
         
         touchMoveCanvasV
-            .clipsToBounds()
-            .backgroundColor(.clear)
+            
+            .backgroundColor(.white)
             .adhere(toSuperview: canvasV)
         touchMoveCanvasV.snp.makeConstraints {
             $0.left.right.top.bottom.equalToSuperview()
@@ -268,6 +274,7 @@ extension PSkProfileMakerVC {
         bgColorBar.showStatus(isShow: isShow)
     }
     func showPhotoBarStatus(isShow: Bool) {
+        photoBar.collection.reloadData()
         photoBar.showStatus(isShow: isShow)
     }
 }
@@ -284,7 +291,7 @@ extension PSkProfileMakerVC {
     }
     
     @objc func saveBtnClick(sender: UIButton) {
-        
+        processBigImg()
         
     }
     
@@ -311,40 +318,53 @@ extension PSkProfileMakerVC {
 
 extension PSkProfileMakerVC {
     func addNewPhotos(img: UIImage) {
-        let item = ProfilePhotoItem()
-        item.bgColor = nil
-        item.originImg = img
-        item.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img)
-        item.isRemoveBg = true
-        item.isSkinBeauty = true
-        item.isMirror = false
-        PSkProfileManager.default.userPhotosItem.append(item)
-        PSkProfileManager.default.currentItem = item
-        PSkProfileManager.default.processUserPhotosItemList()
-        photoBar.collection.reloadData()
         
-        //
-        var wi: CGFloat = 0
-        var he: CGFloat = 0
-        if img.size.width / img.size.height > touchMoveCanvasV.frame.size.width / touchMoveCanvasV.frame.size.height {
-            wi = touchMoveCanvasV.frame.size.width
-            he = touchMoveCanvasV.frame.size.width * (img.size.height / img.size.width)
-        } else {
-            he = touchMoveCanvasV.frame.size.height
-            wi = touchMoveCanvasV.frame.size.height * (img.size.width / img.size.height)
+        HUD.show()
+        DispatchQueue.global().async {
+            let item = ProfilePhotoItem()
+            item.bgColor = nil
+            item.originImg = img
+            item.smartImg = PSkProfileManager.default.processRemoveImageBg(originImg: img)
+            item.isRemoveBg = true
+            item.isSkinBeauty = true
+            item.isMirror = false
+            PSkProfileManager.default.userPhotosItem.append(item)
+            PSkProfileManager.default.currentItem = item
+            PSkProfileManager.default.processUserPhotosItemList()
+            
+            
+            //
+            var wi: CGFloat = 0
+            var he: CGFloat = 0
+            if img.size.width / img.size.height > self.touchMoveCanvasV.frame.size.width / self.touchMoveCanvasV.frame.size.height {
+                wi = self.touchMoveCanvasV.frame.size.width
+                he = CGFloat(Int(self.touchMoveCanvasV.frame.size.width * (img.size.height / img.size.width)))
+            } else {
+                he = self.touchMoveCanvasV.frame.size.height
+                wi = CGFloat(Int(self.touchMoveCanvasV.frame.size.height * (img.size.width / img.size.height)))
+            }
+            let moveImgVFrame = CGRect(x: 0, y: 0, width: wi, height: he)
+            
+            //
+            guard let img = item.smartImg else { return }
+            let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
+            
+            DispatchQueue.main.async {
+                HUD.hide()
+                self.photoBar.collection.reloadData()
+                
+                let moveImgV = UIImageView(image: skinBeautyImg)
+                moveImgV.frame = moveImgVFrame
+                moveImgV.center = CGPoint(x: self.touchMoveCanvasV.width / 2, y: self.touchMoveCanvasV.height / 2)
+                moveImgV
+                    .contentMode(.scaleAspectFill)
+                    .adhere(toSuperview: self.touchMoveCanvasV)
+                self.touchMoveCanvasV.moveV = moveImgV
+                self.touchMoveCanvasV.subViewList.append(moveImgV)
+            }
+            
         }
-        let moveImgVFrame = CGRect(x: 0, y: 0, width: he, height: wi)
         
-        //
-        guard let img = item.smartImg else { return }
-        let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
-        let moveImgV = UIImageView(image: skinBeautyImg)
-        moveImgV.frame = moveImgVFrame
-        moveImgV
-            .contentMode(.scaleAspectFill)
-            .adhere(toSuperview: self.touchMoveCanvasV)
-        self.touchMoveCanvasV.moveV = moveImgV
-        self.touchMoveCanvasV.subViewList.append(moveImgV)
         
     }
     func setupBarBlockAction() {
@@ -419,6 +439,8 @@ extension PSkProfileMakerVC {
             if let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)] as? UIImageView, let img = item_m.smartImg {
                 let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
                 imgV.image = skinBeautyImg
+                imgV.center = CGPoint(x: self.touchMoveCanvasV.width / 2, y: self.touchMoveCanvasV.height / 2)
+                imgV.transform = CGAffineTransform.identity
             }
             
         }
@@ -530,7 +552,108 @@ extension PSkProfileMakerVC {
     
 }
 
+extension PSkProfileMakerVC {
+    func processBigImg() {
+        let bigCanvasV = UIView()
+        bigCanvasV.backgroundColor = touchMoveCanvasV.backgroundColor
+        let bigwidth: CGFloat = PSkProfileManager.default.currentCanvasWidth ?? 1000
+        let bigheight: CGFloat = PSkProfileManager.default.currentCanvasHeight ?? 1000
+        bigCanvasV.frame = CGRect(x: 0, y: 0, width: bigwidth, height: bigheight)
+        let scaleWH = bigwidth / touchMoveCanvasV.width
+        
+        for imgV in touchMoveCanvasV.subviews {
+            if let imgV_m = imgV as? UIImageView {
+                let bigImgV = UIImageView()
+                let bigImgVBound = CGRect(x: 0, y: 0, width: imgV_m.bounds.width * scaleWH, height: imgV_m.bounds.height * scaleWH)
+                bigImgV.bounds = bigImgVBound
+                
+                let bigImgVCenter = CGPoint(x: imgV_m.center.x * scaleWH, y: imgV_m.center.y * scaleWH)
+                bigImgV.center = bigImgVCenter
+                if let i = imgV_m.image?.cgImage {
+                    bigImgV.image = UIImage(cgImage: i)
+                }
+                bigImgV.adhere(toSuperview: bigCanvasV)
+                // trans
+                
+                bigImgV.transform = imgV_m.transform
+                
+            }
+        }
+        
+        //
+        let canvasSize = CGSize(width: bigwidth, height: bigheight)
+        
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, 1)
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        bigCanvasV.layer.render(in: context)
+        
+        let bigImg = UIGraphicsGetImageFromCurrentImageContext()
+        
+//        saveImgsToAlbum(imgs: [imgpng])
 
+        
+
+        
+        
+        
+    }
+ 
+    func showSavePopupView(image: UIImage) {
+        
+        let popupView = PSkProfileSavePopupView(frame: .zero, originImg: image)
+        view.addSubview(popupView)
+        popupView.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        popupView.backBtnClickBlock = {
+            UIView.animate(withDuration: 0.25) {
+                popupView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    popupView.removeFromSuperview()
+                }
+            }
+        }
+        
+        popupView.saveToAlbumBtnClickBlock = {
+            [weak self] img in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                self.saveImgsToAlbum(imgs: [img])
+            }
+            UIView.animate(withDuration: 0.25) {
+                popupView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    popupView.removeFromSuperview()
+                }
+            }
+        }
+        popupView.shareBtnClickBlock = {
+            [weak self] img in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                let ac = UIActivityViewController(activityItems: [img], applicationActivities: nil)
+                ac.modalPresentationStyle = .fullScreen
+                ac.completionWithItemsHandler = {
+                    (type, flag, array, error) -> Void in
+                    if flag == true {
+                         
+                    } else {
+                        
+                    }
+                }
+                self.present(ac, animated: true, completion: nil)
+            }
+        }
+        
+        
+    }
+    
+}
 
 
 
@@ -797,4 +920,87 @@ extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
 }
 
 
+ 
+extension PSkProfileMakerVC {
+    func saveImgsToAlbum(imgs: [UIImage]) {
+        HUD.hide()
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .authorized {
+            saveToAlbumPhotoAction(images: imgs)
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({[weak self] (status) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if status != .authorized {
+                        return
+                    }
+                    self.saveToAlbumPhotoAction(images: imgs)
+                }
+            })
+        } else {
+            // 权限提示
+            albumPermissionsAlet()
+        }
+    }
+    
+    func saveToAlbumPhotoAction(images: [UIImage]) {
+        DispatchQueue.main.async(execute: {
+            PHPhotoLibrary.shared().performChanges({
+                [weak self] in
+                guard let `self` = self else {return}
+                for img in images {
+                    PHAssetChangeRequest.creationRequestForAsset(from: img)
+                }
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.showSaveSuccessAlert()
+                }
+                
+            }) { (finish, error) in
+                if error != nil {
+                    HUD.error("Sorry! please try again")
+                }
+            }
+        })
+    }
+    
+    func showSaveSuccessAlert() {
+        
 
+        DispatchQueue.main.async {
+            let title = ""
+            let message = "Photo saved successfully!"
+            let okText = "OK"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
+                 DispatchQueue.main.async {
+                 }
+            })
+            alert.addAction(okButton)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    func albumPermissionsAlet() {
+        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+            self?.openSystemAppSetting()
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openSystemAppSetting() {
+        let url = NSURL.init(string: UIApplication.openSettingsURLString)
+        let canOpen = UIApplication.shared.canOpenURL(url! as URL)
+        if canOpen {
+            UIApplication.shared.open(url! as URL, options: [:], completionHandler: nil)
+        }
+    }
+ 
+}

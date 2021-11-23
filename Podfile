@@ -19,6 +19,8 @@ target 'PSkbsPicSpace' do
   pod 'MaLiang'
   pod 'FlexColorPicker'
   pod 'YUCIHighPassSkinSmoothing'
+  pod 'LabelSwitch'
+  
   
   pod 'LookinServer', :configurations => ['Debug']
   

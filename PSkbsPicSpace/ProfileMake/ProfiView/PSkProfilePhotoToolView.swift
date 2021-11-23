@@ -169,7 +169,7 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
         let item = PSkProfileManager.default.photoItemList[indexPath.item]
         cell.photoItem = item
         if let bgColor = item.bgColor {
-            cell.contentImgV.backgroundColor(bgColor)
+            cell.bgColorFrameView.backgroundColor(bgColor)
         }
         if let isRemoveBg = item.isRemoveBg {
             if isRemoveBg == true, let removeImg = item.smartImg {
@@ -201,8 +201,8 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
         
         if item == PSkProfileManager.default.bgColorPhotoItem {
             cell.bgColorFrameView.isHidden = false
-            let wS = "\(PSkProfileManager.default.currentCanvasWidth ?? 0)"
-            let hS = "\(PSkProfileManager.default.currentCanvasHeight ?? 0)"
+            let wS = "\(Int(PSkProfileManager.default.currentCanvasWidth ?? 0))"
+            let hS = "\(Int(PSkProfileManager.default.currentCanvasHeight ?? 0))"
                 
             cell.bgColorFrameTitleLabel
                 .text("\(wS) x \(hS)")
@@ -444,20 +444,22 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         }
         
         //
-         bgColorFrameView
-            .backgroundColor(UIColor.white)
+        bgColorFrameView
+            .backgroundColor(UIColor.clear)
             .adhere(toSuperview: contentView)
         bgColorFrameView.snp.makeConstraints {
             $0.top.right.bottom.left.equalToSuperview()
         }
+        bgColorFrameTitleLabel.layer.cornerRadius = 6
         bgColorFrameTitleLabel
             .fontName(20, "AvenirNext-DemiBold")
+            .color(UIColor(hexString: "#000000")!)
             .textAlignment(.center)
             .adhere(toSuperview: bgColorFrameView)
-        bgColorFrameView.snp.makeConstraints {
+        bgColorFrameTitleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.equalTo(120)
-            $0.width.equalTo(30)
+            $0.width.equalTo(190)
+            $0.height.equalTo(30)
         }
         
         //
