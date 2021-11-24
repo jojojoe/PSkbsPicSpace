@@ -14,6 +14,7 @@ class PSkPhotoSlideSavePopupView: UIView {
     let fullBtnOpen = UISwitch()
     var backBtnClickBlock: (()->Void)?
     var okBtnClickBlock: (()->Void)?
+    var shareBtnClickBlock: (()->Void)?
     var sliderAreaViews: [UIImageView] = []
     
     init(frame: CGRect, slideImgs: [UIImage], slideType: SliderType) {
@@ -78,36 +79,56 @@ class PSkPhotoSlideSavePopupView: UIView {
             $0.height.equalTo(40)
         }
         //
-        let backBtn = UIButton(type: .custom)
-        backBtn
-            .text("X")
-            .titleColor(.lightGray)
-            .adhere(toSuperview: contentV)
-        
-        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
-        
-        backBtn.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel.snp.centerY)
-            $0.right.equalTo(contentV.snp.right).offset(-10)
-            $0.width.equalTo(44)
-            $0.height.equalTo(44)
-        }
+//        let backBtn = UIButton(type: .custom)
+//        backBtn
+//            .text("X")
+//            .titleColor(.lightGray)
+//            .adhere(toSuperview: contentV)
+//
+//        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
+//
+//        backBtn.snp.makeConstraints {
+//            $0.centerY.equalTo(nameLabel.snp.centerY)
+//            $0.right.equalTo(contentV.snp.right).offset(-10)
+//            $0.width.equalTo(44)
+//            $0.height.equalTo(44)
+//        }
         //
-        let okBtn = UIButton(type: .custom)
-        okBtn.layer.cornerRadius = 32
-        okBtn
+        let padding: CGFloat = 24
+        // save
+        let saveBtn = UIButton(type: .custom)
+        saveBtn.layer.cornerRadius = 25
+        saveBtn
             .backgroundColor(UIColor(hexString: "#000000")!)
             .text("Save")
             .font(16, "AvenirNext-DemiBold")
             .titleColor(UIColor(hexString: "#FFFFFF")!)
             .adhere(toSuperview: contentV)
-        okBtn.addTarget(self, action: #selector(okBtnClick(sender:)), for: .touchUpInside)
-        okBtn.snp.makeConstraints {
-            $0.bottom.equalTo(contentV.snp.bottom).offset(-30)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(123)
-            $0.height.equalTo(64)
+        saveBtn.addTarget(self, action: #selector(saveBtnClick(sender:)), for: .touchUpInside)
+        saveBtn.snp.makeConstraints {
+            $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
+            $0.right.equalTo(contentV.snp.centerX).offset(-10)
+            $0.width.equalTo(100)
+            $0.height.equalTo(50)
         }
+         
+        // share
+        let shareBtn = UIButton(type: .custom)
+        shareBtn.layer.cornerRadius = 25
+        shareBtn
+            .backgroundColor(UIColor(hexString: "#000000")!)
+            .text("Share")
+            .font(16, "AvenirNext-DemiBold")
+            .titleColor(UIColor(hexString: "#FFFFFF")!)
+            .adhere(toSuperview: contentV)
+        shareBtn.addTarget(self, action: #selector(shareBtnClick(sender:)), for: .touchUpInside)
+        shareBtn.snp.makeConstraints {
+            $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
+            $0.left.equalTo(contentV.snp.centerX).offset(10)
+            $0.width.equalTo(100)
+            $0.height.equalTo(50)
+        }
+        
         //
         let fullLabel: UILabel = UILabel()
             .fontName(15, "")
@@ -115,7 +136,7 @@ class PSkPhotoSlideSavePopupView: UIView {
             .text("整幅/分割")
             .adhere(toSuperview: contentV)
         fullLabel.snp.makeConstraints {
-            $0.bottom.equalTo(okBtn.snp.top).offset(-20)
+            $0.bottom.equalTo(saveBtn.snp.top).offset(-20)
             $0.left.equalTo(24)
             $0.width.greaterThanOrEqualTo(1)
             $0.height.greaterThanOrEqualTo(1)
@@ -289,8 +310,11 @@ class PSkPhotoSlideSavePopupView: UIView {
     @objc func backBtnClick(sender: UIButton) {
         backBtnClickBlock?()
     }
-    @objc func okBtnClick(sender: UIButton) {
+    @objc func saveBtnClick(sender: UIButton) {
         okBtnClickBlock?()
+    }
+    @objc func shareBtnClick(sender: UIButton) {
+        shareBtnClickBlock?()
     }
     @objc func fullBtnOpenClick(sender: UISwitch) {
         updateFullImgStatus(isFull: sender.isOn)

@@ -415,22 +415,26 @@ extension PSkProfileFrameToolView {
     
  
     @objc func widthAddBtnClickTouchUp(sender: UIButton) {
+        isHoldLongPress = false
         autoWidthAdd()
     }
     
  
     @objc func widthJianBtnClickTouchUp(sender: UIButton) {
+        isHoldLongPress = false
         autoWidthJian()
     }
     
  
     
     @objc func heightAddBtnClickTouchUp(sender: UIButton) {
+        isHoldLongPress = false
         autoHeightAdd()
     }
     
     
     @objc func heightJianBtnClickTouchUp(sender: UIButton) {
+        isHoldLongPress = false
         autoHeightJian()
     }
     

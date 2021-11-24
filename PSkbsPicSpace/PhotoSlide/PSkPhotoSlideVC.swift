@@ -286,6 +286,33 @@ extension PSkPhotoSlideVC {
                 }
             }
         }
+        
+        popupView.shareBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                var imgList = images
+                
+                if popupView.fullBtnOpen.isOn == true {
+                    // save full
+                    imgList = [fullImg]
+                } else {
+                    imgList = images
+                }
+                
+                let ac = UIActivityViewController(activityItems: imgList, applicationActivities: nil)
+                ac.modalPresentationStyle = .fullScreen
+                ac.completionWithItemsHandler = {
+                    (type, flag, array, error) -> Void in
+                    if flag == true {
+                         
+                    } else {
+                        
+                    }
+                }
+                self.present(ac, animated: true, completion: nil)
+            }
+        }
     }
     
 }

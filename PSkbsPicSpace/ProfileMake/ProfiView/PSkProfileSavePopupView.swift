@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import LabelSwitch
+import BetterSegmentedControl
 
 enum PSkProfileExportImgType {
     case png
@@ -25,9 +25,10 @@ class PSkProfileSavePopupView: UIView {
     var saveToAlbumBtnClickBlock: ((UIImage)->Void)?
     var shareBtnClickBlock: ((UIImage)->Void)?
     
+    let previewImgV = UIImageView()
     let imageSizeLabel = UILabel()
     
-    var currentQuality: CGFloat = 1
+    var currentQuality: CGFloat = 0.9
     var currentType: PSkProfileExportImgType = .png
     
     
@@ -40,6 +41,7 @@ class PSkProfileSavePopupView: UIView {
         self.processedImg = originImg
         super.init(frame: frame)
         setupView()
+        updateChangePng()
     }
     
     required init?(coder: NSCoder) {
@@ -49,39 +51,8 @@ class PSkProfileSavePopupView: UIView {
     func setupView() {
         backgroundColor(UIColor.black.withAlphaComponent(0.7))
         //
-        //
-        let bgBtn = UIButton(type: .custom)
-        bgBtn
-            .image(UIImage(named: ""))
-            .adhere(toSuperview: self)
-        bgBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
-        bgBtn.snp.makeConstraints {
-            $0.left.right.top.bottom.equalToSuperview()
-        }
         
-        let imgScaleWH: CGFloat = originImg.size.width / originImg.size.height
-        
-        let contentWidth: CGFloat = 330
-        var contentHeight: CGFloat = CGFloat(Int(imgScaleWH * contentWidth))
-        contentHeight += 150
-        
-        //
-        let contentV = UIView()
-            .backgroundColor(.white)
-            .adhere(toSuperview: self)
-        contentV.layer.cornerRadius = 24
-        contentV.layer.shadowColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
-        contentV.layer.shadowOffset = CGSize(width: 0, height: 0)
-        contentV.layer.shadowRadius = 3
-        contentV.layer.shadowOpacity = 0.8
-        contentV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(0)
-            $0.width.equalTo(contentWidth)
-            $0.height.equalTo(contentHeight)
-        }
-         
-        //
+       //
 //        let backBtn = UIButton(type: .custom)
 //        backBtn
 //            .text("X")
@@ -96,13 +67,52 @@ class PSkProfileSavePopupView: UIView {
 //            $0.width.equalTo(44)
 //            $0.height.equalTo(44)
 //        }
+        //
+        let bgBtn = UIButton(type: .custom)
+        bgBtn
+            .image(UIImage(named: ""))
+            .adhere(toSuperview: self)
+        bgBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
+        bgBtn.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        
+        let imgScaleHW: CGFloat = originImg.size.height / originImg.size.width
+        
+        var contentV_Width: CGFloat = 330
+        
+        var contentWidth: CGFloat = 330
+        var contentHeight: CGFloat = CGFloat(Int(imgScaleHW * contentWidth))
+        
+        if contentHeight > 330 {
+            contentHeight = 330
+            contentWidth = CGFloat(Int(contentHeight / imgScaleHW))
+        }
         
         let padding: CGFloat = 24
         
         let previewImgVWidth: CGFloat = contentWidth - (padding * 2)
         let previewImgVHeight: CGFloat = previewImgVWidth * (originImg.size.height / originImg.size.width)
         
-        let previewImgV = UIImageView()
+        contentHeight = padding + previewImgVHeight + 240
+        
+        //
+        let contentV = UIView()
+            .backgroundColor(.white)
+            .adhere(toSuperview: self)
+        contentV.layer.cornerRadius = 24
+        contentV.layer.shadowColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
+        contentV.layer.shadowOffset = CGSize(width: 0, height: 0)
+        contentV.layer.shadowRadius = 3
+        contentV.layer.shadowOpacity = 0.8
+        contentV.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(0)
+            $0.width.equalTo(contentV_Width)
+            $0.height.equalTo(contentHeight)
+        }
+       
+        previewImgV.image = originImg
         previewImgV
             .contentMode(.scaleAspectFill)
             .adhere(toSuperview: contentV)
@@ -126,34 +136,22 @@ class PSkProfileSavePopupView: UIView {
             $0.width.height.greaterThanOrEqualTo(1)
         }
         //
-        let ls = LabelSwitchConfig(text: "Png",
-                              textColor: .white,
-                                   font: UIFont(name: "AvenirNext-Medium", size: 13) ?? UIFont.systemFont(ofSize: 13),
-                        backgroundColor: .purple)
-                
-        let rs = LabelSwitchConfig(text: "Jpg",
-                              textColor: .white,
-                                   font: UIFont(name: "AvenirNext-Medium", size: 13) ?? UIFont.systemFont(ofSize: 13),
-                        backgroundColor: .orange)
-
-        // Set the default state of the switch,
-        let labelSwitch = LabelSwitch(center: .zero, leftConfig: ls, rightConfig: rs)
-
-        // Set the appearance of the circle button
-        labelSwitch.circleShadow = false
-        labelSwitch.circleColor = .white
-
-        // Make switch be triggered by tapping on any position in the switch
-        labelSwitch.fullSizeTapEnabled = true
-
-        // Set the delegate to inform when the switch was triggered
-        labelSwitch.delegate = self
-        labelSwitch.adhere(toSuperview: contentV)
-        labelSwitch.snp.makeConstraints {
+        let imgTypeControl = BetterSegmentedControl(
+            frame: CGRect.zero,
+            segments: LabelSegment.segments(withTitles: ["PNG", "JPG"],
+                                            normalTextColor: .lightGray,
+                                            selectedTextColor: .white),
+            options:[.backgroundColor(.darkGray),
+                     .indicatorViewBackgroundColor(UIColor.purple),
+                     .cornerRadius(6.0),
+                     .animationSpringDamping(2.0)])
+        imgTypeControl.addTarget(self, action: #selector(imgTypeControlValueChange(sender:)), for: .valueChanged)
+        imgTypeControl.adhere(toSuperview: contentV)
+        imgTypeControl.snp.makeConstraints {
             $0.centerY.equalTo(imgTypeLabel.snp.centerY)
             $0.right.equalTo(contentV.snp.right).offset(-padding)
-            $0.width.greaterThanOrEqualTo(70)
-            $0.height.greaterThanOrEqualTo(30)
+            $0.height.equalTo(34)
+            $0.width.equalTo(100)
         }
         
         //
@@ -165,7 +163,7 @@ class PSkProfileSavePopupView: UIView {
             .adhere(toSuperview: contentV)
         imageQualityLabel.snp.makeConstraints {
             $0.left.equalTo(padding)
-            $0.top.equalTo(imgTypeLabel.snp.bottom).offset(34)
+            $0.top.equalTo(imgTypeLabel.snp.bottom).offset(24)
             $0.width.height.greaterThanOrEqualTo(1)
         }
         //
@@ -186,11 +184,13 @@ class PSkProfileSavePopupView: UIView {
         imageQualitySlider.minimumTrackTintColor = UIColor.yellow
         imageQualitySlider.maximumTrackTintColor = UIColor.yellow
         imageQualitySlider.minimumValue = 0
-        imageQualitySlider.maximumValue = 1
+        imageQualitySlider.maximumValue = 0.9
         imageQualitySlider.adhere(toSuperview: contentV)
         imageQualitySlider.snp.makeConstraints {
-            $0.top.equalTo(imageSizeLabel.snp.bottom).offset(20)
+            $0.top.equalTo(imageQualityLabel.snp.bottom).offset(22)
             $0.left.equalTo(40)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(30)
         }
         imageQualitySlider.value = Float(currentQuality)
         
@@ -207,7 +207,7 @@ class PSkProfileSavePopupView: UIView {
             .adhere(toSuperview: contentV)
         saveBtn.addTarget(self, action: #selector(saveBtnClick(sender:)), for: .touchUpInside)
         saveBtn.snp.makeConstraints {
-            $0.bottom.equalTo(contentV.snp.bottom).offset(-30)
+            $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
             $0.right.equalTo(contentV.snp.centerX).offset(-10)
             $0.width.equalTo(100)
             $0.height.equalTo(50)
@@ -215,7 +215,7 @@ class PSkProfileSavePopupView: UIView {
          
         // share
         let shareBtn = UIButton(type: .custom)
-        shareBtn.layer.cornerRadius = 32
+        shareBtn.layer.cornerRadius = 25
         shareBtn
             .backgroundColor(UIColor(hexString: "#000000")!)
             .text("Share")
@@ -224,7 +224,7 @@ class PSkProfileSavePopupView: UIView {
             .adhere(toSuperview: contentV)
         shareBtn.addTarget(self, action: #selector(shareBtnClick(sender:)), for: .touchUpInside)
         shareBtn.snp.makeConstraints {
-            $0.bottom.equalTo(contentV.snp.bottom).offset(-30)
+            $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
             $0.left.equalTo(contentV.snp.centerX).offset(10)
             $0.width.equalTo(100)
             $0.height.equalTo(50)
@@ -233,14 +233,21 @@ class PSkProfileSavePopupView: UIView {
     }
      
 
+    @objc func imgTypeControlValueChange(sender: BetterSegmentedControl) {
+        if sender.index == 0 {
+            updateChangePng()
+        } else {
+            updateChangeJpg()
+        }
+        
+         
+    }
+    
     @objc func backBtnClick(sender: UIButton) {
         backBtnClickBlock?()
     }
     @objc func saveBtnClick(sender: UIButton) {
         saveToAlbumBtnClickBlock?(self.processedImg)
-        
-        
-        
     }
     @objc func shareBtnClick(sender: UIButton) {
         shareBtnClickBlock?(self.processedImg)
@@ -268,31 +275,22 @@ class PSkProfileSavePopupView: UIView {
     
     
     func processPng() {
-        if currentQuality == 1 {
-            if let imageData = originImg.pngData() as NSData? {
-                if let imgpng = UIImage(data: imageData as Data) {
-                    let allSize: Int64 = Int64(imageData.length)
-                    let sizeStr = ByteCountFormatter.string(fromByteCount: allSize, countStyle: ByteCountFormatter.CountStyle.file)
-                    imageSizeLabel.text(sizeStr)
-                    processedImg = imgpng
-                }
-            }
-        } else {
-            if let imageData = originImg.jpegData(compressionQuality: currentQuality) as NSData? {
-                if let jpgtopngImg = UIImage(data: imageData as Data) {
-                    if let imageData = jpgtopngImg.pngData() as NSData? {
-                        if let imgpng = UIImage(data: imageData as Data) {
-                            
-                            let allSize: Int64 = Int64(imageData.length)
-                            let sizeStr = ByteCountFormatter.string(fromByteCount: allSize, countStyle: ByteCountFormatter.CountStyle.file)
-                            
-                            imageSizeLabel.text(sizeStr)
-                            processedImg = imgpng
-                        }
+ 
+        if let imageData = originImg.jpegData(compressionQuality: currentQuality) as NSData? {
+            if let jpgtopngImg = UIImage(data: imageData as Data) {
+                if let imageData = jpgtopngImg.pngData() as NSData? {
+                    if let imgpng = UIImage(data: imageData as Data) {
+                        
+                        let allSize: Int64 = Int64(imageData.length)
+                        let sizeStr = ByteCountFormatter.string(fromByteCount: allSize, countStyle: ByteCountFormatter.CountStyle.file)
+                        
+                        imageSizeLabel.text(sizeStr)
+                        processedImg = imgpng
                     }
                 }
             }
         }
+        previewImgV.image = processedImg
     }
     
     func processJpg() {
@@ -311,18 +309,10 @@ class PSkProfileSavePopupView: UIView {
                 
             }
         }
-        
+        previewImgV.image = processedImg
     }
     
 }
 
-
-extension PSkProfileSavePopupView: LabelSwitchDelegate {
-    func switchChangToState(sender: LabelSwitch) {
-        switch sender.curState {
-            case .L: updateChangePng()
-            case .R: updateChangeJpg()
-        }
-    }
-}
+ 
 

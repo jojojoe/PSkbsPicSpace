@@ -18,6 +18,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     
     let contentBgV = UIView()
     let canvasV = UIView()
+    let canvasBgV = UIView()
     let frameBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Frame")
     let bgBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "BgColor")
     let photoBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Photo")
@@ -55,7 +56,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     }
     
     func updateCanvasFrame() {
-        let canvasLeft: CGFloat = 20
+        var canvasLeft: CGFloat = 20
         let canvasheight: CGFloat = contentBgV.frame.maxY - contentBgV.frame.minY
         let canvaswidth: CGFloat = (UIScreen.main.bounds.width - canvasLeft * 2)
         
@@ -70,6 +71,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         } else {
             fineH = canvasheight
             fineW = canvasheight * canvasTargetWH
+            canvasLeft = (UIScreen.main.bounds.width - fineW) / 2
         }
         let topOffset: CGFloat = (canvasheight - fineH) / 2
         
@@ -118,7 +120,9 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         
         //
         
-        contentBgV.backgroundColor(.lightGray)
+        contentBgV
+            .clipsToBounds()
+            .backgroundColor(.lightGray)
             .adhere(toSuperview: view)
         contentBgV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -127,15 +131,27 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         }
         
         //
+        canvasBgV
+            .clipsToBounds()
+            .backgroundColor(.clear)
+            .adhere(toSuperview: contentBgV)
+        canvasBgV.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.height.equalToSuperview()
+        }
         
+        //
         canvasV
             .clipsToBounds()
             .backgroundColor(.white)
-            .adhere(toSuperview: contentBgV)
+            .adhere(toSuperview: canvasBgV)
         canvasV.layer.shadowColor = UIColor.darkGray.withAlphaComponent(0.5).cgColor
         canvasV.layer.shadowOffset = CGSize(width: 0, height: 0)
         canvasV.layer.shadowRadius = 6
         canvasV.layer.shadowOpacity = 0.8
+        
+        
+        
         
         //
         let bottomBarHeight: CGFloat = 90
@@ -269,13 +285,81 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
 extension PSkProfileMakerVC {
     func showFrameBarStatus(isShow: Bool) {
         frameBar.showStatus(isShow: isShow)
+        if isShow {
+            moveUpCanvasV()
+        } else {
+            moveDownCanvasV()
+        }
     }
     func showBgBarStatus(isShow: Bool) {
         bgColorBar.showStatus(isShow: isShow)
+        if isShow {
+            moveUpCanvasV()
+        } else {
+            moveDownCanvasV()
+        }
     }
     func showPhotoBarStatus(isShow: Bool) {
         photoBar.collection.reloadData()
         photoBar.showStatus(isShow: isShow)
+        if isShow {
+            moveUpCanvasV()
+        } else {
+            moveDownCanvasV()
+        }
+    }
+    
+    func moveUpCanvasV() {
+        
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+//            let cx = self.canvasV.frame.origin.x
+//            let cy = self.canvasV.frame.origin.y - 90
+//            let cwidth = self.canvasV.frame.size.width
+//            let cheight = self.canvasV.frame.size.height
+//
+//            self.canvasV.frame = CGRect(x: cx, y: cy, width: cwidth, height: cheight)
+//        } completion: { finished in
+//
+//        }
+
+        canvasBgV.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(-80)
+            $0.width.height.equalToSuperview()
+        }
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.contentBgV.layoutIfNeeded()
+        } completion: { finished in
+            
+        }
+        
+        
+    }
+    func moveDownCanvasV() {
+        
+//        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+//            let cx = self.canvasV.frame.origin.x
+//            let cy = self.canvasV.frame.origin.y + 90
+//            let cwidth = self.canvasV.frame.size.width
+//            let cheight = self.canvasV.frame.size.height
+//
+//            self.canvasV.frame = CGRect(x: cx, y: cy, width: cwidth, height: cheight)
+//        } completion: { finished in
+//
+//        }
+        
+        
+        canvasBgV.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(0)
+            $0.width.height.equalToSuperview()
+        }
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {
+            self.contentBgV.layoutIfNeeded()
+        } completion: { finished in
+            
+        }
+
     }
 }
 
@@ -332,19 +416,6 @@ extension PSkProfileMakerVC {
             PSkProfileManager.default.currentItem = item
             PSkProfileManager.default.processUserPhotosItemList()
             
-            
-            //
-            var wi: CGFloat = 0
-            var he: CGFloat = 0
-            if img.size.width / img.size.height > self.touchMoveCanvasV.frame.size.width / self.touchMoveCanvasV.frame.size.height {
-                wi = self.touchMoveCanvasV.frame.size.width
-                he = CGFloat(Int(self.touchMoveCanvasV.frame.size.width * (img.size.height / img.size.width)))
-            } else {
-                he = self.touchMoveCanvasV.frame.size.height
-                wi = CGFloat(Int(self.touchMoveCanvasV.frame.size.height * (img.size.width / img.size.height)))
-            }
-            let moveImgVFrame = CGRect(x: 0, y: 0, width: wi, height: he)
-            
             //
             guard let img = item.smartImg else { return }
             let skinBeautyImg = PSkProfileManager.default.processSkinBeautyFilterImageBg(originImg: img)
@@ -353,6 +424,19 @@ extension PSkProfileMakerVC {
                 HUD.hide()
                 self.photoBar.collection.reloadData()
                 
+                //
+                var wi: CGFloat = 0
+                var he: CGFloat = 0
+                if img.size.width / img.size.height > self.touchMoveCanvasV.width / self.touchMoveCanvasV.height {
+                    wi = self.touchMoveCanvasV.frame.size.width
+                    he = CGFloat(Int(self.touchMoveCanvasV.frame.size.width * (img.size.height / img.size.width)))
+                } else {
+                    he = self.touchMoveCanvasV.frame.size.height
+                    wi = CGFloat(Int(self.touchMoveCanvasV.frame.size.height * (img.size.width / img.size.height)))
+                }
+                let moveImgVFrame = CGRect(x: 0, y: 0, width: wi, height: he)
+                
+                //
                 let moveImgV = UIImageView(image: skinBeautyImg)
                 moveImgV.frame = moveImgVFrame
                 moveImgV.center = CGPoint(x: self.touchMoveCanvasV.width / 2, y: self.touchMoveCanvasV.height / 2)
@@ -590,7 +674,11 @@ extension PSkProfileMakerVC {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         bigCanvasV.layer.render(in: context)
         
-        let bigImg = UIGraphicsGetImageFromCurrentImageContext()
+        if let bigImg = UIGraphicsGetImageFromCurrentImageContext() {
+            self.showSavePopupView(image: bigImg)
+        }
+        
+        
         
 //        saveImgsToAlbum(imgs: [imgpng])
 
