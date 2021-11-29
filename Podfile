@@ -20,7 +20,7 @@ target 'PSkbsPicSpace' do
   pod 'FlexColorPicker'
   pod 'YUCIHighPassSkinSmoothing'
   pod 'BetterSegmentedControl'
-  
+  pod 'BBMetalImage'
   
   pod 'LookinServer', :configurations => ['Debug']
   
