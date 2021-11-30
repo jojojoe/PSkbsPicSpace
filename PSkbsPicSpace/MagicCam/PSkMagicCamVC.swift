@@ -36,6 +36,8 @@ import UIKit
  SobelEdgeDetection
  BilateralBlur
  
+ 拍的照片添加拍立得相框
+ 
  */
 
 class PSkMagicCamVC: UIViewController {
