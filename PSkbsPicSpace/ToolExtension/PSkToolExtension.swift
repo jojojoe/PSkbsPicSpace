@@ -9,6 +9,82 @@ import Foundation
 import Alertift
 import ZKProgressHUD
 
+
+//UIView 转 UIimage
+func getImageFromView(view: UIView) -> UIImage{
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
+    let content = UIGraphicsGetCurrentContext()!
+    content.setFillColor(UIColor.clear.cgColor)
+    view.layer.render(in: content)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image!
+    
+}
+
+func getImageFromView(view: UIView, size: CGSize) -> UIImage? {
+    
+    UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+    if let img = UIGraphicsGetImageFromCurrentImageContext() {
+        UIGraphicsEndImageContext()
+        return img
+    } else {
+        UIGraphicsEndImageContext()
+        return nil
+    }
+}
+
+//自定义字体
+let def_fontName = "Helvetica-Bold"
+func customFont(fontName: String, size: CGFloat) -> UIFont {
+    if fontName.count <= 0 || fontName == def_fontName{
+        return UIFont(name: def_fontName, size: size)!
+    }
+    let stringArray: Array = fontName.components(separatedBy: ".")
+    let path = Bundle.main.path(forResource: stringArray[0], ofType: stringArray[1])
+    let fontData = NSData.init(contentsOfFile: path ?? "")
+    
+    let fontdataProvider = CGDataProvider(data: CFBridgingRetain(fontData) as! CFData)
+    let fontRef = CGFont.init(fontdataProvider!)!
+    
+    var fontError = Unmanaged<CFError>?.init(nilLiteral: ())
+    CTFontManagerRegisterGraphicsFont(fontRef, &fontError)
+    
+    let fontName: String =  fontRef.postScriptName as String? ?? ""
+    
+    let font = UIFont(name: fontName, size: size)
+    
+    return font ?? UIFont(name: def_fontName, size: size)!
+}
+
+extension String {
+   /// range转换为NSRange
+   func nsRange(from range: Range<String.Index>) -> NSRange {
+       return NSRange(range, in: self)
+   }
+}
+
+extension String {
+    func getLableHeigh(font:UIFont, width:CGFloat) -> CGFloat {
+        
+        let size = CGSize.init(width: width, height:  CGFloat(MAXFLOAT))
+        
+        //        let dic = [NSAttributedStringKey.font:font] // swift 4.0
+        let dic = [NSAttributedString.Key.font:font] // swift 3.0
+        
+        let strSize = self.boundingRect(with: size, options: [.usesLineFragmentOrigin], attributes: dic, context:nil).size
+        
+        return ceil(strSize.height) + 1
+    }
+    ///获取字符串的宽度
+    func getLableWidth(font:UIFont, height:CGFloat) -> CGFloat {
+        
+        let rect = NSString(string: self).boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: height), options: .usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
+        return ceil(rect.width)
+    }
+}
+
 extension UIImage {
     
     func resized(to size: CGSize) -> UIImage? {
