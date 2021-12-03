@@ -9,6 +9,9 @@ import UIKit
 import BBMetalImage
 import AVFoundation
 import DeviceKit
+import Photos
+import SwiftUI
+
 /*
  https://github.com/Silence-GitHub/BBMetalImage
  
@@ -20,10 +23,18 @@ class PSkMagicCamVC: UIViewController {
 
     private var camera: BBMetalCamera!
     private var metalView: BBMetalView!
+    private var imageSource: BBMetalStaticImageSource?
+    
     
     var backBtn = UIButton(type: .custom)
     var takePhotoBtn = UIButton(type: .custom)
     var camPositionBtn = UIButton(type: .custom)
+    let filterBar = PSkMagicCamFilterBar()
+    let vipProBar = UIView()
+    
+    var currentApplyingFilter: BBMetalBaseFilter?
+    
+    
     
     
     override func viewDidLoad() {
@@ -42,6 +53,7 @@ class PSkMagicCamVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         camera.stop()
+        
     }
     
     func setupView() {
@@ -64,9 +76,13 @@ class PSkMagicCamVC: UIViewController {
         //
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)
         camera.add(consumer: metalView)
-        
+        /*
+         hd4K3840x2160
+         let topOffsety: Float = ((3840 - 2160) / 2) / 3840
+         let heightP: Float = 2160 / 3840
+         */
         //
-        let filterBar = PSkMagicCamFilterBar()
+
         filterBar.backgroundColor(.lightText)
         filterBar.adhere(toSuperview: view)
         filterBar.snp.makeConstraints {
@@ -83,13 +99,13 @@ class PSkMagicCamVC: UIViewController {
         }
         
         //
-        let toolControBar = UIView()
-        toolControBar
+        
+        vipProBar
             .backgroundColor(.darkGray)
             .adhere(toSuperview: view)
-        toolControBar.layer.cornerRadius = 10
-        toolControBar.layer.masksToBounds = true
-        toolControBar.snp.makeConstraints {
+        vipProBar.layer.cornerRadius = 10
+        vipProBar.layer.masksToBounds = true
+        vipProBar.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(filterBar.snp.top).offset(-20)
             $0.height.equalTo(60)
@@ -151,8 +167,63 @@ class PSkMagicCamVC: UIViewController {
 
 extension PSkMagicCamVC {
     func updateFilterItem(item: CamFilterItem) {
+        camera.removeAllConsumers()
+        currentApplyingFilter = item.filter
+        guard let filter = currentApplyingFilter else {
+            camera.add(consumer: metalView)
+            camera.willTransmitTexture = nil
+            imageSource = nil
+            return
+        }
+        //
+        camera.add(consumer: filter).add(consumer: metalView)
+        
+        // blend image source
+        if item.filterType == .hueBlend {
+            imageSource = BBMetalStaticImageSource(image: hueBlendImage(withAlpha: 1))
+        } else {
+            imageSource?.removeAllConsumers()
+            imageSource = nil
+        }
+        if let source = imageSource {
+            camera.willTransmitTexture = { [weak self] _, _ in
+                guard self != nil else { return }
+                source.transmitTexture()
+            }
+            source.add(consumer: filter)
+        }
         
     }
+    
+    func takePhotoProcess(image: UIImage) {
+        //
+        var finalImg: UIImage = image
+        
+        if camera.position == .front {
+            // flip
+            let mirrorFilter = BBMetalFlipFilter(horizontal: true, vertical: false)
+            if let img = mirrorFilter.filteredImage(with: finalImg) {
+                finalImg = img
+            }
+        }
+        
+        // crop
+        let topOffsety: Float = ((1920 - 1080) / 2) / 1920
+        let heightP: Float = 1080 / 1920
+        let cropFilter = BBMetalCropFilter(rect: BBMetalRect(x: 0, y: topOffsety, width: 1, height: heightP))
+        
+        if let img = cropFilter.filteredImage(with: finalImg) {
+            saveImgsToAlbum(imgs: [img])
+        }
+        
+    }
+    
+    private func hueBlendImage(withAlpha alpha: Float) -> UIImage {
+        let image = UIImage(named: "hueBlend4.jpg")!
+        if alpha == 1 { return image }
+        return BBMetalRGBAFilter(alpha: alpha).filteredImage(with: image)!
+    }
+    
 }
 extension PSkMagicCamVC {
     
@@ -163,14 +234,114 @@ extension PSkMagicCamVC {
             self.dismiss(animated: true, completion: nil)
         }
     }
-    
+
     @objc func takePhotoBtnClick(sender: UIButton) {
         
+        camera.capturePhoto { [weak self] info in
+            switch info.result {
+            case let .success(texture):
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    if let img = texture.bb_image {
+                        self.takePhotoProcess(image: img)
+                    }
+                }
+            case let .failure(error):
+                print("Error: \(error)")
+            }
+        }
     }
     
     @objc func camPositionBtnClick(sender: UIButton) {
         camera.switchCameraPosition()
     }
+       
+}
+
+extension PSkMagicCamVC {
     
+}
+
+extension PSkMagicCamVC {
     
+    func saveImgsToAlbum(imgs: [UIImage]) {
+        HUD.hide()
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .authorized {
+            saveToAlbumPhotoAction(images: imgs)
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({[weak self] (status) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if status != .authorized {
+                        return
+                    }
+                    self.saveToAlbumPhotoAction(images: imgs)
+                }
+            })
+        } else {
+            // 权限提示
+            albumPermissionsAlet()
+        }
+    }
+    
+    func saveToAlbumPhotoAction(images: [UIImage]) {
+        DispatchQueue.main.async(execute: {
+            PHPhotoLibrary.shared().performChanges({
+                [weak self] in
+                guard let `self` = self else {return}
+                for img in images {
+                    PHAssetChangeRequest.creationRequestForAsset(from: img)
+                }
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.showSaveSuccessAlert()
+                }
+                
+            }) { (finish, error) in
+                if error != nil {
+                    HUD.error("Sorry! please try again")
+                }
+            }
+        })
+    }
+    
+    func showSaveSuccessAlert() {
+        DispatchQueue.main.async {
+            let title = ""
+            let message = "Photo saved successfully!"
+            let okText = "OK"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
+                 DispatchQueue.main.async {
+                 }
+            })
+            alert.addAction(okButton)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    func albumPermissionsAlet() {
+        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+            self?.openSystemAppSetting()
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openSystemAppSetting() {
+        let url = NSURL.init(string: UIApplication.openSettingsURLString)
+        let canOpen = UIApplication.shared.canOpenURL(url! as URL)
+        if canOpen {
+            UIApplication.shared.open(url! as URL, options: [:], completionHandler: nil)
+        }
+    }
+ 
 }

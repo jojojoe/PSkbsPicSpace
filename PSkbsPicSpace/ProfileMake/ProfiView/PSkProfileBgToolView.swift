@@ -81,7 +81,7 @@ class PSkProfileBgToolView: UIView {
 extension PSkProfileBgToolView {
     
     func loadData() {
-        profileBgColorList = PSkDataManager.default.profileBgColors
+        profileBgColorList = PSkProfileManager.default.profileBgColors
     }
     
     func setupView() {

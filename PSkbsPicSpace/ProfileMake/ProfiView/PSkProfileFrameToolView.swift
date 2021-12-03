@@ -79,7 +79,7 @@ class PSkProfileFrameToolView: UIView {
     }
     
     func loadData() {
-        frameTypeList = PSkDataManager.default.profileMakeFrameItems
+        frameTypeList = PSkProfileManager.default.profileMakeFrameItems
     }
     
     func setupDefault() {

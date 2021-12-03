@@ -20,6 +20,11 @@
 		EB6DA2AE273CB32400D121B2 /* PSkProfileFrameToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6DA2AD273CB32400D121B2 /* PSkProfileFrameToolView.swift */; };
 		EB6DA2B0273CB33000D121B2 /* PSkProfileBgToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6DA2AF273CB33000D121B2 /* PSkProfileBgToolView.swift */; };
 		EB6DA2B2273CB34F00D121B2 /* PSkProfilePhotoToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6DA2B1273CB34F00D121B2 /* PSkProfilePhotoToolView.swift */; };
+		EB7FB2EF275A11C5007BCED8 /* lookup1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2EE275A11C5007BCED8 /* lookup1.png */; };
+		EB7FB2F1275A2811007BCED8 /* hueBlend.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2F0275A2810007BCED8 /* hueBlend.jpg */; };
+		EB7FB2F4275A2ABD007BCED8 /* hueBlend2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2F2275A2ABD007BCED8 /* hueBlend2.jpg */; };
+		EB7FB2F5275A2ABD007BCED8 /* hueBlend3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2F3275A2ABD007BCED8 /* hueBlend3.jpg */; };
+		EB7FB2F7275A2C53007BCED8 /* hueBlend4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2F6275A2C53007BCED8 /* hueBlend4.jpg */; };
 		EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B38B5272C0EE50001C20B /* PSMainVC.swift */; };
 		EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */; };
 		EB8EE7822733F67A0021549B /* PSkProfileMakerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */; };
@@ -48,7 +53,7 @@
 		EB94530B27326ED20000F01A /* PSkPhotoSlideVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530A27326ED20000F01A /* PSkPhotoSlideVC.swift */; };
 		EB94530D27326EFE0000F01A /* PSkPhotoSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530C27326EFE0000F01A /* PSkPhotoSlideView.swift */; };
 		EB945310273271070000F01A /* PSkToolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530F273271070000F01A /* PSkToolExtension.swift */; };
-		EB945312273271900000F01A /* PSkDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB945311273271900000F01A /* PSkDataManager.swift */; };
+		EB945312273271900000F01A /* PSkProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB945311273271900000F01A /* PSkProfileDataManager.swift */; };
 		EB9453142732932A0000F01A /* PSkSlideSaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9453132732932A0000F01A /* PSkSlideSaveView.swift */; };
 		EBDC0E042745E881003010C2 /* PSkTouchMoveCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */; };
 		EBEC9C012745069B004C87AB /* PSkProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEC9C002745069B004C87AB /* PSkProfileManager.swift */; };
@@ -71,6 +76,11 @@
 		EB6DA2AD273CB32400D121B2 /* PSkProfileFrameToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileFrameToolView.swift; sourceTree = "<group>"; };
 		EB6DA2AF273CB33000D121B2 /* PSkProfileBgToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileBgToolView.swift; sourceTree = "<group>"; };
 		EB6DA2B1273CB34F00D121B2 /* PSkProfilePhotoToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfilePhotoToolView.swift; sourceTree = "<group>"; };
+		EB7FB2EE275A11C5007BCED8 /* lookup1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup1.png; sourceTree = "<group>"; };
+		EB7FB2F0275A2810007BCED8 /* hueBlend.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hueBlend.jpg; sourceTree = "<group>"; };
+		EB7FB2F2275A2ABD007BCED8 /* hueBlend2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hueBlend2.jpg; sourceTree = "<group>"; };
+		EB7FB2F3275A2ABD007BCED8 /* hueBlend3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hueBlend3.jpg; sourceTree = "<group>"; };
+		EB7FB2F6275A2C53007BCED8 /* hueBlend4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = hueBlend4.jpg; sourceTree = "<group>"; };
 		EB8B38B5272C0EE50001C20B /* PSMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSMainVC.swift; sourceTree = "<group>"; };
 		EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideSavePopupView.swift; sourceTree = "<group>"; };
 		EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileMakerVC.swift; sourceTree = "<group>"; };
@@ -99,7 +109,7 @@
 		EB94530A27326ED20000F01A /* PSkPhotoSlideVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideVC.swift; sourceTree = "<group>"; };
 		EB94530C27326EFE0000F01A /* PSkPhotoSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideView.swift; sourceTree = "<group>"; };
 		EB94530F273271070000F01A /* PSkToolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkToolExtension.swift; sourceTree = "<group>"; };
-		EB945311273271900000F01A /* PSkDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkDataManager.swift; sourceTree = "<group>"; };
+		EB945311273271900000F01A /* PSkProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileDataManager.swift; sourceTree = "<group>"; };
 		EB9453132732932A0000F01A /* PSkSlideSaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkSlideSaveView.swift; sourceTree = "<group>"; };
 		EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkTouchMoveCanvasView.swift; sourceTree = "<group>"; };
 		EBEC9C002745069B004C87AB /* PSkProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileManager.swift; sourceTree = "<group>"; };
@@ -199,6 +209,18 @@
 			path = PhoSlidView;
 			sourceTree = "<group>";
 		};
+		EB7FB2ED275A11BA007BCED8 /* FilterRes */ = {
+			isa = PBXGroup;
+			children = (
+				EB7FB2EE275A11C5007BCED8 /* lookup1.png */,
+				EB7FB2F0275A2810007BCED8 /* hueBlend.jpg */,
+				EB7FB2F2275A2ABD007BCED8 /* hueBlend2.jpg */,
+				EB7FB2F3275A2ABD007BCED8 /* hueBlend3.jpg */,
+				EB7FB2F6275A2C53007BCED8 /* hueBlend4.jpg */,
+			);
+			path = FilterRes;
+			sourceTree = "<group>";
+		};
 		EB8B38B3272C0EC40001C20B /* Root */ = {
 			isa = PBXGroup;
 			children = (
@@ -226,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */,
+				EB945311273271900000F01A /* PSkProfileDataManager.swift */,
 				EBEC9C02274506FD004C87AB /* ProfileManager */,
 				EB6DA2AB273CB2B100D121B2 /* ProfiView */,
 			);
@@ -237,6 +260,7 @@
 			children = (
 				EB8EE7842733F6B80021549B /* PSkMagicCamVC.swift */,
 				EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */,
+				EB7FB2ED275A11BA007BCED8 /* FilterRes */,
 				EB1F2B102758C49E00A33CE4 /* MagicCamView */,
 			);
 			path = MagicCam;
@@ -302,7 +326,6 @@
 			isa = PBXGroup;
 			children = (
 				EB94530F273271070000F01A /* PSkToolExtension.swift */,
-				EB945311273271900000F01A /* PSkDataManager.swift */,
 			);
 			path = ToolExtension;
 			sourceTree = "<group>";
@@ -376,10 +399,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB7FB2F4275A2ABD007BCED8 /* hueBlend2.jpg in Resources */,
 				041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */,
 				041901B7272C0B03001DC3B9 /* Assets.xcassets in Resources */,
+				EB7FB2F7275A2C53007BCED8 /* hueBlend4.jpg in Resources */,
 				041901B5272C0B02001DC3B9 /* Main.storyboard in Resources */,
 				EB8EE7DE273510190021549B /* profile3.jpg in Resources */,
+				EB7FB2F1275A2811007BCED8 /* hueBlend.jpg in Resources */,
+				EB7FB2F5275A2ABD007BCED8 /* hueBlend3.jpg in Resources */,
+				EB7FB2EF275A11C5007BCED8 /* lookup1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,7 +467,7 @@
 				EB8EE7D42735100B0021549B /* UIImage+RawBytes.swift in Sources */,
 				EB8EE7E5273510FB0021549B /* GraySegmentFilter.swift in Sources */,
 				041901B2272C0B02001DC3B9 /* ViewController.swift in Sources */,
-				EB945312273271900000F01A /* PSkDataManager.swift in Sources */,
+				EB945312273271900000F01A /* PSkProfileDataManager.swift in Sources */,
 				EB8EE7DA2735100B0021549B /* NonMaxSuppression.swift in Sources */,
 				EB8EE7D12735100B0021549B /* Predictions.swift in Sources */,
 				EB8EE7CE2735100B0021549B /* Array+Extensions.swift in Sources */,

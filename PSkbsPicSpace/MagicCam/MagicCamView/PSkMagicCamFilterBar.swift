@@ -58,6 +58,7 @@ extension PSkMagicCamFilterBar: UICollectionViewDataSource {
             .backgroundColor(UIColor.darkGray)
         cell.contentImgV
             .image(item.thumbImgStr)
+        cell.nameL.text(item.thumbImgStr)
         return cell
     }
     
@@ -107,6 +108,7 @@ extension PSkMagicCamFilterBar: UICollectionViewDelegate {
 
 class PSkMagicCamFilterCell: UICollectionViewCell {
     let contentImgV = UIImageView()
+    let nameL = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -126,7 +128,16 @@ class PSkMagicCamFilterCell: UICollectionViewCell {
             $0.left.equalToSuperview().offset(6)
             $0.top.equalToSuperview().offset(6)
         }
-        
+        //
+        nameL
+            .fontName(10, "AvenirNext-DemiBold")
+            .adjustsFontSizeToFitWidth()
+            .color(UIColor.white)
+            .adhere(toSuperview: contentView)
+        nameL.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.top.left.equalToSuperview()
+        }
         
     }
 }
