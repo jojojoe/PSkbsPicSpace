@@ -23,7 +23,7 @@ class PSkMagicCamVC: UIViewController {
 
     private var camera: BBMetalCamera!
     private var metalView: BBMetalView!
-    private var imageSource: BBMetalStaticImageSource?
+//    private var imageSource: BBMetalStaticImageSource?
     
     
     var backBtn = UIButton(type: .custom)
@@ -32,9 +32,8 @@ class PSkMagicCamVC: UIViewController {
     let filterBar = PSkMagicCamFilterBar()
     let vipProBar = UIView()
     
-    var currentApplyingFilter: BBMetalBaseFilter?
-    
-    
+//    var currentApplyingFilter: BBMetalBaseFilter?
+    var currentApplyingFilterItem: CamFilterItem?
     
     
     override func viewDidLoad() {
@@ -62,7 +61,7 @@ class PSkMagicCamVC: UIViewController {
         
         //
         var topOffset: CGFloat = 60
-        var leftOffset: CGFloat = 0
+        var leftOffset: CGFloat = 20
         if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7.0 {
             leftOffset = 50
             topOffset = 50
@@ -168,30 +167,27 @@ class PSkMagicCamVC: UIViewController {
 extension PSkMagicCamVC {
     func updateFilterItem(item: CamFilterItem) {
         camera.removeAllConsumers()
-        currentApplyingFilter = item.filter
-        guard let filter = currentApplyingFilter else {
+        currentApplyingFilterItem = item
+        guard let filter = item.filter else {
             camera.add(consumer: metalView)
             camera.willTransmitTexture = nil
-            imageSource = nil
+//            imageSource = nil
             return
         }
         //
         camera.add(consumer: filter).add(consumer: metalView)
         
-        // blend image source
-        if item.filterType == .hueBlend {
-            imageSource = BBMetalStaticImageSource(image: hueBlendImage(withAlpha: 1))
-        } else {
-            imageSource?.removeAllConsumers()
-            imageSource = nil
-        }
-        if let source = imageSource {
-            camera.willTransmitTexture = { [weak self] _, _ in
-                guard self != nil else { return }
-                source.transmitTexture()
-            }
-            source.add(consumer: filter)
-        }
+         
+//            imageSource?.removeAllConsumers()
+//            imageSource = nil
+        
+//        if let source = imageSource {
+//            camera.willTransmitTexture = { [weak self] _, _ in
+//                guard self != nil else { return }
+//                source.transmitTexture()
+//            }
+//            source.add(consumer: filter)
+//        }
         
     }
     
@@ -213,16 +209,15 @@ extension PSkMagicCamVC {
         let cropFilter = BBMetalCropFilter(rect: BBMetalRect(x: 0, y: topOffsety, width: 1, height: heightP))
         
         if let img = cropFilter.filteredImage(with: finalImg) {
-            saveImgsToAlbum(imgs: [img])
+            if let applyFilter = currentApplyingFilterItem?.makeFilter(), let filteredImg = applyFilter.filteredImage(with: img) {
+                saveImgsToAlbum(imgs: [filteredImg])
+            } else {
+                saveImgsToAlbum(imgs: [img])
+            }
         }
-        
     }
     
-    private func hueBlendImage(withAlpha alpha: Float) -> UIImage {
-        let image = UIImage(named: "hueBlend4.jpg")!
-        if alpha == 1 { return image }
-        return BBMetalRGBAFilter(alpha: alpha).filteredImage(with: image)!
-    }
+    
     
 }
 extension PSkMagicCamVC {

@@ -21,6 +21,7 @@ target 'PSkbsPicSpace' do
   pod 'YUCIHighPassSkinSmoothing'
   pod 'BetterSegmentedControl'
   pod 'BBMetalImage'
+  pod 'GPUImage'
   
   pod 'LookinServer', :configurations => ['Debug']
   
