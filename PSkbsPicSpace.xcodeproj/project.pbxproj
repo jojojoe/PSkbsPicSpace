@@ -30,6 +30,7 @@
 		EB6DA2B0273CB33000D121B2 /* PSkProfileBgToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6DA2AF273CB33000D121B2 /* PSkProfileBgToolView.swift */; };
 		EB6DA2B2273CB34F00D121B2 /* PSkProfilePhotoToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6DA2B1273CB34F00D121B2 /* PSkProfilePhotoToolView.swift */; };
 		EB7FB2EF275A11C5007BCED8 /* lookup1.png in Resources */ = {isa = PBXBuildFile; fileRef = EB7FB2EE275A11C5007BCED8 /* lookup1.png */; };
+		EB892872275DAA20009E73CA /* PSkMagicCamEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB892871275DAA20009E73CA /* PSkMagicCamEditVC.swift */; };
 		EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8B38B5272C0EE50001C20B /* PSMainVC.swift */; };
 		EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */; };
 		EB8EE7822733F67A0021549B /* PSkProfileMakerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */; };
@@ -91,6 +92,7 @@
 		EB6DA2AF273CB33000D121B2 /* PSkProfileBgToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileBgToolView.swift; sourceTree = "<group>"; };
 		EB6DA2B1273CB34F00D121B2 /* PSkProfilePhotoToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfilePhotoToolView.swift; sourceTree = "<group>"; };
 		EB7FB2EE275A11C5007BCED8 /* lookup1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup1.png; sourceTree = "<group>"; };
+		EB892871275DAA20009E73CA /* PSkMagicCamEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamEditVC.swift; sourceTree = "<group>"; };
 		EB8B38B5272C0EE50001C20B /* PSMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSMainVC.swift; sourceTree = "<group>"; };
 		EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideSavePopupView.swift; sourceTree = "<group>"; };
 		EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileMakerVC.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 		EB7FB2ED275A11BA007BCED8 /* FilterRes */ = {
 			isa = PBXGroup;
 			children = (
+				EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */,
 				EB7FB2EE275A11C5007BCED8 /* lookup1.png */,
 				D8E1A108275CE08C00AE43BE /* 曼谷.png */,
 				D8E1A10A275CE08C00AE43BE /* 棉花糖.png */,
@@ -274,7 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				EB8EE7842733F6B80021549B /* PSkMagicCamVC.swift */,
-				EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */,
+				EB892871275DAA20009E73CA /* PSkMagicCamEditVC.swift */,
 				EB7FB2ED275A11BA007BCED8 /* FilterRes */,
 				EB1F2B102758C49E00A33CE4 /* MagicCamView */,
 			);
@@ -493,6 +496,7 @@
 				EB8EE7CE2735100B0021549B /* Array+Extensions.swift in Sources */,
 				EB8EE7D62735100B0021549B /* CVPixelBuffer+Helpers.swift in Sources */,
 				EBEC9C012745069B004C87AB /* PSkProfileManager.swift in Sources */,
+				EB892872275DAA20009E73CA /* PSkMagicCamEditVC.swift in Sources */,
 				EB8EE7D52735100B0021549B /* MLMultiArray+Helpers.swift in Sources */,
 				EB8EE7D92735100B0021549B /* CGImage+CVPixelBuffer.swift in Sources */,
 				EB8EE807273516FD0021549B /* FaceParsing.mlmodel in Sources */,

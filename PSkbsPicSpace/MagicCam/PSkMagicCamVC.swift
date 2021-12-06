@@ -30,9 +30,9 @@ class PSkMagicCamVC: UIViewController {
     var takePhotoBtn = UIButton(type: .custom)
     var camPositionBtn = UIButton(type: .custom)
     let filterBar = PSkMagicCamFilterBar()
-    let vipProBar = UIView()
+//    let vipProBar = UIView()
     
-//    var currentApplyingFilter: BBMetalBaseFilter?
+
     var currentApplyingFilterItem: CamFilterItem?
     
     
@@ -60,10 +60,10 @@ class PSkMagicCamVC: UIViewController {
         view.backgroundColor(.white)
         
         //
-        var topOffset: CGFloat = 60
-        var leftOffset: CGFloat = 20
+        var topOffset: CGFloat = 80
+        var leftOffset: CGFloat = 0
         if Device.current.diagonal <= 4.7 || Device.current.diagonal >= 7.0 {
-            leftOffset = 50
+            leftOffset = 30
             topOffset = 50
         }
         let width: CGFloat = UIScreen.main.bounds.width - (leftOffset * 2)
@@ -99,17 +99,17 @@ class PSkMagicCamVC: UIViewController {
         
         //
         
-        vipProBar
-            .backgroundColor(.darkGray)
-            .adhere(toSuperview: view)
-        vipProBar.layer.cornerRadius = 10
-        vipProBar.layer.masksToBounds = true
-        vipProBar.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(filterBar.snp.top).offset(-20)
-            $0.height.equalTo(60)
-            $0.width.equalTo(UIScreen.main.bounds.width - 80)
-        }
+//        vipProBar
+//            .backgroundColor(.darkGray)
+//            .adhere(toSuperview: view)
+//        vipProBar.layer.cornerRadius = 10
+//        vipProBar.layer.masksToBounds = true
+//        vipProBar.snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.bottom.equalTo(filterBar.snp.top).offset(-20)
+//            $0.height.equalTo(60)
+//            $0.width.equalTo(UIScreen.main.bounds.width - 80)
+//        }
         
         //
         let bottomBar = UIView()
@@ -171,23 +171,11 @@ extension PSkMagicCamVC {
         guard let filter = item.filter else {
             camera.add(consumer: metalView)
             camera.willTransmitTexture = nil
-//            imageSource = nil
             return
         }
         //
         camera.add(consumer: filter).add(consumer: metalView)
-        
          
-//            imageSource?.removeAllConsumers()
-//            imageSource = nil
-        
-//        if let source = imageSource {
-//            camera.willTransmitTexture = { [weak self] _, _ in
-//                guard self != nil else { return }
-//                source.transmitTexture()
-//            }
-//            source.add(consumer: filter)
-//        }
         
     }
     
