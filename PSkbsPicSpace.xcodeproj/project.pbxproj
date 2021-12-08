@@ -61,6 +61,7 @@
 		EB945310273271070000F01A /* PSkToolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530F273271070000F01A /* PSkToolExtension.swift */; };
 		EB945312273271900000F01A /* PSkProfileDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB945311273271900000F01A /* PSkProfileDataManager.swift */; };
 		EB9453142732932A0000F01A /* PSkSlideSaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9453132732932A0000F01A /* PSkSlideSaveView.swift */; };
+		EBC38DF42760BC2800DA0FCD /* PSkMagicCamBorderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */; };
 		EBDC0E042745E881003010C2 /* PSkTouchMoveCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */; };
 		EBEC9C012745069B004C87AB /* PSkProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEC9C002745069B004C87AB /* PSkProfileManager.swift */; };
 /* End PBXBuildFile section */
@@ -123,6 +124,7 @@
 		EB94530F273271070000F01A /* PSkToolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkToolExtension.swift; sourceTree = "<group>"; };
 		EB945311273271900000F01A /* PSkProfileDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileDataManager.swift; sourceTree = "<group>"; };
 		EB9453132732932A0000F01A /* PSkSlideSaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkSlideSaveView.swift; sourceTree = "<group>"; };
+		EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamBorderBar.swift; sourceTree = "<group>"; };
 		EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkTouchMoveCanvasView.swift; sourceTree = "<group>"; };
 		EBEC9C002745069B004C87AB /* PSkProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileManager.swift; sourceTree = "<group>"; };
 		F77BB9F8ECC3CDCF84595DB1 /* Pods-PSkbsPicSpace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.release.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.release.xcconfig"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				EB1F2B112758C50300A33CE4 /* PSkMagicCamFilterBar.swift */,
+				EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */,
 			);
 			path = MagicCamView;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */,
 				EB94530D27326EFE0000F01A /* PSkPhotoSlideView.swift in Sources */,
 				041901B0272C0B02001DC3B9 /* SceneDelegate.swift in Sources */,
+				EBC38DF42760BC2800DA0FCD /* PSkMagicCamBorderBar.swift in Sources */,
 				EB6DA2AE273CB32400D121B2 /* PSkProfileFrameToolView.swift in Sources */,
 				EB8EE7E1273510500021549B /* DeepLabV3.mlmodel in Sources */,
 				EB8EE7DB2735100B0021549B /* CGImage+RawBytes.swift in Sources */,

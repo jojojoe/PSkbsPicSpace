@@ -154,11 +154,19 @@ class CamFilterItem: NSObject {
  BilateralBlur
  
  */
+
+
+struct CamBorderItem {
+    var imgPosition: String = ""
+    var thumb: String = ""
+    var big: String = ""
+}
+
 class PSkMagicCamManager {
     
     static let `default` = PSkMagicCamManager()
     var camFilterList: [CamFilterItem] = []
-    
+    var camBorderList: [CamBorderItem] = []
     init() {
         loadFilter()
     }
