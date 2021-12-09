@@ -12,6 +12,11 @@ import AppTrackingTransparency
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var isForceLandscape:Bool = false
+    var isForcePortrait:Bool = false
+    var isForceAllDerictions:Bool = false
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         NotificationCenter.default.addObserver(self, selector: #selector(applicDidBecomeActiveNotifi(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
         registerNotifications(application)
@@ -100,3 +105,22 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
     }
 }
+
+
+extension AppDelegate {
+    /// 设置屏幕支持的方向
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        if isForceAllDerictions == true {
+            return .all
+        } else if isForceLandscape == true {
+            return .landscape
+        } else if isForcePortrait == true {
+            return .portrait
+        }
+        return .portrait
+    }
+    
+    
+}
+
+

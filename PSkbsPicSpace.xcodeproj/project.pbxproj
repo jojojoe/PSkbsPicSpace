@@ -23,6 +23,15 @@
 		D8E1A118275CE08D00AE43BE /* lookup_002.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10F275CE08C00AE43BE /* lookup_002.png */; };
 		D8E1A119275CE08D00AE43BE /* 日光.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A110275CE08C00AE43BE /* 日光.png */; };
 		DBE20E04214C9A7F82DF1DC6 /* Pods_PSkbsPicSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */; };
+		EB1416912761A99800A79CB7 /* PSkToolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416902761A99800A79CB7 /* PSkToolManager.swift */; };
+		EB1416932761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416922761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift */; };
+		EB1416952761EC4200A79CB7 /* PSkMagicCamColorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416942761EC4200A79CB7 /* PSkMagicCamColorBar.swift */; };
+		EB14169E2761F58900A79CB7 /* UIBezierPath+WeightedPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416982761F58900A79CB7 /* UIBezierPath+WeightedPoint.swift */; };
+		EB14169F2761F58900A79CB7 /* SignatureDrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416992761F58900A79CB7 /* SignatureDrawingModel.swift */; };
+		EB1416A02761F58900A79CB7 /* SignatureDrawingModelAsync.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB14169A2761F58900A79CB7 /* SignatureDrawingModelAsync.swift */; };
+		EB1416A12761F58900A79CB7 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB14169B2761F58900A79CB7 /* CGPoint+Extensions.swift */; };
+		EB1416A22761F58900A79CB7 /* SignatureBezierProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB14169C2761F58900A79CB7 /* SignatureBezierProvider.swift */; };
+		EB1416A32761F58900A79CB7 /* SignatureDrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB14169D2761F58900A79CB7 /* SignatureDrawingViewController.swift */; };
 		EB1F2B0F2758AE3400A33CE4 /* PSkMagicCamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */; };
 		EB1F2B122758C50300A33CE4 /* PSkMagicCamFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1F2B112758C50300A33CE4 /* PSkMagicCamFilterBar.swift */; };
 		EB40F694274CCC420087C4CD /* PSkProfileSavePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40F693274CCC420087C4CD /* PSkProfileSavePopupView.swift */; };
@@ -86,6 +95,15 @@
 		D8E1A10E275CE08C00AE43BE /* lut7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut7.png; sourceTree = "<group>"; };
 		D8E1A10F275CE08C00AE43BE /* lookup_002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_002.png; sourceTree = "<group>"; };
 		D8E1A110275CE08C00AE43BE /* 日光.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "日光.png"; sourceTree = "<group>"; };
+		EB1416902761A99800A79CB7 /* PSkToolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkToolManager.swift; sourceTree = "<group>"; };
+		EB1416922761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamSignatureVC.swift; sourceTree = "<group>"; };
+		EB1416942761EC4200A79CB7 /* PSkMagicCamColorBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamColorBar.swift; sourceTree = "<group>"; };
+		EB1416982761F58900A79CB7 /* UIBezierPath+WeightedPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+WeightedPoint.swift"; sourceTree = "<group>"; };
+		EB1416992761F58900A79CB7 /* SignatureDrawingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureDrawingModel.swift; sourceTree = "<group>"; };
+		EB14169A2761F58900A79CB7 /* SignatureDrawingModelAsync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureDrawingModelAsync.swift; sourceTree = "<group>"; };
+		EB14169B2761F58900A79CB7 /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
+		EB14169C2761F58900A79CB7 /* SignatureBezierProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureBezierProvider.swift; sourceTree = "<group>"; };
+		EB14169D2761F58900A79CB7 /* SignatureDrawingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureDrawingViewController.swift; sourceTree = "<group>"; };
 		EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamManager.swift; sourceTree = "<group>"; };
 		EB1F2B112758C50300A33CE4 /* PSkMagicCamFilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamFilterBar.swift; sourceTree = "<group>"; };
 		EB40F693274CCC420087C4CD /* PSkProfileSavePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileSavePopupView.swift; sourceTree = "<group>"; };
@@ -193,11 +211,33 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		EB1416962761F58900A79CB7 /* UberSignature */ = {
+			isa = PBXGroup;
+			children = (
+				EB1416972761F58900A79CB7 /* Internal */,
+				EB14169D2761F58900A79CB7 /* SignatureDrawingViewController.swift */,
+			);
+			path = UberSignature;
+			sourceTree = "<group>";
+		};
+		EB1416972761F58900A79CB7 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				EB1416982761F58900A79CB7 /* UIBezierPath+WeightedPoint.swift */,
+				EB1416992761F58900A79CB7 /* SignatureDrawingModel.swift */,
+				EB14169A2761F58900A79CB7 /* SignatureDrawingModelAsync.swift */,
+				EB14169B2761F58900A79CB7 /* CGPoint+Extensions.swift */,
+				EB14169C2761F58900A79CB7 /* SignatureBezierProvider.swift */,
+			);
+			path = Internal;
+			sourceTree = "<group>";
+		};
 		EB1F2B102758C49E00A33CE4 /* MagicCamView */ = {
 			isa = PBXGroup;
 			children = (
 				EB1F2B112758C50300A33CE4 /* PSkMagicCamFilterBar.swift */,
 				EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */,
+				EB1416942761EC4200A79CB7 /* PSkMagicCamColorBar.swift */,
 			);
 			path = MagicCamView;
 			sourceTree = "<group>";
@@ -281,6 +321,7 @@
 			children = (
 				EB8EE7842733F6B80021549B /* PSkMagicCamVC.swift */,
 				EB892871275DAA20009E73CA /* PSkMagicCamEditVC.swift */,
+				EB1416922761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift */,
 				EB7FB2ED275A11BA007BCED8 /* FilterRes */,
 				EB1F2B102758C49E00A33CE4 /* MagicCamView */,
 			);
@@ -298,6 +339,7 @@
 		EB8EE7BD27350FF40021549B /* 3Part */ = {
 			isa = PBXGroup;
 			children = (
+				EB1416962761F58900A79CB7 /* UberSignature */,
 				EB8EE7BE2735100B0021549B /* CoreMLHelpers */,
 			);
 			path = 3Part;
@@ -347,6 +389,7 @@
 			isa = PBXGroup;
 			children = (
 				EB94530F273271070000F01A /* PSkToolExtension.swift */,
+				EB1416902761A99800A79CB7 /* PSkToolManager.swift */,
 			);
 			path = ToolExtension;
 			sourceTree = "<group>";
@@ -492,6 +535,8 @@
 				EB8EE7E3273510EB0021549B /* UIImage+Segmentation.swift in Sources */,
 				EB8EE7D42735100B0021549B /* UIImage+RawBytes.swift in Sources */,
 				EB8EE7E5273510FB0021549B /* GraySegmentFilter.swift in Sources */,
+				EB1416A22761F58900A79CB7 /* SignatureBezierProvider.swift in Sources */,
+				EB14169E2761F58900A79CB7 /* UIBezierPath+WeightedPoint.swift in Sources */,
 				041901B2272C0B02001DC3B9 /* ViewController.swift in Sources */,
 				EB945312273271900000F01A /* PSkProfileDataManager.swift in Sources */,
 				EB8EE7DA2735100B0021549B /* NonMaxSuppression.swift in Sources */,
@@ -501,10 +546,13 @@
 				EBEC9C012745069B004C87AB /* PSkProfileManager.swift in Sources */,
 				EB892872275DAA20009E73CA /* PSkMagicCamEditVC.swift in Sources */,
 				EB8EE7D52735100B0021549B /* MLMultiArray+Helpers.swift in Sources */,
+				EB1416A02761F58900A79CB7 /* SignatureDrawingModelAsync.swift in Sources */,
+				EB1416A32761F58900A79CB7 /* SignatureDrawingViewController.swift in Sources */,
 				EB8EE7D92735100B0021549B /* CGImage+CVPixelBuffer.swift in Sources */,
 				EB8EE807273516FD0021549B /* FaceParsing.mlmodel in Sources */,
 				EB1F2B122758C50300A33CE4 /* PSkMagicCamFilterBar.swift in Sources */,
 				EB8EE7852733F6B80021549B /* PSkMagicCamVC.swift in Sources */,
+				EB1416A12761F58900A79CB7 /* CGPoint+Extensions.swift in Sources */,
 				EB40F694274CCC420087C4CD /* PSkProfileSavePopupView.swift in Sources */,
 				EB8EE7822733F67A0021549B /* PSkProfileMakerVC.swift in Sources */,
 				EB94530B27326ED20000F01A /* PSkPhotoSlideVC.swift in Sources */,
@@ -517,12 +565,16 @@
 				EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */,
 				EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */,
 				EB94530D27326EFE0000F01A /* PSkPhotoSlideView.swift in Sources */,
+				EB1416952761EC4200A79CB7 /* PSkMagicCamColorBar.swift in Sources */,
 				041901B0272C0B02001DC3B9 /* SceneDelegate.swift in Sources */,
 				EBC38DF42760BC2800DA0FCD /* PSkMagicCamBorderBar.swift in Sources */,
 				EB6DA2AE273CB32400D121B2 /* PSkProfileFrameToolView.swift in Sources */,
 				EB8EE7E1273510500021549B /* DeepLabV3.mlmodel in Sources */,
+				EB1416912761A99800A79CB7 /* PSkToolManager.swift in Sources */,
 				EB8EE7DB2735100B0021549B /* CGImage+RawBytes.swift in Sources */,
 				EB8EE7DC2735100B0021549B /* MLMultiArray+Image.swift in Sources */,
+				EB1416932761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift in Sources */,
+				EB14169F2761F58900A79CB7 /* SignatureDrawingModel.swift in Sources */,
 				EB6DA2B0273CB33000D121B2 /* PSkProfileBgToolView.swift in Sources */,
 				EB8EE7D22735100B0021549B /* UIImage+Extensions.swift in Sources */,
 				EB9453142732932A0000F01A /* PSkSlideSaveView.swift in Sources */,

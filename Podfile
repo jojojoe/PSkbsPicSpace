@@ -22,6 +22,7 @@ target 'PSkbsPicSpace' do
   pod 'BetterSegmentedControl'
   pod 'BBMetalImage'
   pod 'GPUImage'
+#  pod 'UberSignature'
   
   pod 'LookinServer', :configurations => ['Debug']
   

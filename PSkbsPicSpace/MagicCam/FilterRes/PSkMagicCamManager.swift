@@ -167,8 +167,34 @@ class PSkMagicCamManager {
     static let `default` = PSkMagicCamManager()
     var camFilterList: [CamFilterItem] = []
     var camBorderList: [CamBorderItem] = []
+    var camSignColorList: [String] = []
+    
     init() {
         loadFilter()
+        loadCamBorder()
+        loadCamSignColor()
+    }
+    
+    func loadCamSignColor() {
+        camSignColorList = ["#FFFFFF", "#9E0000", "#163AB8", "#1190EF", "#1D9265", "#D2A647", "#D87B22", "#00BDA6", "#602BB9"]
+    }
+    
+    func loadCamBorder() {
+        let border0 = CamBorderItem(imgPosition: "", thumb: "", big: "")
+        let border1 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
+        let border2 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
+        let border3 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
+        let border4 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
+        let border5 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
+        let border6 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
+        let border7 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
+        let border8 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
+        let border9 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
+        let border10 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
+        let border11 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
+        let border12 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
+        
+        camBorderList = [border0, border1, border2, border3, border4, border5, border6, border7, border8, border9, border10, border11, border12]
     }
     
     func loadFilter() {

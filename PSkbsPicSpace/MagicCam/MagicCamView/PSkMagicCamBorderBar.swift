@@ -23,8 +23,6 @@ class PSkMagicCamBorderBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-
 }
 
 extension PSkMagicCamBorderBar {
@@ -77,7 +75,7 @@ extension PSkMagicCamBorderBar: UICollectionViewDataSource {
 
 extension PSkMagicCamBorderBar: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        return CGSize(width: 90, height: 90)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

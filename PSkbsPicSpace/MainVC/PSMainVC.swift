@@ -145,8 +145,13 @@ extension PSMainVC {
         checkAlbumAuthorization()
     }
     @objc func magicCamBtnClick(sender: UIButton) {
-        let vc = PSkMagicCamVC()
+//        let vc = PSkMagicCamVC()
+//        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let vc = PSkMagicCamEditVC(origImg: UIImage(named: "lut15.png")!)
         self.navigationController?.pushViewController(vc, animated: true)
+        
+        
     }
     @objc func customPhotoBtnClick(sender: UIButton) {
         
