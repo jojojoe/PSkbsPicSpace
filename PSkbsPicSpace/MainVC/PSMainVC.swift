@@ -22,6 +22,8 @@ class PSMainVC: UIViewController, UINavigationControllerDelegate {
         setupView()
         
         setupTEst()
+        
+        AFlyerLibManage.event_LaunchApp()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,10 +50,13 @@ extension PSMainVC {
         view
             .backgroundColor(UIColor.white)
         //
+
+        
         let settingBtn = UIButton(type: .custom)
         settingBtn
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
+        settingBtn.addTarget(self, action: #selector(settingBtnClick(sender: )), for: .touchUpInside)
         settingBtn.snp.makeConstraints {
             $0.left.equalToSuperview().offset(10)
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
@@ -63,6 +68,7 @@ extension PSMainVC {
         vipBtn
             .backgroundColor(UIColor.lightGray)
             .adhere(toSuperview: view)
+        vipBtn.addTarget(self, action: #selector(storeBtnClick(sender: )), for: .touchUpInside)
         vipBtn.snp.makeConstraints {
             $0.right.equalToSuperview().offset(-10)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
@@ -100,7 +106,7 @@ extension PSMainVC {
             $0.height.equalTo(60)
         }
         slideBtn.addTarget(self, action: #selector(slideBtnClick(sender: )), for: .touchUpInside)
-        
+        /*
         //
         let customPhotoBtn = UIButton(type: .custom)
         customPhotoBtn
@@ -115,6 +121,7 @@ extension PSMainVC {
             $0.height.equalTo(60)
         }
         customPhotoBtn.addTarget(self, action: #selector(customPhotoBtnClick(sender: )), for: .touchUpInside)
+        */
         
         //
         let profileMakerBtn = UIButton(type: .custom)
@@ -144,24 +151,30 @@ extension PSMainVC {
         isActionType = "slide"
         checkAlbumAuthorization()
     }
+    
     @objc func magicCamBtnClick(sender: UIButton) {
-//        let vc = PSkMagicCamVC()
-//        self.navigationController?.pushViewController(vc, animated: true)
-        
-        let vc = PSkMagicCamEditVC(origImg: UIImage(named: "lut15.png")!)
+        let vc = PSkMagicCamVC()
         self.navigationController?.pushViewController(vc, animated: true)
-        
-        
     }
+    
     @objc func customPhotoBtnClick(sender: UIButton) {
         
     }
+    
     @objc func profileMakerBtnClick(sender: UIButton) {
         let vc = PSkProfileMakerVC()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    @objc func settingBtnClick(sender: UIButton) {
+        let vc = PSSettingVC()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
+    @objc func storeBtnClick(sender: UIButton) {
+        let vc = PSStoreVC()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
 }
 

@@ -7,6 +7,7 @@
 
 import UIKit
 import DeviceKit
+import Photos
 
 class PSkMagicCamEditVC: UIViewController {
     var origImg: UIImage
@@ -25,6 +26,8 @@ class PSkMagicCamEditVC: UIViewController {
     let signVC = PSkMagicCamSignatureVC()
     
     var viewDidLayoutSubviewsOnce: Once = Once()
+    var currentCanvasFrameItem: CamBorderItem?
+    
     
     init(origImg: UIImage) {
         self.origImg = origImg
@@ -156,7 +159,7 @@ class PSkMagicCamEditVC: UIViewController {
         siginBtn.addTarget(self, action: #selector(siginBtnClick(sender: )), for: .touchUpInside)
         //
         contentBgV
-            .backgroundColor(.white)
+            .backgroundColor(.gray)
             .adhere(toSuperview: view)
         contentBgV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -166,19 +169,18 @@ class PSkMagicCamEditVC: UIViewController {
         
         //
         canvasBgV
-            .backgroundColor(.purple)
+            .backgroundColor(.white)
             .adhere(toSuperview: contentBgV)
-        
-        //
-        
-        borderImgV
-            .contentMode(.scaleAspectFit)
-            .adhere(toSuperview: canvasBgV)
         //
         userImgV
             .contentMode(.scaleAspectFit)
             .adhere(toSuperview: canvasBgV)
         userImgV.image = origImg
+        //
+        borderImgV
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: canvasBgV)
+        
         
     }
 
@@ -187,7 +189,14 @@ class PSkMagicCamEditVC: UIViewController {
 
 extension PSkMagicCamEditVC {
     func updateCanvasFrame(item: CamBorderItem) {
+        if let borderImg = UIImage(named: item.big) {
+            borderImgV.image = borderImg
+        } else {
+            borderImgV.image = UIImage(named: "promax.png")
+        }
         
+        
+        //
         var canvasTargetWH: CGFloat = 1
         var userImgVTopOffset: CGFloat = 0
         var userImgVLeftOffset: CGFloat = 0
@@ -276,6 +285,16 @@ extension PSkMagicCamEditVC {
         borderImgV.frame = CGRect(x: 0, y: 0, width: fineW, height: fineH)
         userImgV.frame = CGRect(x: userImgVLeftOffset, y: userImgVTopOffset, width: userImgVWidth, height: userImgVHeight)
         
+        if currentCanvasFrameItem?.imgPosition != item.imgPosition {
+            currentCanvasFrameItem = item
+            if let signV = self.touchMoveCanvasV.subViewList.first as? UIImageView {
+                updateTouchMoveSignImgVPosition(moveImgV: signV)
+            }
+        } else {
+            currentCanvasFrameItem = item
+        }
+        
+        
         
     }
     
@@ -284,6 +303,8 @@ extension PSkMagicCamEditVC {
         if let signV = self.touchMoveCanvasV.subViewList.first as? UIImageView {
           
             signV.image = signImg
+            
+            updateTouchMoveSignImgVPosition(moveImgV: signV)
             return
         }
         guard let img = signImg else { return }
@@ -309,18 +330,117 @@ extension PSkMagicCamEditVC {
         self.touchMoveCanvasV.moveV = moveImgV
         self.touchMoveCanvasV.subViewList.append(moveImgV)
         
-        
+        //
+        if currentCanvasFrameItem?.imgPosition == "top" {
+            moveImgV.center = CGPoint(x: moveImgV.center.x, y: self.touchMoveCanvasV.height * 5.5/7)
+        } else if currentCanvasFrameItem?.imgPosition == "bottom" {
+            moveImgV.center = CGPoint(x: moveImgV.center.x, y: self.touchMoveCanvasV.height * 2.5/7)
+        } else if currentCanvasFrameItem?.imgPosition == "left" {
+            moveImgV.center = CGPoint(x: self.touchMoveCanvasV.width * 5.5/7, y: moveImgV.center.y)
+        } else if currentCanvasFrameItem?.imgPosition == "right" {
+            moveImgV.center = CGPoint(x: self.touchMoveCanvasV.width * 2.5/7, y: moveImgV.center.y)
+        }
+        updateTouchMoveSignImgVPosition(moveImgV: moveImgV)
     }
+    
+    func updateTouchMoveSignImgVPosition(moveImgV: UIImageView) {
+        //
+        if currentCanvasFrameItem?.imgPosition == "top" {
+            moveImgV.center = CGPoint(x: self.borderImgV.bounds.width / 2, y: self.borderImgV.height * 5.5/7)
+        } else if currentCanvasFrameItem?.imgPosition == "bottom" {
+            moveImgV.center = CGPoint(x: self.borderImgV.bounds.width / 2, y: self.borderImgV.height * 1.5/7)
+        } else if currentCanvasFrameItem?.imgPosition == "left" {
+            moveImgV.center = CGPoint(x: self.borderImgV.bounds.width / 2, y: self.borderImgV.bounds.height / 2)
+        } else if currentCanvasFrameItem?.imgPosition == "right" {
+            moveImgV.center = CGPoint(x: self.borderImgV.bounds.width / 2, y: self.borderImgV.bounds.height / 2)
+        } else {
+            moveImgV.center = CGPoint(x: self.borderImgV.bounds.width / 2, y: self.borderImgV.bounds.height / 2)
+        }
+    }
+}
+
+extension PSkMagicCamEditVC {
+    func processImg() -> UIImage {
+         
+        
+        //TODO: save
+        
+        let scale: CGFloat = 3
+        
+        let saveBgRect: CGRect = CGRect(x: 0, y: 0, width: canvasBgV.size.width * scale, height: canvasBgV.size.height * scale)
+        let canvas_big: UIView = UIView(frame: saveBgRect)
+        
+        //
+        let saveUserImgVRect: CGRect = CGRect(x: self.userImgV.frame.origin.x * scale, y: self.userImgV.frame.origin.y * scale, width: self.userImgV.bounds.width * scale, height: self.userImgV.bounds.height * scale)
+        let saveUserImgV = UIImageView(frame: saveUserImgVRect)
+        if let userImg = userImgV.image, let userImgcg = userImg.cgImage {
+            saveUserImgV.image = UIImage(cgImage: userImgcg)
+        }
+        
+        saveUserImgV.adhere(toSuperview: canvas_big)
+        //
+        let saveBorderImgVRect: CGRect = CGRect(x: self.borderImgV.frame.origin.x * scale, y: self.borderImgV.frame.origin.y * scale, width: self.borderImgV.bounds.width * scale, height: self.borderImgV.bounds.height * scale)
+        
+        let saveBorderImgV = UIImageView(frame: saveBorderImgVRect)
+        saveBorderImgV.image = UIImage(cgImage: borderImgV.image!.cgImage!)
+        saveBorderImgV.adhere(toSuperview: canvas_big)
+        
+        //
+        if let signAddonV = self.touchMoveCanvasV.subViewList.first as? UIImageView, let signImg = signAddonV.image {
+            let saveSignAddonFrame: CGRect = CGRect(x: 0, y: 0, width: signAddonV.bounds.width * scale, height: signAddonV.bounds.height * scale)
+            let saveSignAddonCenter: CGPoint = CGPoint(x: signAddonV.center.x * scale, y: signAddonV.center.y * scale)
+            let saveSignAddon = UIImageView(frame: saveSignAddonFrame)
+            saveSignAddon.center = saveSignAddonCenter
+            saveSignAddon.image = UIImage(cgImage: signImg.cgImage!)
+            saveSignAddon.adhere(toSuperview: canvas_big)
+            
+            transformNewAddonView(newAddon: saveSignAddon, originAddon: signAddonV, scale: scale)
+        }
+       
+        if let canvasImage_big = canvas_big.screenshot {
+            return canvasImage_big
+            
+        }
+        return UIImage()
+    }
+    
+    func transformNewAddonView(newAddon: UIView, originAddon: UIView, scale: CGFloat) {
+        
+        let originalTransform = originAddon.transform
+        let translation = CGPoint(x: originalTransform.tx * scale, y: originalTransform.ty * scale)
+        let rotation = atan2(originalTransform.b, originalTransform.a)
+        let scaleX = sqrt(originAddon.transform.a * originAddon.transform.a + originAddon.transform.c * originAddon.transform.c)
+        let scaleY = sqrt(originAddon.transform.b * originAddon.transform.b + originAddon.transform.d * originAddon.transform.d)
+        
+        newAddon.transform = newAddon.transform.translatedBy(x: translation.x, y: translation.y)
+        newAddon.transform = newAddon.transform.rotated(by: rotation)
+        newAddon.transform = newAddon.transform.scaledBy(x: scaleX, y: scaleY)
+    }
+    
 }
 
 extension PSkMagicCamEditVC {
     
     @objc func saveAlbumBtnClick(sender: UIButton) {
-    
+        let saveImg = processImg()
+        saveImgsToAlbum(imgs: [saveImg])
     }
     
     @objc func shareBtnClick(sender: UIButton) {
-    
+        
+        let saveImg = processImg()
+        
+        let ac = UIActivityViewController(activityItems: [saveImg], applicationActivities: nil)
+        ac.modalPresentationStyle = .fullScreen
+        ac.completionWithItemsHandler = {
+            (type, flag, array, error) -> Void in
+            if flag == true {
+                 
+            } else {
+                
+            }
+        }
+        self.present(ac, animated: true, completion: nil)
     }
     
     @objc func backBtnClick(sender: UIButton) {
@@ -347,6 +467,89 @@ extension PSkMagicCamEditVC {
     }
 }
 
+extension PSkMagicCamEditVC {
+    func saveImgsToAlbum(imgs: [UIImage]) {
+        HUD.hide()
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .authorized {
+            saveToAlbumPhotoAction(images: imgs)
+        } else if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization({[weak self] (status) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    if status != .authorized {
+                        return
+                    }
+                    self.saveToAlbumPhotoAction(images: imgs)
+                }
+            })
+        } else {
+            // 权限提示
+            albumPermissionsAlet()
+        }
+    }
+    
+    func saveToAlbumPhotoAction(images: [UIImage]) {
+        DispatchQueue.main.async(execute: {
+            PHPhotoLibrary.shared().performChanges({
+                [weak self] in
+                guard let `self` = self else {return}
+                for img in images {
+                    PHAssetChangeRequest.creationRequestForAsset(from: img)
+                }
+                DispatchQueue.main.async {
+                    [weak self] in
+                    guard let `self` = self else {return}
+                    self.showSaveSuccessAlert()
+                }
+                
+            }) { (finish, error) in
+                if error != nil {
+                    HUD.error("Sorry! please try again")
+                }
+            }
+        })
+    }
+    
+    func showSaveSuccessAlert() {
+        
+
+        DispatchQueue.main.async {
+            let title = ""
+            let message = "Photo saved successfully!"
+            let okText = "OK"
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
+                 DispatchQueue.main.async {
+                 }
+            })
+            alert.addAction(okButton)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    func albumPermissionsAlet() {
+        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+            self?.openSystemAppSetting()
+        }
+        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            
+        }
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openSystemAppSetting() {
+        let url = NSURL.init(string: UIApplication.openSettingsURLString)
+        let canOpen = UIApplication.shared.canOpenURL(url! as URL)
+        if canOpen {
+            UIApplication.shared.open(url! as URL, options: [:], completionHandler: nil)
+        }
+    }
+ 
+}
 
 extension PSkMagicCamEditVC {
     // 强制旋转横屏

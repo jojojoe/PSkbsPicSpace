@@ -1,0 +1,347 @@
+//
+//  PSkSubPurchaseManager.swift
+//  PSkbsPicSpace
+//
+//  Created by JOJO on 2021/12/10.
+//
+
+
+import Foundation
+import SwiftyStoreKit
+import StoreKit
+import ZKProgressHUD
+
+let sharedSecret_debug = "38bdf9155ecf40888db6394c40319edd"
+let sharedSecret_release = "38bdf9155ecf40888db6394c40319edd"
+
+extension Notification.Name {
+    
+    static let PurchaseSubscrtionStateChange = Notification.Name("PSPurchaseSubscrtionStateChange")
+    public static let buy = Notification.Name("PSkSubscribeBuy")
+}
+
+
+enum SubscriptionType {
+    case week
+    case month
+    case year
+    
+    static var allType: [SubscriptionType] {
+        return [.week,.month,.year]
+    }
+    
+    //测试,已更新
+    var iapStr: String {
+        switch self {
+        case .week:
+            return "com.cleanerUp.photosCleans.weekly"
+        case .month:
+            return "com.cleanerUp.photosCleans.monthly"
+        case .year:
+            return "com.cleanerUp.photosCleans.yearly"
+        }
+    }
+}
+
+struct SubscriptionModel {
+    
+    let iapID: String
+    let price: Double
+    let currencySymbol: String
+    let localizedPrice: String
+    
+    // MARK: -
+    
+    var iapType: SubscriptionType {
+        //
+        switch self.iapID {
+        case SubscriptionType.week.iapStr:
+            return .week
+        case SubscriptionType.month.iapStr:
+            return .month
+        case SubscriptionType.year.iapStr:
+            return .year
+        default:
+            return .month
+        }
+    }
+    
+}
+
+
+extension Double {
+    
+    func toEveryMonthPriceStr(_ count: Int) -> String {
+        //
+        var temp = ((self/count.double)*100).int.double / 100
+        if count == 1 {
+            temp = self
+        }
+        return String(format: "%.2f", temp)
+    }
+    
+}
+
+
+class PurchaseManager {
+    
+    public static var share = PurchaseManager()
+    
+    var purchaseFailBlock: (_ error: String)->() = {_ in}
+    
+    func setUp() {
+        //
+        SwiftyStoreKit.completeTransactions { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                // Unlock content
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
+                @unknown default:
+                    break
+                }
+            }
+        }
+        //
+        SwiftyStoreKit.shouldAddStorePaymentHandler = { payment,product in
+            //itms-services://?action=purchaseIntent&bundleId=com.gamekeyboard.themestest1&productIdentifier=com.gamekeyboard.themes.month
+            //            GKMyVipViewController().show(source: "AppStore")
+            return false
+        }
+        //
+        if PurchaseManager.share.inSubscription {
+            self.verifyReceipt {}
+        }
+    }
+    
+    private var receiptInfo: ReceiptInfo? {
+        set{
+            if let jsonData = newValue?.jsonData() {
+                UserDefaults.standard.set(jsonData, forKey: "PurchaseManager_ReceiptInfo_key")
+                UserDefaults.standard.synchronize()
+            }
+        }
+        get{
+            if let data = UserDefaults.standard.data(forKey: "PurchaseManager_ReceiptInfo_key"),
+               let obj = try? data.jsonObject() as? ReceiptInfo {
+                return obj
+            }
+            return nil
+        }
+    }
+    
+    func getReceiptInfo() -> ReceiptInfo? {
+        return self.receiptInfo
+    }
+    
+    // 请求产品的数据
+    func fetchProductsInfo(productIds: [String],comp: @escaping (_ productModels: Set<SKProduct>)->()) {
+        //
+        let ids = Set(productIds)
+        //
+        SwiftyStoreKit.retrieveProductsInfo(ids) { result in
+            let products = result.retrievedProducts
+            comp(products)
+        }
+    }
+    
+    
+    /// 发起购买
+    func startPurchaseProduct(iapIdStr: String,comp: @escaping (_ purchase: PurchaseDetails?)->()) {
+        
+        //测试
+//        if UIApplication.shared.inferredEnvironment == .debug {
+//            //
+//            SVProgressHUD.setMaximumDismissTimeInterval(1)
+//            SVProgressHUD.showSuccess(withStatus: "Buy Success".localized())
+//            //
+//            self.test = true
+//            //
+//            NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+//            //
+//            DispatchQueue.main.async {
+//                comp(nil)
+//            }
+//            return;
+//        }
+        
+        
+        ZKProgressHUD.show()
+        //
+        purchaseProduct(iapIdStr: iapIdStr) { purchaseDetails in
+            //
+            self.verifyReceipt(iapIdStr: iapIdStr) {
+                //
+                ZKProgressHUD.dismiss()
+                ZKProgressHUD.showSuccess("Unlock Full Premium Features Successfully".localized())
+                //
+//                print("购买并验证成功")
+                //
+                NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+                //
+                DispatchQueue.main.async {
+                    comp(purchaseDetails)
+                }
+            }
+        }
+    }
+    
+    /// 购买方法
+    private func purchaseProduct(iapIdStr: String,comp: @escaping (_ purchase: PurchaseDetails)->()) {
+        //
+        SwiftyStoreKit.purchaseProduct(iapIdStr) { (result) in
+            switch result {
+            case .success(let purchase):
+                //
+                comp(purchase)
+            case .error(let error):
+                ZKProgressHUD.dismiss()
+                ZKProgressHUD.showError(error.localizedDescription)
+                
+                self.purchaseFailBlock(error.localizedDescription)
+            //                    switch error.code {
+            //                    case .unknown: print("Unknown error. Please contact support")
+            //                    case .clientInvalid: print("Not allowed to make the payment")
+            //                    case .paymentCancelled: break
+            //                    case .paymentInvalid: print("The purchase identifier was invalid")
+            //                    case .paymentNotAllowed: print("The device is not allowed to make the payment")
+            //                    case .storeProductNotAvailable: print("The product is not available in the current storefront")
+            //                    case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+            //                    case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+            //                    case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+            //                    default: print((error as NSError).localizedDescription)
+            //                    }
+            }
+        }
+    }
+    
+    /// 购买验证凭据
+    private func verifyReceipt(iapIdStr: String = "",comp: @escaping ()->()) {
+        //
+        if self.test {
+            comp()
+            return
+        }
+        
+        // 测试已更新, 这里填写新的sharedSecret
+        #if DEBUG
+        let receiptValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: sharedSecret_debug)
+        #else
+        let receiptValidator = AppleReceiptValidator(service: .production, sharedSecret: sharedSecret_release)
+        #endif
+        //
+        SwiftyStoreKit.verifyReceipt(using: receiptValidator) { result in
+            switch result {
+            case .success(let receipt):
+                //
+                self.receiptInfo = receipt
+                //
+                if !iapIdStr.isEmpty {
+                    //
+                    let productId = iapIdStr
+                    //
+                    let purchaseResult = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receipt)
+                    
+                    switch purchaseResult {
+                    case .purchased(expiryDate: _, items: _):
+                        comp()
+                    case .expired(expiryDate: _, items: _):
+                        comp()
+                    case .notPurchased:
+                        ZKProgressHUD.dismiss()
+                        ZKProgressHUD.showError("")
+                    }
+                    
+                    // Verify the purchase of Consumable or NonConsumable
+                    //                    let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                    //                        productId: productId,
+                    //                        inReceipt: receipt)
+                    
+                    //                    switch purchaseResult {
+                    //                    case .purchased(let receiptItem):
+                    //                        print("\(productId) is purchased: \(receiptItem)")
+                    //                        comp()
+                    //                    case .notPurchased:
+                    //                        print("The user has never purchased \(productId)")
+                    //                        HUD.error()
+                    //                    }
+                    
+                }else{
+                    comp()
+                }
+            case .error(let error):
+                //                print("Receipt verification failed: \(error)")
+                ZKProgressHUD.dismiss()
+                ZKProgressHUD.showError(error.localizedDescription)
+                
+                self.purchaseFailBlock(error.localizedDescription)
+            }
+        }
+    }
+    
+    func restore(comp: @escaping ()->()) {
+        //测试
+        //        HUD.show()
+        //        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+        //            self.test = true
+        //            HUD.hide()
+        //            NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+        //            comp()
+        //        }
+        //        return;
+        
+         
+        ZKProgressHUD.show()
+        SwiftyStoreKit.restorePurchases(atomically: true) { results in
+            if results.restoredPurchases.count > 0 {
+                self.verifyReceipt {
+                    ZKProgressHUD.dismiss()
+                    NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+                    comp()
+                }
+            } else {
+                //
+                ZKProgressHUD.dismiss()
+                ZKProgressHUD.showError("Restore Failed".localized())
+            }
+        }
+    }
+    
+    //
+    var test = false
+    
+    // 判断订阅有效
+    var inSubscription: Bool {
+        //
+        if UIApplication.shared.inferredEnvironment == .debug && test {
+            return true
+        }
+        
+        guard let receiptInfo = receiptInfo else { return false }
+        
+        let subscriptionIDList = Set(SubscriptionType.allType.map{$0.iapStr})
+        let subscriptionInfo = SwiftyStoreKit.verifySubscriptions(productIds: subscriptionIDList, inReceipt: receiptInfo)
+        switch subscriptionInfo {
+        case let .purchased(expiryDate, _):
+            //
+            let compare = Date().compare(expiryDate)
+            let inPurchase = compare != .orderedDescending
+            return inPurchase
+        case .expired, .notPurchased:
+            return false
+        }
+    }
+    
+}
+
+
+
+
+
+
+

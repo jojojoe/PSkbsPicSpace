@@ -9,6 +9,12 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import AppTrackingTransparency
+
+
+public var flyerDevKey: String = ""
+public var flyerAppID: String = ""
+
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,11 +24,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        NotificationCenter.default.addObserver(self, selector: #selector(applicDidBecomeActiveNotifi(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
-        registerNotifications(application)
         
-          
+        NotificationCenter.default.addObserver(self, selector: #selector(applicDidBecomeActiveNotifi(_:)), name: UIApplication.didBecomeActiveNotification, object: nil)
+        // notification
+        registerNotifications(application)
+        // prepare
+        prepareInit()
+        
         return true
+    }
+    
+    func prepareInit() {
+        // init af
+        initAfLib()
+        // IAP
+        PurchaseManager.share.setUp()
+
     }
 
     @objc func applicDidBecomeActiveNotifi(_ notifi: Notification) {
@@ -34,9 +51,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 14, *) {
             ATTrackingManager.requestTrackingAuthorization(completionHandler: {[weak self] status in
                 guard let `self` = self else {return}
-                
             })
+        } else {
+            
         }
+    }
+    
+    func initAfLib() {
+        let _ = AFlyerLibManage.init(appsFlyerDevKey: flyerDevKey, appleAppID: flyerAppID)
     }
     
     // MARK: UISceneSession Lifecycle

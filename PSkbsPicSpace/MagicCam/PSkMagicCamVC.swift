@@ -198,13 +198,17 @@ extension PSkMagicCamVC {
         
         if let img = cropFilter.filteredImage(with: finalImg) {
             if let applyFilter = currentApplyingFilterItem?.makeFilter(), let filteredImg = applyFilter.filteredImage(with: img) {
-                saveImgsToAlbum(imgs: [filteredImg])
+                self.showCamEditVC(img: filteredImg)
             } else {
-                saveImgsToAlbum(imgs: [img])
+                self.showCamEditVC(img: img)
             }
         }
     }
     
+    func showCamEditVC(img: UIImage) {
+        let vc = PSkMagicCamEditVC(origImg: img)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     
 }

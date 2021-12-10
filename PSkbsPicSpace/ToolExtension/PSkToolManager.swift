@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import NoticeObserveKit
+
+
 
 class PSkToolManager: NSObject {
 
