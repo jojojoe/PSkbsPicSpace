@@ -36,7 +36,7 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
     let privacyBtn = CUSettingToolBtn(frame: .zero, iconImgName: "ic_setting_privacy_policyicon", nameStr: "Privacy Policy".localized())
     let feedbackBtn = CUSettingToolBtn(frame: .zero, iconImgName: "feedback_ic", nameStr: "Feedback".localized())
     let restoreBtn = CUSettingToolBtn(frame: .zero, iconImgName: "restore_ic", nameStr: "Restore Purchase".localized())
-    
+    let bottomBgView = UIView()
     //
     
     
@@ -85,19 +85,19 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
     @objc func purchaseResultRefresh() {
         if PurchaseManager.share.inSubscription {
             vipBtn.isHidden = true
-            termsBtn.snp.makeConstraints {
+            bottomBgView.snp.remakeConstraints {
                 $0.left.equalTo(20)
-                $0.top.equalTo(backBtn.snp.bottom).offset(10)
+                $0.top.equalTo(vipBtn.snp.top)
                 $0.centerX.equalToSuperview()
-                $0.height.equalTo(60)
+                $0.height.equalTo(360)
             }
         } else {
             vipBtn.isHidden = false
-            termsBtn.snp.makeConstraints {
+            bottomBgView.snp.remakeConstraints {
                 $0.left.equalTo(20)
-                $0.top.equalTo(backBtn.snp.bottom).offset(10 + 75)
+                $0.top.equalTo(vipBtn.snp.bottom).offset(15)
                 $0.centerX.equalToSuperview()
-                $0.height.equalTo(60)
+                $0.height.equalTo(360)
             }
         }
         self.view.layoutIfNeeded()
@@ -115,17 +115,8 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
             $0.centerX.equalToSuperview()
             $0.height.equalTo(60)
         }
-        
         //
         
-//        widghtBtn.adhere(toSuperview: view)
-//        widghtBtn.addTarget(self, action: #selector(widghtBtnClick(sender:)), for: .touchUpInside)
-        
-        purchaseResultRefresh()
-        
-        
-        //
-        let bottomBgView = UIView()
         bottomBgView.layer.cornerRadius = 8
         bottomBgView
             .backgroundColor(UIColor.white)
@@ -134,7 +125,7 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
             $0.left.equalTo(20)
             $0.top.equalTo(vipBtn.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(410)
+            $0.height.equalTo(360)
         }
         //
         
@@ -181,6 +172,9 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
             $0.top.equalTo(feedbackBtn.snp.bottom).offset(10)
             $0.height.equalTo(60)
         }
+        
+        //
+        purchaseResultRefresh()
         
     }
     
