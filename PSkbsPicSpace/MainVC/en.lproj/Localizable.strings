@@ -1,0 +1,53 @@
+/* 
+  Localizable.strings
+  PSkbsPicSpace
+
+  Created by Joe on 2022/1/19.
+  
+*/
+
+"Setting" = "Setting";
+
+"Unlimited Save Photos" = "Unlimited Save Photos";
+
+"Month" = "Month";
+
+"3-day Free Trial" = "3-day Free Trial";
+
+"Try Now" = "Try Now";
+
+"Terms of Use" = "Terms of Use";
+
+"Rate Us" = "Rate Us";
+
+"Privacy Policy" = "Privacy Policy";
+
+"Feedback" = "Feedback";
+
+"Restore Purchase" = "Restore Purchase";
+
+"Purchase Notice" = "Purchase Notice";
+
+"Cancel" = "Cancel";
+
+"Library" = "Library";
+
+"Next" = "Next";
+
+"Photo saved successfully!" = "Photo saved successfully!";
+
+"OK" = "OK";
+
+"Max Value" = "Max Value";
+ 
+"Subscription successful!" = "Subscription successful!";
+
+"Photo saved successfully!" = "Photo saved successfully!";
+
+"You have declined access to photos, please active it in Settings>Privacy>Photos." = "You have declined access to photos, please active it in Settings>Privacy>Photos.";
+
+"Ooops!" = "Ooops!";
+
+"Cancel" = "Cancel";
+
+"Cancel anytime" = "Cancel anytime";

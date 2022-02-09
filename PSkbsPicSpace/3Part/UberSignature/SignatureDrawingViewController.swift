@@ -60,8 +60,8 @@ public class SignatureDrawingViewController: UIViewController {
         }
         set(color) {
             model.signatureColor = color
-            bezierPathLayer.strokeColor = color.cgColor
-            bezierPathLayer.fillColor = color.cgColor
+//            bezierPathLayer.strokeColor = color.cgColor
+//            bezierPathLayer.fillColor = color.cgColor
         }
     }
     
@@ -130,12 +130,17 @@ public class SignatureDrawingViewController: UIViewController {
     
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        updateModel(withTouches: touches, shouldEndContinousLine: true)
+        updateModel(withTouches: touches, shouldEndContinousLine: true, isEnd: false)
     }
     
     override public func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        updateModel(withTouches: touches, shouldEndContinousLine: false)
+        updateModel(withTouches: touches, shouldEndContinousLine: false, isEnd: false)
+    }
+    
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        updateModel(withTouches: touches, shouldEndContinousLine: true, isEnd: true)
     }
     
     // MARK: Private
@@ -153,7 +158,7 @@ public class SignatureDrawingViewController: UIViewController {
     private var imageView = UIImageView()
     private var presetImage: UIImage?
     
-    private func updateModel(withTouches touches: Set<UITouch>, shouldEndContinousLine: Bool) {
+    private func updateModel(withTouches touches: Set<UITouch>, shouldEndContinousLine: Bool, isEnd: Bool) {
         guard let touchPoint = touches.touchPoint else {
             return
         }
@@ -161,7 +166,13 @@ public class SignatureDrawingViewController: UIViewController {
         if shouldEndContinousLine {
             model.asyncEndContinuousLine()
         }
-        model.asyncUpdate(withPoint: touchPoint)
+        if isEnd {
+            
+        } else {
+            model.asyncUpdate(withPoint: touchPoint)
+        }
+        
+        
         updateViewFromModel()
     }
     

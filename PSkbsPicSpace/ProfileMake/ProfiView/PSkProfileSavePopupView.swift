@@ -27,6 +27,7 @@ class PSkProfileSavePopupView: UIView {
     
     let previewImgV = UIImageView()
     let imageSizeLabel = UILabel()
+    let sliderSizeLabel = UILabel()
     
     var currentQuality: CGFloat = 0.9
     var currentType: PSkProfileExportImgType = .png
@@ -98,7 +99,7 @@ class PSkProfileSavePopupView: UIView {
         
         //
         let contentV = UIView()
-            .backgroundColor(.white)
+            .backgroundColor(UIColor.white.withAlphaComponent(0.95))
             .adhere(toSuperview: self)
         contentV.layer.cornerRadius = 24
         contentV.layer.shadowColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
@@ -115,118 +116,157 @@ class PSkProfileSavePopupView: UIView {
         previewImgV.image = originImg
         previewImgV
             .contentMode(.scaleAspectFill)
+            .backgroundColor(UIColor(hexString: "#F4F4F4")!)
             .adhere(toSuperview: contentV)
         previewImgV.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(contentV.snp.top).offset(padding)
+            $0.top.equalTo(contentV.snp.top).offset(54)
             $0.width.equalTo(previewImgVWidth)
             $0.height.equalTo(previewImgVHeight)
         }
         
         //
-        let imgTypeLabel = UILabel()
-        imgTypeLabel
-            .color(UIColor.black)
-            .fontName(14, "AvenirNext-Medium")
-            .text("Image Type")
+        let backBtn = UIButton(type: .custom)
+        backBtn
+            .image(UIImage(named: "i_all_close"))
             .adhere(toSuperview: contentV)
-        imgTypeLabel.snp.makeConstraints {
-            $0.left.equalTo(padding)
-            $0.top.equalTo(previewImgV.snp.bottom).offset(padding)
-            $0.width.height.greaterThanOrEqualTo(1)
+
+        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
+
+        backBtn.snp.makeConstraints {
+            $0.top.equalTo(contentV.snp.top).offset(5)
+            $0.right.equalTo(contentV.snp.right).offset(-5)
+            $0.width.equalTo(44)
+            $0.height.equalTo(44)
         }
+        
+        //
+//        let imgTypeLabel = UILabel()
+//        imgTypeLabel
+//            .color(UIColor.black)
+//            .fontName(14, "AvenirNext-Medium")
+//            .text("Image Type")
+//            .adhere(toSuperview: contentV)
+//        imgTypeLabel.snp.makeConstraints {
+//            $0.left.equalTo(padding)
+//            $0.top.equalTo(previewImgV.snp.bottom).offset(padding)
+//            $0.width.height.greaterThanOrEqualTo(1)
+//        }
         //
         let imgTypeControl = BetterSegmentedControl(
             frame: CGRect.zero,
             segments: LabelSegment.segments(withTitles: ["PNG", "JPG"],
-                                            normalTextColor: .lightGray,
+                                            normalFont: UIFont(name: "Montserrat-SemiBold", size: 12)!, normalTextColor: UIColor(hexString: "#CFCFCF")!,
                                             selectedTextColor: .white),
-            options:[.backgroundColor(.darkGray),
-                     .indicatorViewBackgroundColor(UIColor.purple),
-                     .cornerRadius(6.0),
+            options:[.backgroundColor(UIColor(hexString: "#040404")!),
+                     .indicatorViewBackgroundColor(UIColor(hexString: "#EEAB00")!),
+                     .cornerRadius(8.0),
                      .animationSpringDamping(2.0)])
         imgTypeControl.addTarget(self, action: #selector(imgTypeControlValueChange(sender:)), for: .valueChanged)
         imgTypeControl.adhere(toSuperview: contentV)
         imgTypeControl.snp.makeConstraints {
-            $0.centerY.equalTo(imgTypeLabel.snp.centerY)
-            $0.right.equalTo(contentV.snp.right).offset(-padding)
-            $0.height.equalTo(34)
-            $0.width.equalTo(100)
+            $0.top.equalTo(previewImgV.snp.bottom).offset(28)
+            $0.left.equalTo(previewImgV.snp.left).offset(0)
+            $0.height.equalTo(36)
+            $0.width.equalTo(86)
         }
+        imgTypeControl.layer.cornerRadius = 8
+        imgTypeControl.layer.masksToBounds = true
         
-        //
-        let imageQualityLabel = UILabel()
-        imageQualityLabel
-            .color(UIColor.black)
-            .fontName(14, "AvenirNext-Medium")
-            .text("Image Quality")
-            .adhere(toSuperview: contentV)
-        imageQualityLabel.snp.makeConstraints {
-            $0.left.equalTo(padding)
-            $0.top.equalTo(imgTypeLabel.snp.bottom).offset(24)
-            $0.width.height.greaterThanOrEqualTo(1)
-        }
+//        //
+//        let imageQualityLabel = UILabel()
+//        imageQualityLabel
+//            .color(UIColor.black)
+//            .fontName(14, "AvenirNext-Medium")
+//            .text("Image Quality")
+//            .adhere(toSuperview: contentV)
+//        imageQualityLabel.snp.makeConstraints {
+//            $0.left.equalTo(padding)
+//            $0.top.equalTo(imgTypeLabel.snp.bottom).offset(24)
+//            $0.width.height.greaterThanOrEqualTo(1)
+//        }
         //
         
         imageSizeLabel
-            .color(UIColor.orange)
-            .fontName(18, "AvenirNext-Bold")
+            .color(UIColor.black)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
+            .fontName(12, "Montserrat-SemiBold")
+            .textAlignment(.center)
             .adhere(toSuperview: contentV)
-        .snp.makeConstraints {
-            $0.right.equalTo(contentV.snp.right).offset(-padding)
-            $0.centerY.equalTo(imageQualityLabel.snp.centerY)
-            $0.width.height.greaterThanOrEqualTo(1)
+        imageSizeLabel.layer.cornerRadius = 8
+        imageSizeLabel.layer.masksToBounds = true
+        imageSizeLabel.snp.makeConstraints {
+            $0.right.equalTo(previewImgV.snp.right).offset(0)
+            $0.centerY.equalTo(imgTypeControl.snp.centerY)
+            $0.width.equalTo(62)
+            $0.height.equalTo(28)
         }
         //
         let imageQualitySlider = UISlider()
         imageQualitySlider.isContinuous = false
-        imageQualitySlider.thumbTintColor = UIColor.white
-        imageQualitySlider.minimumTrackTintColor = UIColor.yellow
-        imageQualitySlider.maximumTrackTintColor = UIColor.yellow
-        imageQualitySlider.minimumValue = 0
-        imageQualitySlider.maximumValue = 0.9
+        imageQualitySlider.setMinimumTrackImage(UIImage(named: "i_minslider"), for: .normal)
+        imageQualitySlider.setMaximumTrackImage(UIImage(named: "i_maxslider"), for: .normal)
+        imageQualitySlider.setThumbImage(UIImage(named: "i_qualyPoint"), for: .normal)
+        imageQualitySlider.minimumValue = 0.1
+        imageQualitySlider.maximumValue = 1
         imageQualitySlider.adhere(toSuperview: contentV)
         imageQualitySlider.snp.makeConstraints {
-            $0.top.equalTo(imageQualityLabel.snp.bottom).offset(22)
-            $0.left.equalTo(40)
-            $0.centerX.equalToSuperview()
+            $0.top.equalTo(imgTypeControl.snp.bottom).offset(22)
+            $0.left.equalTo(previewImgV.snp.left)
+            $0.right.equalTo(contentV.snp.right).offset(-80)
             $0.height.equalTo(30)
         }
-        imageQualitySlider.value = Float(currentQuality)
+        imageQualitySlider.value = 1
         
         imageQualitySlider.addTarget(self, action: #selector(imageQualitySliderValueChange(sender: )), for: .valueChanged)
         
+        //
+        
+        sliderSizeLabel
+            .color(UIColor.black)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
+            .fontName(10, "Montserrat-SemiBold")
+            .textAlignment(.center)
+            .text("100%")
+            .adhere(toSuperview: contentV)
+        
+        sliderSizeLabel.layer.cornerRadius = 8
+        sliderSizeLabel.layer.masksToBounds = true
+        sliderSizeLabel.snp.makeConstraints {
+            $0.right.equalTo(contentV.snp.right).offset(-24)
+            $0.centerY.equalTo(imageQualitySlider.snp.centerY)
+            $0.width.equalTo(42)
+            $0.height.equalTo(22)
+        }
+        
+        
         // save
-        let saveBtn = UIButton(type: .custom)
+        let saveBtn = UIButton()
         saveBtn.layer.cornerRadius = 25
         saveBtn
             .backgroundColor(UIColor(hexString: "#000000")!)
-            .text("Save")
-            .font(16, "AvenirNext-DemiBold")
-            .titleColor(UIColor(hexString: "#FFFFFF")!)
+            .image(UIImage(named: "i_clip_download"))
             .adhere(toSuperview: contentV)
         saveBtn.addTarget(self, action: #selector(saveBtnClick(sender:)), for: .touchUpInside)
         saveBtn.snp.makeConstraints {
             $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
             $0.right.equalTo(contentV.snp.centerX).offset(-10)
-            $0.width.equalTo(100)
+            $0.left.equalTo(contentV.snp.left).offset(24)
             $0.height.equalTo(50)
         }
          
         // share
-        let shareBtn = UIButton(type: .custom)
+        let shareBtn = UIButton()
         shareBtn.layer.cornerRadius = 25
         shareBtn
             .backgroundColor(UIColor(hexString: "#000000")!)
-            .text("Share")
-            .font(16, "AvenirNext-DemiBold")
-            .titleColor(UIColor(hexString: "#FFFFFF")!)
+            .image(UIImage(named: "i_clip_share"))
             .adhere(toSuperview: contentV)
         shareBtn.addTarget(self, action: #selector(shareBtnClick(sender:)), for: .touchUpInside)
         shareBtn.snp.makeConstraints {
             $0.bottom.equalTo(contentV.snp.bottom).offset(-padding)
             $0.left.equalTo(contentV.snp.centerX).offset(10)
-            $0.width.equalTo(100)
+            $0.right.equalTo(contentV.snp.right).offset(-24)
             $0.height.equalTo(50)
         }
         
@@ -254,7 +294,9 @@ class PSkProfileSavePopupView: UIView {
     }
     
     @objc func imageQualitySliderValueChange(sender: UISlider) {
-        currentQuality = CGFloat(sender.value)
+        let quality: CGFloat = CGFloat(sender.value - 0.1)
+        currentQuality = quality
+        sliderSizeLabel.text("\(Int(sender.value * 100))%")
         switch currentType {
         case .png:
             processPng()

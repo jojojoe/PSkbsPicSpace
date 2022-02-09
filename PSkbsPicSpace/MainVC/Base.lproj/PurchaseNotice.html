@@ -1,0 +1,45 @@
+
+<style>
+    * {font-family:AvenirNext-Regular;background:transparent;color:#000000;text-align:left;}
+    body {
+        background-color: #FFFFFF;
+    }
+    h1 {font-size:24px;text-align:center;padding-top:0px;}
+    div {margin:18px;text-align:center;}
+</style>
+<script>
+    (function (doc, win) {
+     var docEl = doc.documentElement,
+     resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+     recalc = function () {
+     var clientWidth = docEl.clientWidth;
+     if (!clientWidth) return;
+     if (clientWidth > 500) {
+     docEl.style.fontSize = 18 + 'px';
+     docEl.style.lineHeight = 20 + 'px';
+     } else {
+     docEl.style.fontSize = 16 + 'px';
+     docEl.style.lineHeight = 18 + 'px';
+     }
+     
+     };
+     if (!doc.addEventListener) return;
+     win.addEventListener(resizeEvt, recalc, false);
+     doc.addEventListener('DOMContentLoaded', recalc, false);
+     })(document, window);
+</script>
+PicPli Pro Subscriptions
+<div>
+    * You can subscribe for Pro PicPli to use all features and content by offering the purchase within the app.<br>
+    PicPli offers monthly, yearly subscriptions and one-time package. The subscription prices are:<br>
+    (i) $9.99 Monthly VIP Pack<br>
+    -You can subscribe to a monthly plan ($9.99 billed once a month) that comes with a 3 days free trial. The prices are in US dollars. Pricing in other countries may vary and actual charges may be converted to your local currency depending on the country of residence.<br>
+    -Payment will be charged to iTunes Account at confirmation of purchase.<br>
+    -Subscriptions automatically renew unless auto-renew is turned off at least 24-hours before the end of the current period.<br>
+    -Account will be charged for renewal within 24-hours prior to the end of the current period, and identify the cost of the renewal.<br>
+    -Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase.<br>
+    -Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.<br>
+    -Our app is functional without purchasing an Auto-Renewable subscription, and you can use all the unlocked content after the subscription expires.<br>
+<a href="https://pages.flycricket.io/picpli/terms.html">Terms of use</a>&nbsp&amp;
+<a href="https://pages.flycricket.io/picpli/privacy.html">Privacy Policy</a>
+</div>

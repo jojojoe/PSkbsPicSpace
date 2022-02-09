@@ -9,7 +9,7 @@ import UIKit
 import MessageUI
 import ZKProgressHUD
 
-let APP_Id = ""
+let APP_Id = "1607282610"
 let infoForDictionary = Bundle.main.infoDictionary
 func feefbackInfo(appName:String,appVersion:String,deviceModel:String,systemVersion:String,deviceName:String) -> String {
     return "<br /><br /><br /><br /><font color=\"#9F9F9F\" style=\"font-size: 13px;\"> <i>(\(appName) \(appVersion) on iPhone running with iOS \(systemVersion), device \(deviceName)</i>)</font>"
@@ -19,27 +19,40 @@ let CurrentAppVersion = infoForDictionary?["CFBundleShortVersionString"] as? Str
 var AppName = infoForDictionary?["CFBundleDisplayName"] as? String ?? ""
 var DeviceName = UIDevice.current.systemName
 
-let emailAddress = ""
-let ppUrl = ""
-let touUrl = ""
-//let appStoreUrl = "https://itunes.apple.com/app/id1583687807?mt=8#"
-let ppUrl_cn = "https://docs.qq.com/doc/"
-let touUrl_cn = "https://docs.qq.com/doc/"
+let emailAddress = "zx804463232@163.com"
+//let ppUrl = "https://pages.flycricket.io/picpli/privacy.html"
+//let touUrl = "https://pages.flycricket.io/picpli/terms.html"
 
-class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
+let ppUrl = "https://www.app-privacy-policy.com/live.php?token=jwAReDY4Y4nfoPnGs37282qWS0V37gAs"
+let touUrl = "https://www.app-privacy-policy.com/live.php?token=AqVmDkXgSdwJLa17ScmYEQ9bDwp2bl17"
+
+//
+//
+
+
+let purhcasepUrl = "PurchaseNotice"
+//let appStoreUrl = "https://itunes.apple.com/app/id1583687807?mt=8#"
+let ppUrl_cn = "https://www.app-privacy-policy.com/live.php?token=jwAReDY4Y4nfoPnGs37282qWS0V37gAs"
+let touUrl_cn = "https://www.app-privacy-policy.com/live.php?token=AqVmDkXgSdwJLa17ScmYEQ9bDwp2bl17"
+let purhcasepUrl_cn = "PurchaseNotice"
+class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, SubscriptionBaseProtocol, UINavigationControllerDelegate {
 
     let backBtn = UIButton(type: .custom)
     let topTitleLabel = UILabel()
-    let vipBtn = CUSettingToolBtn(frame: .zero, iconImgName: "ic_setting_full_accessicon", nameStr: "Go to Premium".localized())
+    let vipBtn = PSSettingVipCard()
     let termsBtn = CUSettingToolBtn(frame: .zero, iconImgName: "ic_setting_terms_of_useicon", nameStr: "Terms of Use".localized())
     let rateBtn = CUSettingToolBtn(frame: .zero, iconImgName: "ic_setting_rate_usicon", nameStr: "Rate Us".localized())
     let privacyBtn = CUSettingToolBtn(frame: .zero, iconImgName: "ic_setting_privacy_policyicon", nameStr: "Privacy Policy".localized())
     let feedbackBtn = CUSettingToolBtn(frame: .zero, iconImgName: "feedback_ic", nameStr: "Feedback".localized())
     let restoreBtn = CUSettingToolBtn(frame: .zero, iconImgName: "restore_ic", nameStr: "Restore Purchase".localized())
+    let purchaseLinkBtn = CUSettingToolBtn(frame: .zero, iconImgName: "restore_ic", nameStr: "Purchase Notice".localized())
     let bottomBgView = UIView()
+    
+    
+    
     //
     
-    
+    let contentBgScrollV = UIScrollView()
     
         
     override func viewDidLoad() {
@@ -51,14 +64,18 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
     
     func addNoti() {
         NotificationCenter.default.addObserver(self, selector: #selector(purchaseResultRefresh), name: Notification.Name.PurchaseSubscrtionStateChange , object: nil)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(purchaseResultRefresh), name: Notification.Name.buy , object: nil)
+        
+            
     }
     
     func setupView() {
-        view.backgroundColor(UIColor(hexString: "#F5F7FE")!)
+        view.backgroundColor(UIColor(hexString: "#F4F4F4")!)
         view.clipsToBounds = true
         //
         backBtn
-            .image(UIImage(named: "btn_photo_cleaning_returnbtn"))
+            .image(UIImage(named: "i_back"))
             .backgroundColor(UIColor.clear)
             .adhere(toSuperview: view)
         backBtn.snp.makeConstraints {
@@ -69,7 +86,7 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
         backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         //
         topTitleLabel
-            .fontName(17, "SFProText-Semibold")
+            .fontName(17, "Montserrat-Bold")
             .color(UIColor.black)
             .text("Setting".localized())
             .textAlignment(.center)
@@ -89,16 +106,18 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
                 $0.left.equalTo(20)
                 $0.top.equalTo(vipBtn.snp.top)
                 $0.centerX.equalToSuperview()
-                $0.height.equalTo(360)
+                $0.height.equalTo(430)
             }
+            contentBgScrollV.contentSize = CGSize(width: UIScreen.width, height: 430 + 60)
         } else {
             vipBtn.isHidden = false
             bottomBgView.snp.remakeConstraints {
                 $0.left.equalTo(20)
                 $0.top.equalTo(vipBtn.snp.bottom).offset(15)
                 $0.centerX.equalToSuperview()
-                $0.height.equalTo(360)
+                $0.height.equalTo(430)
             }
+            contentBgScrollV.contentSize = CGSize(width: UIScreen.width , height: (180/320) * UIScreen.width + 430 + 60)
         }
         self.view.layoutIfNeeded()
     }
@@ -107,26 +126,44 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
         
         //
         
-        vipBtn.adhere(toSuperview: view)
+        contentBgScrollV.backgroundColor(.clear)
+            .adhere(toSuperview: view)
+        contentBgScrollV.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(0)
+            $0.right.equalToSuperview().offset(0)
+            $0.top.equalTo(backBtn.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        contentBgScrollV.contentSize = CGSize(width: UIScreen.width, height: (180/320) * UIScreen.width + 430 + 60)
+        
+        //
+        vipBtn
+            .adhere(toSuperview: contentBgScrollV)
         vipBtn.addTarget(self, action: #selector(vipBtnClick(sender:)), for: .touchUpInside)
         vipBtn.snp.makeConstraints {
             $0.left.equalTo(20)
-            $0.top.equalTo(backBtn.snp.bottom).offset(10)
+            $0.top.equalTo(contentBgScrollV.snp.top).offset(15)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(60)
+             
+            $0.height.equalTo((364/634) * (UIScreen.width - 20 * 2))
         }
+        
         //
         
-        bottomBgView.layer.cornerRadius = 8
+        bottomBgView.layer.cornerRadius = 15
         bottomBgView
             .backgroundColor(UIColor.white)
-            .adhere(toSuperview: view)
+            .adhere(toSuperview: contentBgScrollV)
         bottomBgView.snp.makeConstraints {
             $0.left.equalTo(20)
             $0.top.equalTo(vipBtn.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(360)
+            $0.height.equalTo(430)
         }
+        bottomBgView.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor
+        bottomBgView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        bottomBgView.layer.shadowOpacity = 0.5
+        bottomBgView.layer.shadowRadius = 8
         //
         
         termsBtn.adhere(toSuperview: bottomBgView)
@@ -136,6 +173,7 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
             $0.top.equalTo(bottomBgView.snp.top).offset(10)
             $0.height.equalTo(60)
         }
+        
         //
         
         rateBtn.adhere(toSuperview: bottomBgView)
@@ -174,6 +212,16 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
         }
         
         //
+        purchaseLinkBtn.adhere(toSuperview: bottomBgView)
+        purchaseLinkBtn.addTarget(self, action: #selector(purchaseLinkBtnClick(sender:)), for: .touchUpInside)
+        purchaseLinkBtn.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.top.equalTo(restoreBtn.snp.bottom).offset(10)
+            $0.height.equalTo(60)
+        }
+        purchaseLinkBtn.line.isHidden = true
+        
+        //
         purchaseResultRefresh()
         
     }
@@ -184,9 +232,7 @@ class PSSettingVC: UIViewController, MFMailComposeViewControllerDelegate, UINavi
 
 extension PSSettingVC {
     @objc func vipBtnClick(sender: UIButton) {
-        let vc = PSStoreVC()
-        vc.source = ""
-        self.navigationController?.pushViewController(vc)
+        startSubscribeBtnClick()
     }
      
     @objc func termsBtnClick(sender: UIButton) {
@@ -196,7 +242,9 @@ extension PSSettingVC {
         if lan.contains("zh") {
             url = URL(string: touUrl_cn)
         }
-        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+//        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        let vc = PSkWebLinkVC(contentUrl: url, nil, "Terms of Use".localized())
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     @objc func rateusBtnClick(sender: UIButton) {
         rateusAction()
@@ -209,18 +257,46 @@ extension PSSettingVC {
             url = URL(string: ppUrl_cn)
         }
         
-        
-        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        let vc = PSkWebLinkVC(contentUrl: url, nil, "Privacy Policy".localized())
+        self.navigationController?.pushViewController(vc, animated: true)
+//        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
     }
     @objc func feedbackBtnClick(sender: UIButton) {
         sendEmailAction()
     }
     @objc func restoreBtnClick(sender: UIButton) {
-        PurchaseManager.share.restore {
-            ZKProgressHUD.showSuccess()
-            self.dismiss(animated: true, completion: nil)
-        }
+        restoreButtonClick()
     }
+    
+    @objc func purchaseLinkBtnClick(sender: UIButton) {
+//        if let purPath = Bundle.main.path(forResource: purhcasepUrl, ofType: nil) {
+//            do {
+//                let purchaseNoticeStr = try String(contentsOfFile: purPath, encoding: .utf8)
+//                let vc = PSkWebLinkVC(contentUrl: nil)
+//                vc.webView.loadHTMLString(purchaseNoticeStr, baseURL: nil)
+//                self.navigationController?.pushViewController(vc, animated: true)
+//            } catch {
+//
+//            }
+//
+//        }
+        
+        let vc = PSkWebLinkVC(contentUrl: nil, purhcasepUrl, "Purchase Notice".localized())
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        
+        
+//        let purl = purhcasepUrl
+//        var url = URL(string: purl)
+//        let lan = Locale.preferredLanguages.first ?? "en"
+//        debugPrint("preferredLanguages = \(Locale.preferredLanguages)")
+//        if lan.contains("zh") {
+//            let purl_cn = Bundle.main.path(forResource: purhcasepUrl_cn, ofType: nil)
+//            url = URL(string: purl_cn)
+//        }
+        
+    }
+    
     
     //
     func showSetNotificationSuccessAlert() {
@@ -240,6 +316,8 @@ extension PSSettingVC {
         
         self.present(alert, animated: true)
     }
+    
+    
 }
 
 extension PSSettingVC {
@@ -268,6 +346,33 @@ extension PSSettingVC {
             self.present(mailComposeViewController, animated: true, completion: nil)
         } else {
             showSendMailErrorAlert()
+        }
+    }
+    
+    func restoreButtonClick() {
+        
+        restoreFunc {
+            ZKProgressHUD.showSuccess("Subscription successful!".localized(), maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1.5, completion: nil)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .buy, object: nil)
+                NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+            }
+        }
+    }
+    
+    func startSubscribeBtnClick() {
+        //
+        let currentSubscribeType: SubscriptionType = .month
+        buySubscription(type: currentSubscribeType, source: "", page: "") {
+            //
+            [weak self] purchseDetail in
+            guard let `self` = self else {return}
+            ZKProgressHUD.showSuccess("Subscription successful!".localized(), maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1.5, completion: nil)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .buy, object: nil)
+                NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+            }
+
         }
     }
 }
@@ -305,12 +410,11 @@ class CUSettingToolBtn: UIButton {
     
     var iconImgV = UIImageView()
     var nameLabel = UILabel()
-    var arrowImgV = UIImageView()
-    var toolSwitch = UISwitch()
+    
     
     var iconImgName: String
     var nameStr: String
-    
+    let line = UIView()
     var switchBtnClickBlock: ((Bool)->Void)?
     
     
@@ -342,7 +446,7 @@ class CUSettingToolBtn: UIButton {
         //
         nameLabel
             .text(nameStr)
-            .fontName(16, "SFProText-Semibold")
+            .fontName(16, "Montserrat-Medium")
             .color(UIColor(hexString: "#292D32")!)
             .textAlignment(.left)
             .adhere(toSuperview: self)
@@ -352,37 +456,185 @@ class CUSettingToolBtn: UIButton {
             $0.width.height.greaterThanOrEqualTo(1)
         }
         
-        arrowImgV
-            .image("ic_home_next")
+        //
+        line.backgroundColor(UIColor(hexString: "#F4F4F4")!.withAlphaComponent(1))
             .adhere(toSuperview: self)
-        arrowImgV.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalToSuperview().offset(-10)
-            $0.width.height.equalTo(10)
+        line.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.right.equalToSuperview().offset(-20)
+            $0.left.equalToSuperview().offset(60)
+            $0.height.equalTo(1)
         }
-        
-        toolSwitch.isHidden = true
-        toolSwitch.onTintColor = UIColor(hexString: "#3458E9")
-        toolSwitch.thumbTintColor = UIColor.white
-        toolSwitch.adhere(toSuperview: self)
-        toolSwitch.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.right.equalTo(-15)
-            $0.width.equalTo(40)
-            $0.height.equalTo(22)
-        }
-        toolSwitch.addTarget(self, action: #selector(toolSwiftchClick(sender:)), for: .valueChanged)
-        
+        line.layer.cornerRadius = 0.5
         
     }
     
-    @objc func toolSwiftchClick(sender: UISwitch) {
-        switchBtnClickBlock?(sender.isOn)
-    }
-    
-    
+     
 }
 
 
-
+class PSSettingVipCard: UIButton, SubscriptionBaseProtocol {
+    
+    let priceLabel = UILabel()
+    let monthPriceDefault: String = "9.99"
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        prepareData()
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupView() {
+        
+        layer.masksToBounds = true
+        //
+        let bgImgV = UIImageView()
+        bgImgV.image("i_s_vipBgView")
+            .contentMode(.scaleAspectFill)
+            .adhere(toSuperview: self)
+        bgImgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalToSuperview()
+        }
+        //
+        let vipLabel = UILabel()
+        vipLabel.fontName(14, "Montserrat-Bold")
+            .color(UIColor(hexString: "#BAA867")!)
+            .text("VIP")
+            .textAlignment(.center)
+            .adhere(toSuperview: self)
+        vipLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(30)
+            $0.right.equalToSuperview().offset(-30)
+            $0.width.height.greaterThanOrEqualTo(1)
+        }
+        
+        //
+        let nowTryLabel = UILabel()
+        nowTryLabel.fontName(14, "Montserrat-Bold")
+            .color(UIColor(hexString: "#BAA867")!)
+            .backgroundColor(UIColor.white)
+            .text("Try Now".localized())
+            .textAlignment(.center)
+            .adhere(toSuperview: self)
+        nowTryLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-28)
+            $0.width.equalTo(130)
+            $0.height.equalTo(32)
+        }
+        nowTryLabel.layer.cornerRadius = 6
+        nowTryLabel.layer.masksToBounds = true
+        
+        //
+        let info1Label = UILabel()
+        info1Label.fontName(18, "Montserrat-Bold")
+            .color(UIColor(hexString: "#FFFFFF")!)
+            .text("Unlimited Save Photos".localized())
+            .textAlignment(.center)
+            .adhere(toSuperview: self)
+        info1Label.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(self.snp.centerY).offset(-26)
+            $0.left.equalTo(40)
+            $0.height.greaterThanOrEqualTo(30)
+        }
+        //
+        //
+        
+        priceLabel
+            .fontName(16, "Montserrat-Medium")
+            .textAlignment(.center)
+            .text("$2.99/\("Month".localized())")
+            .color(UIColor.white)
+            .adjustsFontSizeToFitWidth()
+            .adhere(toSuperview: self)
+        priceLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(info1Label.snp.bottom).offset(12)
+            $0.width.height.greaterThanOrEqualTo(20)
+        }
+        
+        
+        //
+        let free3DayLabel = UILabel()
+        free3DayLabel
+            .fontName(12, "Montserrat-Regular")
+            .textAlignment(.center)
+            .text("3-day Free Trial".localized())
+            .color(UIColor.white)
+            .adjustsFontSizeToFitWidth()
+            .adhere(toSuperview: self)
+        free3DayLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(nowTryLabel.snp.top).offset(-5)
+            $0.width.height.greaterThanOrEqualTo(20)
+        }
+        
+       
+        //
+        let cancelLabel = UILabel()
+        cancelLabel
+            .fontName(10, "Montserrat-Regular")
+            .textAlignment(.center)
+            .text("Cancel anytime".localized())
+            .color(UIColor.white)
+            .adjustsFontSizeToFitWidth()
+            .adhere(toSuperview: self)
+        cancelLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(nowTryLabel.snp.bottom).offset(2)
+            $0.width.height.greaterThanOrEqualTo(20)
+        }
+        
+    }
+    
+    
+    func prepareData() {
+        if let cacheIapMonthInfo = UserDefaults.standard.value(forKey: cacheIapInfoMonthKey) as? [String: Any] {
+            let localizedPrice = cacheIapMonthInfo["localizedPrice"] as? String ?? ""
+            let _ = cacheIapMonthInfo["currencySymbol"] as? String ?? ""
+            let _ = cacheIapMonthInfo["price"] as? Double ?? 0
+            
+            self.priceLabel.text("\(localizedPrice)/\("Month".localized())")
+            
+        } else {
+            
+            self.priceLabel.text("\("$\(monthPriceDefault)")/\("Month".localized())")
+        }
+        
+        getSubscriptionData {[weak self] models in
+            guard let `self` = self else {return}
+            //
+            let month = models.filter{$0.iapType == .month}.first
+            if let month = month {
+                self.priceLabel.text("\("\(month.localizedPrice)")/\("Month".localized())")
+                 
+            }
+            //
+//            let week = models.filter{$0.iapType == .week}.first
+//            if let week = week {
+//                self.weekBtn.priceLabel.text = "\(week.localizedPrice)"
+//                self.weekBtn.weekPriceLabel.text = "\("XX per week".localized().replacingOccurrences(of: "XX", with: "\(String(format: "%@%.2f", week.currencySymbol,week.price))"))"
+//
+//
+//            }
+//            //
+//            let year = models.filter{$0.iapType == .year}.first
+//            if let year = year {
+//                self.yearBtn.priceLabel.text = "\(year.localizedPrice)"
+//                self.yearBtn.weekPriceLabel.text = "\("XX per week".localized().replacingOccurrences(of: "XX", with: "\(String(format: "%@%.2f", year.currencySymbol,year.price/52))"))"
+//            }
+            
+        }
+        
+    }
+    
+    
+    
+}
 

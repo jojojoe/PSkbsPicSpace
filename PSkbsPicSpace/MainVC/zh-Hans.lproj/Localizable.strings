@@ -1,0 +1,53 @@
+/* 
+  Localizable.strings
+  PSkbsPicSpace
+
+  Created by Joe on 2022/1/19.
+  
+*/
+
+"Setting" = "设置";
+
+"Unlimited Save Photos" = "无限制保存图片";
+
+"Month" = "月";
+
+"3-day Free Trial" = "3天免费试用";
+
+"Try Now" = "立即订阅";
+
+"Terms of Use" = "使用条款";
+
+"Rate Us" = "评价我们";
+
+"Privacy Policy" = "隐私政策";
+
+"Feedback" = "反馈";
+
+"Restore Purchase" = "恢复购买";
+
+"Purchase Notice" = "购买须知";
+
+"Cancel" = "取消";
+
+"Library" = "相册";
+
+"Next" = "确定";
+
+"Photo saved successfully!" = "图片保存成功";
+
+"OK" = "确定";
+
+"Max Value" = "已达到最大画布尺寸比例";
+
+"Subscription successful!" = "订阅成功!";
+
+"Photo saved successfully!" = "图片保存成功!";
+
+"You have declined access to photos, please active it in Settings>Privacy>Photos." = "您暂时没有开启访问照片权限，请在\"设置->隐私权限->照片\"中将其激活";
+
+"Ooops!" = "哎，不好";
+
+"Cancel" = "取消";
+
+"Cancel anytime" = "可随时取消";

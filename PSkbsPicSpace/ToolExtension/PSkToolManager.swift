@@ -11,7 +11,7 @@ import NoticeObserveKit
 
 
 class PSkToolManager: NSObject {
-
+    static let `default` = PSkToolManager()
 }
 
 extension PSkToolManager {

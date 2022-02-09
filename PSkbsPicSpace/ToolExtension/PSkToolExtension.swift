@@ -634,6 +634,16 @@ public extension UIImageView {
 }
 
 
+public extension UIScreen {
+    static var width: CGFloat {
+        return UIScreen.main.bounds.width
+    }
+
+    static var height: CGFloat {
+        return UIScreen.main.bounds.height
+    }
+}
+
 public extension UIDevice {
     static var isPad: Bool {
         return current.userInterfaceIdiom == .pad

@@ -28,7 +28,7 @@ class PSkProfilePhotoToolView: UIView {
     var downMoveBtnClickBlock: ((ProfilePhotoItem?)->Void)?
     
     
-    var contentHeight: CGFloat = 500
+    var contentHeight: CGFloat = 460
     var isShow: Bool = false
     
     
@@ -98,7 +98,7 @@ extension PSkProfilePhotoToolView {
         
         //
         contentV
-            .backgroundColor(UIColor.white)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
             .adhere(toSuperview: self)
         contentV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -119,9 +119,8 @@ extension PSkProfilePhotoToolView {
         //
         let backBtn = UIButton(type: .custom)
         backBtn
-            .title("Back")
-            .image("")
-            .backgroundColor(.orange)
+            .image("i_profile_downview")
+            .backgroundColor(.white)
             .adhere(toSuperview: contentV)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         backBtn.snp.makeConstraints {
@@ -130,7 +129,10 @@ extension PSkProfilePhotoToolView {
             $0.left.equalTo(contentV.snp.left).offset(0)
             $0.height.equalTo(35)
         }
-        
+        backBtn.layer.shadowColor = UIColor(hexString: "#F3F3F3")!.cgColor
+        backBtn.layer.shadowOffset = CGSize(width: 0, height: -1)
+        backBtn.layer.shadowRadius = 8
+        backBtn.layer.shadowOpacity = 0.8
         //
         
         let layout = UICollectionViewFlowLayout()
@@ -199,25 +201,30 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
         }
         
         
+        
         if item == PSkProfileManager.default.bgColorPhotoItem {
             cell.bgColorFrameView.isHidden = false
             let wS = "\(Int(PSkProfileManager.default.currentCanvasWidth ?? 0))"
             let hS = "\(Int(PSkProfileManager.default.currentCanvasHeight ?? 0))"
-                
+            
+            cell.bgColorFrameTitleLabel.layer.cornerRadius = 4
             cell.bgColorFrameTitleLabel
                 .text("\(wS) x \(hS)")
-                .backgroundColor(UIColor.white)
+                .backgroundColor(UIColor(hexString: "#F3F3F3")!)
                 .color(UIColor.black)
             cell.canvasV.isHidden = true
             cell.addNewImgV.isHidden = true
+            cell.canvasV.backgroundColor(.white)
         } else if item == PSkProfileManager.default.addNewPhotoItem {
             cell.bgColorFrameView.isHidden = true
             cell.canvasV.isHidden = true
             cell.addNewImgV.isHidden = false
+            cell.contentView.backgroundColor(.black)
         } else {
             cell.bgColorFrameView.isHidden = true
             cell.canvasV.isHidden = false
             cell.addNewImgV.isHidden = true
+            cell.canvasV.backgroundColor(.white)
         }
         
         
@@ -311,6 +318,17 @@ extension PSkProfilePhotoToolView: UICollectionViewDataSource {
             }
         }
         
+        if indexPath.item == 2 || indexPath.item == 3 {
+            if PurchaseManager.share.inSubscription {
+                cell.vipImgV.isHidden = true
+            } else {
+                cell.vipImgV.isHidden = false
+            }
+        } else {
+            cell.vipImgV.isHidden = true
+        }
+        
+        
         return cell
     }
     
@@ -339,9 +357,9 @@ extension PSkProfilePhotoToolView: UICollectionViewDelegateFlowLayout {
         
         if indexPath.item == 0 {
             // Add New Photo
-            return CGSize(width: width, height: 60)
+            return CGSize(width: width, height: 48)
         } else if isAddNewItem {
-            return CGSize(width: width, height: 40)
+            return CGSize(width: width, height: 36)
         } else {
             return CGSize(width: width, height: 100)
         }
@@ -370,7 +388,6 @@ extension PSkProfilePhotoToolView: UICollectionViewDelegate {
         } else if item == PSkProfileManager.default.bgColorPhotoItem {
             
         } else {
-            
             collectionView.reloadData()
             selectUserPhotoBlock?(item)
         }
@@ -408,6 +425,7 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
     let mirrorBtn = UIButton(type: .custom)
     let upMoveBtn = UIButton(type: .custom)
     let downMoveBtn = UIButton(type: .custom)
+    let vipImgV = UIImageView()
     
     var photoItem: ProfilePhotoItem?
     
@@ -432,9 +450,9 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
     
     func setupView() {
         // 100
-        contentView.backgroundColor(UIColor.lightGray)
-        
-        
+        contentView.backgroundColor(UIColor.clear)
+        contentView.layer.cornerRadius = 8
+        contentView.layer.masksToBounds = true
         //
         contentImgV.contentMode = .scaleAspectFill
         contentImgV.clipsToBounds = true
@@ -451,15 +469,16 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
             $0.top.right.bottom.left.equalToSuperview()
         }
         bgColorFrameTitleLabel.layer.cornerRadius = 6
+        bgColorFrameTitleLabel.layer.masksToBounds = true
         bgColorFrameTitleLabel
-            .fontName(20, "AvenirNext-DemiBold")
+            .fontName(12, "Montserrat-Medium")
             .color(UIColor(hexString: "#000000")!)
             .textAlignment(.center)
             .adhere(toSuperview: bgColorFrameView)
         bgColorFrameTitleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.equalTo(190)
-            $0.height.equalTo(30)
+            $0.width.equalTo(130)
+            $0.height.equalTo(28)
         }
         
         //
@@ -473,10 +492,11 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         
         //
         addNewImgV
-            .backgroundColor(UIColor(hexString: "#A0A0A0")!)
+            .image("i_p_photo_addnew")
             .adhere(toSuperview: contentView)
         addNewImgV.snp.makeConstraints {
-            $0.top.right.bottom.left.equalToSuperview()
+            $0.center.equalToSuperview()
+            $0.width.height.equalTo(18)
         }
         
         //
@@ -489,24 +509,23 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
             $0.left.right.top.bottom.equalToSuperview()
         }
         bgBorderV.layer.borderColor = UIColor.black.cgColor
-        bgBorderV.layer.borderWidth = 3
-        
+        bgBorderV.layer.borderWidth = 2
+        bgBorderV.layer.cornerRadius = 8
         //
         selectV.isUserInteractionEnabled = false
-        selectV.layer.borderColor = UIColor.yellow.cgColor
-        selectV.layer.borderWidth = 3
+        selectV.layer.borderColor = UIColor(hexString: "#EEAB00")!.cgColor
+        selectV.layer.borderWidth = 2
         selectV
             .backgroundColor(.clear)
             .adhere(toSuperview: contentView)
         selectV.snp.makeConstraints {
             $0.top.right.bottom.left.equalToSuperview()
         }
+        selectV.layer.cornerRadius = 8
         //
         
         deleteBtn
-            .title("D")
-            .titleColor(UIColor.orange)
-            .backgroundColor(UIColor.purple)
+            .image(UIImage(named: "i_p_photo_delete"), .normal)
             .adhere(toSuperview: canvasV)
         deleteBtn.addTarget(self, action: #selector(deleteBtnClick(sender: )), for: .touchUpInside)
         deleteBtn.snp.makeConstraints {
@@ -517,9 +536,7 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         
         //
         resetBtn
-            .title("R")
-            .titleColor(UIColor.orange)
-            .backgroundColor(UIColor.purple)
+            .image(UIImage(named: "i_p_photo_reset"), .normal)
             .adhere(toSuperview: canvasV)
         resetBtn.addTarget(self, action: #selector(resetBtnClick(sender: )), for: .touchUpInside)
         resetBtn.snp.makeConstraints {
@@ -529,24 +546,35 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         }
         
         //
+        let photoImgBgV = UIImageView()
+        photoImgBgV.image("i_clearBg")
+            .adhere(toSuperview: canvasV)
+            .contentMode(.scaleAspectFit)
+            .clipsToBounds()
+        
+        //
         photoImgV
             .contentMode(.scaleAspectFill)
             .clipsToBounds()
-            .backgroundColor(.darkGray)
+            .backgroundColor(.clear)
             .adhere(toSuperview: canvasV)
         photoImgV.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.left.equalTo(deleteBtn.snp.right).offset(10)
             $0.width.height.equalTo(80)
         }
+        photoImgV.layer.cornerRadius = 8
+        photoImgV.layer.masksToBounds = true
+        photoImgBgV.layer.cornerRadius = 8
+        photoImgBgV.layer.masksToBounds = true
+        photoImgBgV.snp.makeConstraints {
+            $0.left.right.top.bottom.equalTo(photoImgV)
+        }
+        
         //
         removeBgBtn
-            .image(UIImage(named: ""), .normal)
-            .image(UIImage(named: ""), .selected)
-            .title("R", .normal)
-            .title("Red", .selected)
-            .titleColor(.white)
-            .backgroundColor(.purple)
+            .image(UIImage(named: "i_p_photo_removebg_n"), .normal)
+            .image(UIImage(named: "i_p_photo_removebg_s"), .selected)
             .adhere(toSuperview: canvasV)
         removeBgBtn.snp.makeConstraints {
             $0.bottom.equalTo(photoImgV.snp.bottom)
@@ -556,12 +584,8 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         removeBgBtn.addTarget(self, action: #selector(removeBgBtnClick(sender:)), for: .touchUpInside)
         //
         beautyBtn
-            .image(UIImage(named: ""), .normal)
-            .image(UIImage(named: ""), .selected)
-            .title("S", .normal)
-            .title("Sed", .selected)
-            .titleColor(.white)
-            .backgroundColor(.purple)
+            .image(UIImage(named: "i_p_photo_beauty_n"), .normal)
+            .image(UIImage(named: "i_p_photo_beauty_s"), .selected)
             .adhere(toSuperview: canvasV)
         beautyBtn.snp.makeConstraints {
             $0.bottom.equalTo(photoImgV.snp.bottom)
@@ -571,12 +595,8 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         beautyBtn.addTarget(self, action: #selector(skinBeautyBtnClick(sender:)), for: .touchUpInside)
         //
         mirrorBtn
-            .image(UIImage(named: ""), .normal)
-            .image(UIImage(named: ""), .selected)
-            .title("M", .normal)
-            .title("Med", .selected)
-            .titleColor(.white)
-            .backgroundColor(.purple)
+            .image(UIImage(named: "i_p_photo_mirror_n"), .normal)
+            .image(UIImage(named: "i_p_photo_mirror_s"), .selected)
             .adhere(toSuperview: canvasV)
         mirrorBtn.snp.makeConstraints {
             $0.bottom.equalTo(photoImgV.snp.bottom)
@@ -586,12 +606,7 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         mirrorBtn.addTarget(self, action: #selector(mirrorBtnClick(sender:)), for: .touchUpInside)
         //
         upMoveBtn
-            .image(UIImage(named: ""), .normal)
-            .image(UIImage(named: ""), .selected)
-            .title("u", .normal)
-            .title("ued", .selected)
-            .titleColor(.white)
-            .backgroundColor(.purple)
+            .image(UIImage(named: "i_p_photo_up"), .normal)
             .adhere(toSuperview: canvasV)
         upMoveBtn.snp.makeConstraints {
             $0.bottom.equalTo(snp.centerY).offset(-5)
@@ -602,12 +617,7 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
         
         //
         downMoveBtn
-            .image(UIImage(named: ""), .normal)
-            .image(UIImage(named: ""), .selected)
-            .title("d", .normal)
-            .title("ded", .selected)
-            .titleColor(.white)
-            .backgroundColor(.purple)
+            .image(UIImage(named: "i_p_photo_down"), .normal)
             .adhere(toSuperview: canvasV)
         downMoveBtn.snp.makeConstraints {
             $0.top.equalTo(snp.centerY).offset(5)
@@ -615,6 +625,22 @@ class PSkProfilePhotoToolCell: UICollectionViewCell {
             $0.width.height.equalTo(40)
         }
         downMoveBtn.addTarget(self, action: #selector(moveDownBtnClick(sender:)), for: .touchUpInside)
+        
+        //
+        
+        //
+        vipImgV
+            .image("i_viplog")
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: contentView)
+        vipImgV.snp.makeConstraints {
+            $0.top.equalTo(photoImgV.snp.top)
+            $0.left.equalTo(removeBgBtn.snp.left).offset(12)
+            $0.width.equalTo(56/2)
+            $0.width.equalTo(37/2)
+        }
+        vipImgV.isHidden = true
+        
         
     }
     

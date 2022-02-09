@@ -26,6 +26,7 @@ class PSkMagicCamColorBar: UIView {
     var greenSlider: GreenSliderControl = GreenSliderControl()
     var blueSlider: BlueSliderControl = BlueSliderControl()
     
+    var currentColorStr: String?
     var contentHeight: CGFloat = 290
     var isShow: Bool = false
     
@@ -97,7 +98,7 @@ extension PSkMagicCamColorBar {
         //
         
         bgV
-            .backgroundColor(.white)
+            .backgroundColor(UIColor.black.withAlphaComponent(0.92))
             .adhere(toSuperview: self)
         bgV.snp.makeConstraints {
             $0.right.equalToSuperview().offset(420)
@@ -107,7 +108,7 @@ extension PSkMagicCamColorBar {
         
         //
         contentV
-            .backgroundColor(UIColor.white)
+            .backgroundColor(UIColor.clear)
             .adhere(toSuperview: bgV)
         contentV.snp.makeConstraints {
             $0.left.equalToSuperview()
@@ -116,41 +117,42 @@ extension PSkMagicCamColorBar {
             $0.height.equalTo(contentHeight)
         }
         
-        //
-        let backBtn = UIButton(type: .custom)
-        backBtn
-            .title("B")
-            .image("")
-            .backgroundColor(.orange)
-            .adhere(toSuperview: bgV)
-        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
-        backBtn.snp.makeConstraints {
-            $0.right.equalToSuperview()
-            $0.top.bottom.equalToSuperview()
-            $0.width.equalTo(40)
-        }
-        
+       
         //
         
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
-        collection.backgroundColor(.lightGray)
+        collection.backgroundColor(.white)
         collection.showsHorizontalScrollIndicator = false
         collection.delegate = self
         collection.dataSource = self
         contentV.addSubview(collection)
         collection.snp.makeConstraints {
-            $0.right.equalToSuperview()
+            $0.right.equalToSuperview().offset(38)
             $0.top.equalToSuperview().offset(20)
             $0.height.equalTo(60)
             $0.left.equalToSuperview().offset(100)
         }
         collection.register(cellWithClass: ITMagicCamColorCell.self)
-        
+        collection.layer.cornerRadius = 30
+        collection.layer.masksToBounds = true
         //
-         
+        //
+        let backBtn = UIButton(type: .custom)
+        backBtn
+            .image(UIImage(named: "i_sig_color_back"))
+            .backgroundColor(.black)
+            .adhere(toSuperview: bgV)
+        backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
+        backBtn.snp.makeConstraints {
+            $0.right.equalToSuperview()
+            $0.top.bottom.equalToSuperview()
+            $0.width.equalTo(38)
+        }
+        
+        
         
     }
     
@@ -242,6 +244,12 @@ extension PSkMagicCamColorBar: UICollectionViewDataSource {
         cell.contentImgV
             .backgroundColor(UIColor(hexString: item)!)
         cell.contentImgV.layer.cornerRadius = cell.bounds.width / 2
+        cell.selectV.layer.cornerRadius = cell.bounds.width / 2
+        if currentColorStr == item {
+            cell.selectV.isHidden = false
+        } else {
+            cell.selectV.isHidden = true
+        }
         return cell
     }
     
@@ -262,7 +270,7 @@ extension PSkMagicCamColorBar: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        return UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 54)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -282,6 +290,10 @@ extension PSkMagicCamColorBar: UICollectionViewDelegate {
         colorPicker.selectedColor = color
         //
         selectColorBlock?(color)
+        
+        currentColorStr = colorStr
+        collectionView.reloadData()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -297,7 +309,7 @@ extension PSkMagicCamColorBar: UICollectionViewDelegate {
 
 class ITMagicCamColorCell: UICollectionViewCell {
     let contentImgV = UIImageView()
-    
+    let selectV = UIView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -314,6 +326,16 @@ class ITMagicCamColorCell: UICollectionViewCell {
         contentImgV.snp.makeConstraints {
             $0.top.right.bottom.left.equalToSuperview()
         }
+        //
+        selectV.adhere(toSuperview: contentView)
+            .backgroundColor(.clear)
+        selectV.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.left.top.equalTo(contentImgV)
+        }
+        
+        selectV.layer.borderColor = UIColor(hexString: "#EEAB00")?.cgColor
+        selectV.layer.borderWidth = 2
         
         
     }

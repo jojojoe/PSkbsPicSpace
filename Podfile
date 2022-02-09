@@ -15,7 +15,7 @@ target 'PSkbsPicSpace' do
   pod 'NoticeObserveKit'
   pod 'Alamofire'
   pod 'SwiftyStoreKit'
-  pod 'Defaults'
+#  pod 'Defaults'
   pod 'MaLiang'
   pod 'FlexColorPicker'
   pod 'YUCIHighPassSkinSmoothing'

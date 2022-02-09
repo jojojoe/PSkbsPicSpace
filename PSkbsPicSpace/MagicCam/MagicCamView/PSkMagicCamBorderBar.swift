@@ -12,6 +12,8 @@ class PSkMagicCamBorderBar: UIView {
 
     var collection: UICollectionView!
     var camBorderBarClickBlock: ((CamBorderItem)->Void)?
+    var currentItem: CamBorderItem?
+    var isVipBorder: Bool = false
     
     
     override init(frame: CGRect) {
@@ -51,13 +53,32 @@ extension PSkMagicCamBorderBar: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: PSkMagicCamBorderCell.self, for: indexPath)
         let item = PSkMagicCamManager.default.camBorderList[indexPath.item]
-        cell.contentView.layer.cornerRadius = 10
+//        cell.contentView.layer.cornerRadius = 10
         cell.contentView.layer.masksToBounds = true
         cell.contentView
-            .backgroundColor(UIColor.darkGray)
+            .backgroundColor(UIColor.clear)
         cell.contentImgV
             .image(item.thumb)
-        cell.nameL.text(item.imgPosition)
+//        cell.nameL.text(item.imgPosition)
+        
+        
+        if currentItem?.thumb == item.thumb {
+            cell.selectV.isHidden = false
+        } else {
+            cell.selectV.isHidden = true
+        }
+        
+        if indexPath.item <= 1 {
+            cell.vipImgV.isHidden = true
+        } else {
+            if PurchaseManager.share.inSubscription {
+                cell.vipImgV.isHidden = true
+            } else {
+                cell.vipImgV.isHidden = false
+            }
+        }
+        
+        
         return cell
     }
     
@@ -75,7 +96,7 @@ extension PSkMagicCamBorderBar: UICollectionViewDataSource {
 
 extension PSkMagicCamBorderBar: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 90, height: 90)
+        return CGSize(width: 74, height: 74)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -96,7 +117,13 @@ extension PSkMagicCamBorderBar: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = PSkMagicCamManager.default.camBorderList[indexPath.item]
         camBorderBarClickBlock?(item)
-        
+        currentItem = item
+        collectionView.reloadData()
+        if indexPath.item <= 1 {
+            isVipBorder = false
+        } else {
+            isVipBorder = true
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -108,7 +135,8 @@ extension PSkMagicCamBorderBar: UICollectionViewDelegate {
 
 class PSkMagicCamBorderCell: UICollectionViewCell {
     let contentImgV = UIImageView()
-    let nameL = UILabel()
+    let selectV = UIView()
+    let vipImgV = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -120,24 +148,39 @@ class PSkMagicCamBorderCell: UICollectionViewCell {
     }
     
     func setupView() {
-        contentImgV.contentMode = .scaleAspectFill
+        contentImgV.contentMode = .scaleAspectFit
         contentImgV.clipsToBounds = true
         contentView.addSubview(contentImgV)
         contentImgV.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.left.equalToSuperview().offset(6)
-            $0.top.equalToSuperview().offset(6)
+            $0.left.equalToSuperview().offset(0)
+            $0.top.equalToSuperview().offset(0)
         }
+        
         //
-        nameL
-            .fontName(10, "AvenirNext-DemiBold")
-            .adjustsFontSizeToFitWidth()
-            .color(UIColor.white)
-            .adhere(toSuperview: contentView)
-        nameL.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.top.left.equalToSuperview()
+        let selectW: CGFloat = 20
+        
+        selectV.adhere(toSuperview: contentView)
+            .backgroundColor(UIColor(hexString: "#EEAB00")!)
+        selectV.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(8)
+            $0.width.height.equalTo(selectW)
         }
+        selectV.layer.cornerRadius = selectW/2
+        selectV.layer.masksToBounds = true
+
+        //
+        vipImgV
+            .image("i_viplog")
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: contentView)
+        vipImgV.snp.makeConstraints {
+            $0.top.right.equalToSuperview()
+            $0.width.equalTo(56/2)
+            $0.height.equalTo(37/2)
+        }
+        vipImgV.isHidden = true
         
     }
 }

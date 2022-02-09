@@ -11,12 +11,12 @@ import SwiftyStoreKit
 import AppsFlyerLib
 
 let cacheIapInfoMonthKey = "cacheIapInfo_month"
-let cacheIapInfoWeekKey = "cacheIapInfo_week"
-let cacheIapInfoYearKey = "cacheIapInfo_year"
+let cacheIapInfoWeekKey = "cacheIapInfo_month"
+let cacheIapInfoYearKey = "cacheIapInfo_month"
 
-let AF_event_Week = "subscribe_week"
+let AF_event_Week = "subscribe_month"
 let AF_event_Month = "subscribe_month"
-let AF_event_Year3Free = "subscribe_year_3dayfree"
+let AF_event_Year3Free = "subscribe_month"
 
 
 protocol SubscriptionBaseProtocol {
@@ -54,7 +54,7 @@ extension SubscriptionBaseProtocol {
         }
     }
 
-    func buySubscription(type: SubscriptionType,source: String,page: String,comp: @escaping ()->()) {
+    func buySubscription(type: SubscriptionType,source: String,page: String,comp: @escaping (PurchaseDetails?)->()) {
         //
         
         //
@@ -64,7 +64,7 @@ extension SubscriptionBaseProtocol {
         //
         PurchaseManager.share.startPurchaseProduct(iapIdStr: type.iapStr) { (purchaseDetails) in
             //
-            comp()
+            comp(purchaseDetails)
             // 测试已更新, 这里填写新的AppsFlyer的标识码
             var AppsFlyerStr = ""
             switch type {
@@ -78,6 +78,8 @@ extension SubscriptionBaseProtocol {
             
             //
             if let purchaseDetails = purchaseDetails {
+                debugPrint("purchaseDetails = \(purchaseDetails)")
+                
                 let price = purchaseDetails.product.price.doubleValue
                 let currencyCode = purchaseDetails.product.priceLocale.currencyCode ?? "USD"
                 //

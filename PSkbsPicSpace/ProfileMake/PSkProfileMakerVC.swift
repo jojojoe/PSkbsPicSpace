@@ -19,15 +19,15 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     let contentBgV = UIView()
     let canvasV = UIView()
     let canvasBgV = UIView()
-    let frameBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Frame")
-    let bgBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "BgColor")
-    let photoBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "Photo")
+    let frameBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "i_profile_size")
+    let bgBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "i_profile_color")
+    let photoBtn = PSkProfileMakerBottomBtn(frame: .zero, nameStr: "i_profile_photo")
     let frameBar = PSkProfileFrameToolView()
     let bgColorBar = PSkProfileBgToolView()
     let photoBar = PSkProfilePhotoToolView()
     let touchMoveCanvasV = PSkTouchMoveCanvasView()
     var viewDidLayoutSubviewsOnce: Once = Once()
-    
+    let vipAlertView = PSkVipAlertView()
     
     
     var canvasTargetWH: CGFloat = 1 // 1 , 3/4 9/16 16/9
@@ -39,7 +39,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         setupTouchMoveCanvasV()
         setupToolView()
         setupBarBlockAction()
-        
+        setupVipAlertView()
         setupDefaultStatus()
     }
     
@@ -81,7 +81,7 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
             [weak self] in
             guard let `self` = self else {return}
             self.viewDidLayoutSubviewsOnce.run({
-                
+                self.checkAlbumAuthorization()
             })
         }
     }
@@ -89,40 +89,45 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     
     func setupView() {
         //
-        view.backgroundColor(.white)
+        view.backgroundColor(UIColor(hexString: "#F4F4F4")!)
+        
+        //
+        let topBanner = UIView()
+        topBanner.backgroundColor(.white)
+            .adhere(toSuperview: view)
+        topBanner.snp.makeConstraints {
+            $0.left.right.top.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(44)
+        }
         
         backBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
-            .adhere(toSuperview: view)
+            .image(UIImage(named: "i_back"))
+            .adhere(toSuperview: topBanner)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender: )), for: .touchUpInside)
         backBtn.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.bottom.equalTo(topBanner.snp.bottom).offset(0)
             $0.left.equalTo(10)
             $0.width.height.equalTo(44)
         }
         //
+        //
         let saveBtn = UIButton(type: .custom)
         saveBtn
-            .backgroundColor(UIColor(hexString: "#999999")!)
-            .title("Save")
-            .font(16, "AvenirNext-DemiBold")
-            .titleColor(UIColor(hexString: "#111111")!)
-            .adhere(toSuperview: view)
-        saveBtn.layer.cornerRadius = 20
+            .image(UIImage(named: "i_download"))
+            .adhere(toSuperview: topBanner)
         saveBtn.addTarget(self, action: #selector(saveBtnClick(sender: )), for: .touchUpInside)
         saveBtn.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.bottom.equalTo(topBanner.snp.bottom).offset(0)
             $0.right.equalTo(-10)
-            $0.height.equalTo(40)
-            $0.width.greaterThanOrEqualTo(96)
+            $0.width.height.equalTo(44)
         }
+        
         
         //
         
         contentBgV
             .clipsToBounds()
-            .backgroundColor(.lightGray)
+            .backgroundColor(.clear)
             .adhere(toSuperview: view)
         contentBgV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -154,20 +159,27 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         
         
         //
-        let bottomBarHeight: CGFloat = 90
+        let bottomBarHeight: CGFloat = 130
         let bottomBar = UIView()
         bottomBar
-            .backgroundColor(UIColor.lightGray)
+            .backgroundColor(UIColor.white)
             .adhere(toSuperview: view)
         bottomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.height.equalTo(bottomBarHeight)
         }
-        
+        let bottomMaskBar = UIView()
+        bottomMaskBar
+            .backgroundColor(UIColor.white)
+            .adhere(toSuperview: view)
+        bottomMaskBar.snp.makeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
         //
-        let btnWidth: CGFloat = 90
-        let btnHeight: CGFloat = 90
+        let btnWidth: CGFloat = 60
+        let btnHeight: CGFloat = 60
         let btnPadding: CGFloat = (UIScreen.main.bounds.width - btnWidth * 3) / 4
         
         frameBtn.adhere(toSuperview: bottomBar)
@@ -366,7 +378,7 @@ extension PSkProfileMakerVC {
 extension PSkProfileMakerVC {
     
     @objc func backBtnClick(sender: UIButton) {
-        
+        PSkProfileManager.default.clearPhotosListData()
         if self.navigationController != nil {
             self.navigationController?.popViewController()
         } else {
@@ -375,7 +387,16 @@ extension PSkProfileMakerVC {
     }
     
     @objc func saveBtnClick(sender: UIButton) {
-        processBigImg()
+        
+        if PSkProfileManager.default.photoItemList.count >= 4 {
+            if PurchaseManager.share.inSubscription {
+                processBigImg()
+            } else {
+                showSubscribeView()
+            }
+        } else {
+            processBigImg()
+        }
         
     }
     
@@ -398,6 +419,55 @@ extension PSkProfileMakerVC {
     
     
 
+}
+
+extension PSkProfileMakerVC {
+    
+    func setupVipAlertView() {
+        
+        vipAlertView.alpha = 0
+        vipAlertView.adhere(toSuperview: view)
+        vipAlertView.snp.makeConstraints {
+            $0.left.right.bottom.top.equalToSuperview()
+        }
+        
+    }
+
+    func showSubscribeView() {
+        // show coin alert
+        UIView.animate(withDuration: 0.35) {
+            self.vipAlertView.alpha = 1
+        }
+        self.view.bringSubviewToFront(self.vipAlertView)
+        
+        vipAlertView.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+        
+        vipAlertView.subscribeSuccessBlock = {
+            [weak self] purchaseDetail in
+            guard let `self` = self else {return}
+            ZKProgressHUD.showSuccess("Subscription successful!".localized(), maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1.5, completion: nil)
+            //
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+        
+    }
+    
 }
 
 extension PSkProfileMakerVC {
@@ -505,7 +575,9 @@ extension PSkProfileMakerVC {
                 }
                 
             }
-            
+//            if let item_im = item {
+//                PSkProfileManager.default.photoItemList.removeAll(item_im)
+//            }
             self.photoBar.collection.reloadData()
             
         }
@@ -748,7 +820,7 @@ extension PSkProfileMakerVC {
 
 class PSkProfileMakerBottomBtn: UIButton {
     var nameStr: String
-    let nameLabel = UILabel()
+    let iconImgV = UIImageView()
     
     
     init(frame: CGRect, nameStr: String) {
@@ -762,30 +834,28 @@ class PSkProfileMakerBottomBtn: UIButton {
     
     func setupView() {
 
-        nameLabel
-            .fontName(14, "AvenirNext-DemiBold")
-            .color(UIColor(hexString: "#454C3D")!)
-            .text(nameStr)
-            .adjustsFontSizeToFitWidth()
+        iconImgV
+            .image(nameStr)
+            .contentMode(.scaleAspectFit)
             .adhere(toSuperview: self)
-        nameLabel.snp.makeConstraints {
+        iconImgV.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(-4)
-            $0.width.height.greaterThanOrEqualTo(1)
+            $0.centerY.equalToSuperview().offset(0)
+            $0.width.height.greaterThanOrEqualTo(60)
         }
         
     }
     
     func isCurrentSelect(isSelect: Bool) {
-        if isSelect == true {
-            nameLabel
-                .color(UIColor(hexString: "#454C3D")!)
-            
-        } else {
-            nameLabel
-                .color(UIColor(hexString: "#454C3D")!.withAlphaComponent(0.5))
-            
-        }
+//        if isSelect == true {
+//            nameLabel
+//                .color(UIColor(hexString: "#454C3D")!)
+//
+//        } else {
+//            nameLabel
+//                .color(UIColor(hexString: "#454C3D")!.withAlphaComponent(0.5))
+//
+//        }
     }
     
 }
@@ -833,7 +903,7 @@ extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -844,14 +914,14 @@ extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Oops".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -877,14 +947,14 @@ extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Oops".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -895,14 +965,14 @@ extension PSkProfileMakerVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Oops".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -1058,8 +1128,8 @@ extension PSkProfileMakerVC {
 
         DispatchQueue.main.async {
             let title = ""
-            let message = "Photo saved successfully!"
-            let okText = "OK"
+            let message = "Photo saved successfully!".localized()
+            let okText = "OK".localized()
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
                  DispatchQueue.main.async {
@@ -1071,11 +1141,11 @@ extension PSkProfileMakerVC {
         
     }
     func albumPermissionsAlet() {
-        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+        let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK".localized(), style: .default) { [weak self] (actioin) in
             self?.openSystemAppSetting()
         }
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancelButton = UIAlertAction(title: "Cancel".localized().localized(), style: .cancel) { (action) in
             
         }
         alert.addAction(okButton)

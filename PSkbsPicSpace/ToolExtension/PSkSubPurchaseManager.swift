@@ -11,8 +11,8 @@ import SwiftyStoreKit
 import StoreKit
 import ZKProgressHUD
 
-let sharedSecret_debug = "38bdf9155ecf40888db6394c40319edd"
-let sharedSecret_release = "38bdf9155ecf40888db6394c40319edd"
+let sharedSecret_debug = "53947d67a981482cb327a0971c768478"
+let sharedSecret_release = "53947d67a981482cb327a0971c768478"
 
 extension Notification.Name {
     
@@ -27,18 +27,18 @@ enum SubscriptionType {
     case year
     
     static var allType: [SubscriptionType] {
-        return [.week,.month,.year]
+        return [.week]
     }
     
     //测试,已更新
     var iapStr: String {
         switch self {
         case .week:
-            return "com.cleanerUp.photosCleans.weekly"
+            return "com.picpli.pailide.month"
         case .month:
-            return "com.cleanerUp.photosCleans.monthly"
+            return "com.picpli.pailide.month"
         case .year:
-            return "com.cleanerUp.photosCleans.yearly"
+            return "com.picpli.pailide.month"
         }
     }
 }
@@ -174,17 +174,20 @@ class PurchaseManager {
         ZKProgressHUD.show()
         //
         purchaseProduct(iapIdStr: iapIdStr) { purchaseDetails in
-            //
+            // ReceiptInfo
+            
             self.verifyReceipt(iapIdStr: iapIdStr) {
                 //
+                
                 ZKProgressHUD.dismiss()
-                ZKProgressHUD.showSuccess("Unlock Full Premium Features Successfully".localized())
+//                ZKProgressHUD.showSuccess("Unlock Full Premium Features Successfully".localized())
                 //
 //                print("购买并验证成功")
                 //
-                NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
+//                NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
                 //
                 DispatchQueue.main.async {
+                    
                     comp(purchaseDetails)
                 }
             }
@@ -230,7 +233,7 @@ class PurchaseManager {
         
         // 测试已更新, 这里填写新的sharedSecret
         #if DEBUG
-        let receiptValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: sharedSecret_debug)
+        let receiptValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: sharedSecret_debug)//
         #else
         let receiptValidator = AppleReceiptValidator(service: .production, sharedSecret: sharedSecret_release)
         #endif
@@ -327,8 +330,11 @@ class PurchaseManager {
         let subscriptionIDList = Set(SubscriptionType.allType.map{$0.iapStr})
         let subscriptionInfo = SwiftyStoreKit.verifySubscriptions(productIds: subscriptionIDList, inReceipt: receiptInfo)
         switch subscriptionInfo {
-        case let .purchased(expiryDate, _):
+        case let .purchased(expiryDate, items):
             //
+            debugPrint("expiryDate - \(expiryDate)")
+            expiryDate.string(withFormat: "yyyy-MM-dd")
+            debugPrint("items - \(items)")
             let compare = Date().compare(expiryDate)
             let inPurchase = compare != .orderedDescending
             return inPurchase

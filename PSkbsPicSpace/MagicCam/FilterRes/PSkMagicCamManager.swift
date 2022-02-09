@@ -7,6 +7,7 @@
 
 import Foundation
 import BBMetalImage
+import UIKit
 
 
 
@@ -16,6 +17,7 @@ class CamFilterItem: NSObject {
     var thumbImgStr: String
     var filter: BBMetalBaseFilter?
     
+    
     init(filterType: FilterType) {
         self.filterType = filterType
         self.thumbImgStr = filterType.rawValue
@@ -23,6 +25,11 @@ class CamFilterItem: NSObject {
         self.filter = makeFilter()
     }
     
+    func processImg(img: UIImage) -> UIImage {
+        let filter = makeFilter()
+        let filtedImg = filter.filteredImage(with: img)
+        return filtedImg ?? img
+    }
     
     func makeFilter() -> BBMetalBaseFilter {
         switch filterType {
@@ -57,16 +64,16 @@ class CamFilterItem: NSObject {
             let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lookup1", withExtension: "png")!).bb_metalTexture!, intensity: 1)
             return lookupF
         case .lookup2:
-            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "曼谷", withExtension: "png")!).bb_metalTexture!, intensity: 1)
+            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lut_mangu", withExtension: "png")!).bb_metalTexture!, intensity: 1)
             return lookupF
         case .lookup3:
-            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "棉花糖", withExtension: "png")!).bb_metalTexture!, intensity: 1)
+            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lut_mianhuatang", withExtension: "png")!).bb_metalTexture!, intensity: 1)
             return lookupF
         case .lookup4:
-            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "日光", withExtension: "png")!).bb_metalTexture!, intensity: 1)
+            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lut_riguang", withExtension: "png")!).bb_metalTexture!, intensity: 1)
             return lookupF
         case .lookup5:
-            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "藤蔓", withExtension: "png")!).bb_metalTexture!, intensity: 1)
+            let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lut_tengman", withExtension: "png")!).bb_metalTexture!, intensity: 1)
             return lookupF
         case .lookup6:
             let lookupF = try! BBMetalLookupFilter(lookupTable: Data(contentsOf: Bundle.main.url(forResource: "lookup_002", withExtension: "png")!).bb_metalTexture!, intensity: 1)
@@ -156,7 +163,7 @@ class CamFilterItem: NSObject {
  */
 
 
-struct CamBorderItem {
+struct CamBorderItem: Codable {
     var imgPosition: String = ""
     var thumb: String = ""
     var big: String = ""
@@ -166,36 +173,22 @@ class PSkMagicCamManager {
     
     static let `default` = PSkMagicCamManager()
     var camFilterList: [CamFilterItem] = []
-    var camBorderList: [CamBorderItem] = []
     var camSignColorList: [String] = []
+    
+    var camBorderList : [CamBorderItem] {
+        return PSkToolManager.default.loadJson([CamBorderItem].self, name: "camPalideList") ?? []
+    }
+    
     
     init() {
         loadFilter()
-        loadCamBorder()
         loadCamSignColor()
     }
     
     func loadCamSignColor() {
-        camSignColorList = ["#FFFFFF", "#9E0000", "#163AB8", "#1190EF", "#1D9265", "#D2A647", "#D87B22", "#00BDA6", "#602BB9"]
+        camSignColorList = ["#000000", "#9E0000", "#163AB8", "#1190EF", "#1D9265", "#D2A647", "#D87B22", "#00BDA6", "#602BB9"]
     }
     
-    func loadCamBorder() {
-        let border0 = CamBorderItem(imgPosition: "", thumb: "", big: "")
-        let border1 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
-        let border2 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
-        let border3 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
-        let border4 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
-        let border5 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
-        let border6 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
-        let border7 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
-        let border8 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
-        let border9 = CamBorderItem(imgPosition: "top", thumb: "", big: "")
-        let border10 = CamBorderItem(imgPosition: "left", thumb: "", big: "")
-        let border11 = CamBorderItem(imgPosition: "bottom", thumb: "", big: "")
-        let border12 = CamBorderItem(imgPosition: "right", thumb: "", big: "")
-        
-        camBorderList = [border0, border1, border2, border3, border4, border5, border6, border7, border8, border9, border10, border11, border12]
-    }
     
     func loadFilter() {
     
@@ -244,6 +237,19 @@ class PSkMagicCamManager {
         
         //
         camFilterList = [beauty,
+                         zoomBlur,
+                         tiltShift,
+                         pixellate,
+                         polkaDot,
+                         halftone,
+                         crosshatch,
+                         sketch,
+                         vignette,
+                         kuwahara,
+                         sobelEdgeDetection,
+                         swirl,
+                         bulge,
+                         pinch,
                          rgba1,
                          rgba2,
                          rgba3,
@@ -269,20 +275,7 @@ class PSkMagicCamManager {
                          monochrome2,
                          monochrome3,
                          monochrome4,
-                         monochrome5,
-                         zoomBlur,
-                         tiltShift,
-                         pixellate,
-                         polkaDot,
-                         halftone,
-                         crosshatch,
-                         sketch,
-                         vignette,
-                         kuwahara,
-                         swirl,
-                         bulge,
-                         pinch,
-                         sobelEdgeDetection]
+                         monochrome5]
     }
     
        

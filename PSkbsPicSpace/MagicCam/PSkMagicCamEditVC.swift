@@ -8,6 +8,8 @@
 import UIKit
 import DeviceKit
 import Photos
+import ZKProgressHUD
+
 
 class PSkMagicCamEditVC: UIViewController {
     var origImg: UIImage
@@ -17,7 +19,8 @@ class PSkMagicCamEditVC: UIViewController {
     let borderBar = PSkMagicCamBorderBar()
     var shareBtn = UIButton()
     let siginBtn = UIButton()
-
+    let sigVipImgV = UIImageView()
+    let vipAlertView = PSkVipAlertView()
     var contentBgV = UIView()
     var canvasBgV = UIView()
     let borderImgV = UIImageView()
@@ -27,6 +30,8 @@ class PSkMagicCamEditVC: UIViewController {
     
     var viewDidLayoutSubviewsOnce: Once = Once()
     var currentCanvasFrameItem: CamBorderItem?
+    
+    var isVipSignature = false
     
     
     init(origImg: UIImage) {
@@ -44,7 +49,9 @@ class PSkMagicCamEditVC: UIViewController {
         
         setupView()
         setupTouchMoveCanvasV()
+        setupVipAlertView()
         
+        updateSignatureVipStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,10 +61,13 @@ class PSkMagicCamEditVC: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let firstBorder = PSkMagicCamManager.default.camBorderList[1]
+        
         
         self.viewDidLayoutSubviewsOnce.run({
+            let firstBorder = PSkMagicCamManager.default.camBorderList[1]
             updateCanvasFrame(item: firstBorder)
+            borderBar.currentItem = firstBorder
+            borderBar.collection.reloadData()
         })
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
@@ -77,9 +87,28 @@ class PSkMagicCamEditVC: UIViewController {
         }
     }
     
+    func updateSignatureVipStatus() {
+        if PurchaseManager.share.inSubscription {
+            sigVipImgV.isHidden = true
+        } else {
+            sigVipImgV.isHidden = false
+        }
+        borderBar.collection.reloadData()
+    }
+    
     func setupView() {
         //
-        view.backgroundColor(UIColor.white)
+        view.backgroundColor(UIColor(hexString: "#F4F4F4")!)
+        
+        //
+        contentBgV
+            .backgroundColor(.clear)
+            .adhere(toSuperview: view)
+        //
+        let toolBar = UIView()
+        toolBar.backgroundColor(.white)
+            .adhere(toSuperview: view)
+        
         //
         let bottomBar = UIView()
         bottomBar
@@ -88,50 +117,59 @@ class PSkMagicCamEditVC: UIViewController {
         bottomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.height.equalTo(100)
+            $0.height.equalTo(120)
         }
         
         //
         saveAlbumBtn
-            .image("")
-            .backgroundColor(UIColor.orange)
+            .image("i_cam_download")
             .adhere(toSuperview: bottomBar)
-        saveAlbumBtn.layer.cornerRadius = 70/2
         saveAlbumBtn.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.height.equalTo(70)
+            $0.width.height.equalTo(90)
         }
         saveAlbumBtn.addTarget(self, action: #selector(saveAlbumBtnClick(sender: )), for: .touchUpInside)
         //
         backBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_cam_back"))
             .adhere(toSuperview: bottomBar)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender: )), for: .touchUpInside)
         backBtn.snp.makeConstraints {
             $0.centerY.equalTo(bottomBar.snp.centerY)
             $0.left.equalToSuperview().offset(25)
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(60)
         }
         //
         shareBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_cam_share"))
             .adhere(toSuperview: bottomBar)
         shareBtn.addTarget(self, action: #selector(shareBtnClick(sender: )), for: .touchUpInside)
         shareBtn.snp.makeConstraints {
             $0.centerY.equalTo(bottomBar.snp.centerY)
             $0.right.equalToSuperview().offset(-25)
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(60)
         }
         
         //
-        //
         
-        borderBar.adhere(toSuperview: view)
-        borderBar.snp.makeConstraints {
+        toolBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.bottom.equalTo(bottomBar.snp.top)
+            $0.height.equalTo(120)
+        }
+//        toolBar.layer.cornerRadius = 24
+        toolBar.layer.shadowColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
+        toolBar.layer.shadowOffset = CGSize(width: 0, height: 0)
+        toolBar.layer.shadowRadius = 3
+        toolBar.layer.shadowOpacity = 0.8
+        
+        //
+        
+        borderBar.adhere(toSuperview: toolBar)
+        borderBar.snp.makeConstraints {
+            $0.right.equalToSuperview()
+            $0.left.equalToSuperview().offset(100)
+            $0.centerY.equalTo(toolBar.snp.centerY)
             $0.height.equalTo(100)
         }
         borderBar.camBorderBarClickBlock = {
@@ -141,26 +179,35 @@ class PSkMagicCamEditVC: UIViewController {
                 self.updateCanvasFrame(item: borderItem)
             }
         }
+        
         //
 
         siginBtn
-            .title("签名")
-            .titleColor(.white)
-            .backgroundColor(.blue)
-            .adhere(toSuperview: view)
-        siginBtn.layer.cornerRadius = 5
+            .image(UIImage(named: "i_cam_sig"))
+            .adhere(toSuperview: toolBar)
         siginBtn.snp.makeConstraints {
-            $0.left.equalTo(30)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(borderBar.snp.top).offset(-5)
-            $0.height.equalTo(44)
+            $0.left.equalTo(25)
+            $0.centerY.equalTo(borderBar.snp.centerY)
+            $0.height.width.equalTo(60)
                 
         }
         siginBtn.addTarget(self, action: #selector(siginBtnClick(sender: )), for: .touchUpInside)
+        
         //
-        contentBgV
-            .backgroundColor(.gray)
-            .adhere(toSuperview: view)
+        //
+        sigVipImgV
+            .image("i_viplog")
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: toolBar)
+        sigVipImgV.snp.makeConstraints {
+            $0.top.right.equalTo(siginBtn)
+            $0.width.equalTo(56/2)
+            $0.width.equalTo(37/2)
+        }
+        
+        sigVipImgV.isHidden = false
+        
+        //
         contentBgV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -181,6 +228,16 @@ class PSkMagicCamEditVC: UIViewController {
             .contentMode(.scaleAspectFit)
             .adhere(toSuperview: canvasBgV)
         
+        //
+        let bottomMaskV = UIView()
+        bottomMaskV.backgroundColor(.white)
+            .adhere(toSuperview: view)
+        bottomMaskV.snp.makeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+        
         
     }
 
@@ -192,7 +249,7 @@ extension PSkMagicCamEditVC {
         if let borderImg = UIImage(named: item.big) {
             borderImgV.image = borderImg
         } else {
-            borderImgV.image = UIImage(named: "promax.png")
+            borderImgV.image = nil
         }
         
         
@@ -251,27 +308,27 @@ extension PSkMagicCamEditVC {
         if item.imgPosition == "top" {
             userImgVWidth = fineW * (centerP/widthP)
             userImgVHeight = userImgVWidth
-            userImgVTopOffset = fineH * (offsetP/widthP)
+            userImgVTopOffset = fineW * (offsetP/widthP)
             userImgVLeftOffset = fineW * (offsetP/widthP)
         } else if item.imgPosition == "bottom" {
             userImgVWidth = fineW * (centerP/widthP)
             userImgVHeight = userImgVWidth
-            userImgVTopOffset = fineH - userImgVHeight - (fineH * (offsetP/widthP))
+            userImgVTopOffset = fineH - userImgVHeight - (fineW * (offsetP/widthP))
             userImgVLeftOffset = fineW * (offsetP/widthP)
         } else if item.imgPosition == "left" {
             userImgVHeight = fineH * (centerP/widthP)
             userImgVWidth = userImgVHeight
             userImgVTopOffset = fineH * (offsetP/widthP)
-            userImgVLeftOffset = fineW * (offsetP/widthP)
+            userImgVLeftOffset = fineH * (offsetP/widthP)
         } else if item.imgPosition == "right" {
             userImgVHeight = fineH * (centerP/widthP)
             userImgVWidth = userImgVHeight
             userImgVTopOffset = fineH * (offsetP/widthP)
-            userImgVLeftOffset = fineW - userImgVWidth - (fineW * (offsetP/widthP))
+            userImgVLeftOffset = fineW - userImgVWidth - (fineH * (offsetP/widthP))
         } else if item.imgPosition == "center" {
             userImgVWidth = fineW * (centerP/widthP)
             userImgVHeight = userImgVWidth
-            userImgVTopOffset = fineH * (offsetP/widthP)
+            userImgVTopOffset = fineW * (offsetP/widthP)
             userImgVLeftOffset = fineW * (offsetP/widthP)
         } else {
             userImgVWidth = fineW
@@ -293,8 +350,6 @@ extension PSkMagicCamEditVC {
         } else {
             currentCanvasFrameItem = item
         }
-        
-        
         
     }
     
@@ -419,28 +474,102 @@ extension PSkMagicCamEditVC {
     
 }
 
+
+extension PSkMagicCamEditVC {
+    
+    func setupVipAlertView() {
+        
+        vipAlertView.alpha = 0
+        vipAlertView.adhere(toSuperview: view)
+        vipAlertView.snp.makeConstraints {
+            $0.left.right.bottom.top.equalToSuperview()
+        }
+        
+    }
+
+    func showSubscribeView() {
+        // show coin alert
+        UIView.animate(withDuration: 0.35) {
+            self.vipAlertView.alpha = 1
+        }
+        self.view.bringSubviewToFront(self.vipAlertView)
+        
+        vipAlertView.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+        
+        vipAlertView.subscribeSuccessBlock = {
+            [weak self] purchaseDetail in
+            guard let `self` = self else {return}
+            ZKProgressHUD.showSuccess("Subscription successful!".localized(), maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1.5, completion: nil)
+            self.updateSignatureVipStatus()
+            //
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+    }
+}
+
 extension PSkMagicCamEditVC {
     
     @objc func saveAlbumBtnClick(sender: UIButton) {
-        let saveImg = processImg()
-        saveImgsToAlbum(imgs: [saveImg])
+        //
+        var isVip = false
+        
+        if isVipSignature == true {
+            isVip = true
+        } else if borderBar.isVipBorder == true {
+            isVip = true
+        }
+        
+        if isVip {
+            if PurchaseManager.share.inSubscription {
+                let saveImg = processImg()
+                saveImgsToAlbum(imgs: [saveImg])
+            } else {
+                showSubscribeView()
+            }
+        } else {
+            let saveImg = processImg()
+            saveImgsToAlbum(imgs: [saveImg])
+        }
+        
     }
     
     @objc func shareBtnClick(sender: UIButton) {
         
-        let saveImg = processImg()
         
-        let ac = UIActivityViewController(activityItems: [saveImg], applicationActivities: nil)
-        ac.modalPresentationStyle = .fullScreen
-        ac.completionWithItemsHandler = {
-            (type, flag, array, error) -> Void in
-            if flag == true {
-                 
-            } else {
-                
-            }
+        //
+        var isVip = false
+        
+        if isVipSignature == true {
+            isVip = true
+        } else if borderBar.isVipBorder == true {
+            isVip = true
         }
-        self.present(ac, animated: true, completion: nil)
+        
+        if isVip {
+            if PurchaseManager.share.inSubscription {
+                shareAction()
+            } else {
+                showSubscribeView()
+            }
+        } else {
+            shareAction()
+        }
     }
     
     @objc func backBtnClick(sender: UIButton) {
@@ -461,9 +590,33 @@ extension PSkMagicCamEditVC {
             guard let `self` = self else {return}
             debugPrint(signImg)
             DispatchQueue.main.async {
-                self.addSignPhotos(signImg: signImg)
+                if let signImg_m = signImg {
+                    self.addSignPhotos(signImg: signImg_m)
+                    self.isVipSignature = true
+                } else {
+                    self.isVipSignature = false
+                }
             }
         }
+    }
+}
+
+extension PSkMagicCamEditVC  {
+    func shareAction() {
+        
+        let saveImg = processImg()
+        
+        let ac = UIActivityViewController(activityItems: [saveImg], applicationActivities: nil)
+        ac.modalPresentationStyle = .fullScreen
+        ac.completionWithItemsHandler = {
+            (type, flag, array, error) -> Void in
+            if flag == true {
+                 
+            } else {
+                
+            }
+        }
+        self.present(ac, animated: true, completion: nil)
     }
 }
 
@@ -513,11 +666,10 @@ extension PSkMagicCamEditVC {
     
     func showSaveSuccessAlert() {
         
-
         DispatchQueue.main.async {
             let title = ""
-            let message = "Photo saved successfully!"
-            let okText = "OK"
+            let message = "Photo saved successfully!".localized()
+            let okText = "OK".localized()
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
                  DispatchQueue.main.async {
@@ -529,11 +681,11 @@ extension PSkMagicCamEditVC {
         
     }
     func albumPermissionsAlet() {
-        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+        let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK".localized(), style: .default) { [weak self] (actioin) in
             self?.openSystemAppSetting()
         }
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel) { (action) in
             
         }
         alert.addAction(okButton)

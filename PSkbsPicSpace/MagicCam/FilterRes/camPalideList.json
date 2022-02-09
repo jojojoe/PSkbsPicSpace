@@ -1,0 +1,138 @@
+
+[
+    {
+        "imgPosition" : "",
+        "thumb" : "palide_top_0_t",
+        "big" : ""
+    },
+    
+    {
+        "imgPosition" : "top",
+        "thumb" : "palide_top_1_t",
+        "big" : "palide_top_1"
+    },
+    {
+        "imgPosition" : "left",
+        "thumb" : "palide_left_1_t",
+        "big" : "palide_left_1"
+    },
+    {
+        "imgPosition" : "right",
+        "thumb" : "palide_right_1_t",
+        "big" : "palide_right_1"
+    },
+    {
+        "imgPosition" : "bottom",
+        "thumb" : "palide_bottom_1_t",
+        "big" : "palide_bottom_1"
+    },
+    {
+        "imgPosition" : "center",
+        "thumb" : "palide_center_1_t",
+        "big" : "palide_center_1"
+    },
+    
+    {
+        "imgPosition" : "top",
+        "thumb" : "palide_top_2_t",
+        "big" : "palide_top_2"
+    },
+    {
+        "imgPosition" : "left",
+        "thumb" : "palide_left_2_t",
+        "big" : "palide_left_2"
+    },
+    {
+        "imgPosition" : "right",
+        "thumb" : "palide_right_2_t",
+        "big" : "palide_right_2"
+    },
+    {
+        "imgPosition" : "bottom",
+        "thumb" : "palide_bottom_2_t",
+        "big" : "palide_bottom_2"
+    },
+    {
+        "imgPosition" : "center",
+        "thumb" : "palide_center_2_t",
+        "big" : "palide_center_2"
+    },
+    
+    {
+        "imgPosition" : "top",
+        "thumb" : "palide_top_3_t",
+        "big" : "palide_top_3"
+    },
+    {
+        "imgPosition" : "left",
+        "thumb" : "palide_left_3_t",
+        "big" : "palide_left_3"
+    },
+    {
+        "imgPosition" : "right",
+        "thumb" : "palide_right_3_t",
+        "big" : "palide_right_3"
+    },
+    {
+        "imgPosition" : "bottom",
+        "thumb" : "palide_bottom_3_t",
+        "big" : "palide_bottom_3"
+    },
+    {
+        "imgPosition" : "center",
+        "thumb" : "palide_center_3_t",
+        "big" : "palide_center_3"
+    },
+    
+    {
+        "imgPosition" : "top",
+        "thumb" : "palide_top_4_t",
+        "big" : "palide_top_1"
+    },
+    {
+        "imgPosition" : "left",
+        "thumb" : "palide_left_4_t",
+        "big" : "palide_left_4"
+    },
+    {
+        "imgPosition" : "right",
+        "thumb" : "palide_right_4_t",
+        "big" : "palide_right_4"
+    },
+    {
+        "imgPosition" : "bottom",
+        "thumb" : "palide_bottom_4_t",
+        "big" : "palide_bottom_4"
+    },
+    {
+        "imgPosition" : "center",
+        "thumb" : "palide_center_4_t",
+        "big" : "palide_center_4"
+    },
+    
+    {
+        "imgPosition" : "top",
+        "thumb" : "palide_top_5_t",
+        "big" : "palide_top_5"
+    },
+    {
+        "imgPosition" : "left",
+        "thumb" : "palide_left_5_t",
+        "big" : "palide_left_5"
+    },
+    {
+        "imgPosition" : "right",
+        "thumb" : "palide_right_5_t",
+        "big" : "palide_right_5"
+    },
+    {
+        "imgPosition" : "bottom",
+        "thumb" : "palide_bottom_5_t",
+        "big" : "palide_bottom_5"
+    },
+    {
+        "imgPosition" : "center",
+        "thumb" : "palide_center_5_t",
+        "big" : "palide_center_5"
+    }
+]

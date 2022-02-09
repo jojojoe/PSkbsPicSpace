@@ -56,13 +56,14 @@ class PSkProfileManager: NSObject {
     
     func loadData() {
         
-        let item1 = PSkProfileFrameItem(itemId: "0", pixWidth: 1000, pixHeight: 1000, iconImgStr: "", titleStr: "Custom")
-        let item2 = PSkProfileFrameItem(itemId: "1", pixWidth: 600, pixHeight: 600, iconImgStr: "", titleStr: "1x1")
-        let item3 = PSkProfileFrameItem(itemId: "2", pixWidth: 300, pixHeight: 400, iconImgStr: "", titleStr: "一寸")
-        let item4 = PSkProfileFrameItem(itemId: "3", pixWidth: 700, pixHeight: 900, iconImgStr: "", titleStr: "两寸")
+        let item1 = PSkProfileFrameItem(itemId: "0", pixWidth: 300, pixHeight: 400, iconImgStr: "i_profile_size1_n", titleStr: "i_profile_size1_s")
+        let item2 = PSkProfileFrameItem(itemId: "1", pixWidth: 800, pixHeight: 1200, iconImgStr: "i_profile_size2_n", titleStr: "i_profile_size2_s")
+        let item3 = PSkProfileFrameItem(itemId: "2", pixWidth: 800, pixHeight: 800, iconImgStr: "i_profile_size3_n", titleStr: "i_profile_size3_s")
+        let item4 = PSkProfileFrameItem(itemId: "2", pixWidth: 1600, pixHeight: 1600, iconImgStr: "i_profile_size4_n", titleStr: "i_profile_size4_s")
+        let item5 = PSkProfileFrameItem(itemId: "3", pixWidth: 800, pixHeight: 400, iconImgStr: "i_profile_size5_n", titleStr: "i_profile_size5_s")
+        let item6 = PSkProfileFrameItem(itemId: "3", pixWidth: 2000, pixHeight: 1200, iconImgStr: "i_profile_size6_n", titleStr: "i_profile_size6_s")
         
-        
-        profileMakeFrameItems = [item1, item2, item3, item4]
+        profileMakeFrameItems = [item3, item1, item5, item4, item2, item6]
         
         
         profileBgColors = ["#FFFFFF", "#9E0000", "#163AB8", "#1190EF", "#1D9265", "#D2A647", "#D87B22", "#00BDA6", "#602BB9"]
@@ -85,6 +86,10 @@ class PSkProfileManager: NSObject {
             PSkProfileManager.default.photoItemList.append(contentsOf: PSkProfileManager.default.userPhotosItem)
             PSkProfileManager.default.photoItemList.append(PSkProfileManager.default.addNewPhotoItem)
         }
+    }
+    
+    func clearPhotosListData() {
+        PSkProfileManager.default.photoItemList = []
     }
     
     func processRemoveImageBg(originImg: UIImage) -> UIImage {
@@ -130,6 +135,8 @@ class PSkProfileManager: NSObject {
         return outputUIImage
         
     }
+    
+    
     
 }
 

@@ -12,7 +12,7 @@ class PSkProfileFrameToolView: UIView {
 
     var backBtnClickBlock: (()->Void)?
     var selectProfileFrameBlock: ((CGFloat, CGFloat)->Void)?
-    
+    var currentFrameItem: PSkProfileFrameItem?
     
     var frameTypeList: [PSkProfileFrameItem] = []
     
@@ -87,7 +87,8 @@ class PSkProfileFrameToolView: UIView {
         let item = frameTypeList[indexP.item]
         currentWidth = item.pixWidth
         currentHeight = item.pixHeight
-        
+        currentFrameItem = item
+        collection.reloadData()
         PSkProfileManager.default.currentCanvasWidth = currentWidth
         PSkProfileManager.default.currentCanvasHeight = currentHeight
         
@@ -128,13 +129,12 @@ class PSkProfileFrameToolView: UIView {
             $0.bottom.equalToSuperview()
             $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom)
         }
-        //
+        
         //
         let backBtn = UIButton(type: .custom)
         backBtn
-            .title("Back")
-            .image("")
-            .backgroundColor(.orange)
+            .image("i_profile_downview")
+            .backgroundColor(.white)
             .adhere(toSuperview: contentV)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         backBtn.snp.makeConstraints {
@@ -143,14 +143,17 @@ class PSkProfileFrameToolView: UIView {
             $0.left.equalTo(contentV.snp.left).offset(0)
             $0.height.equalTo(35)
         }
-        
+        backBtn.layer.shadowColor = UIColor(hexString: "#F3F3F3")!.cgColor
+        backBtn.layer.shadowOffset = CGSize(width: 0, height: -1)
+        backBtn.layer.shadowRadius = 8
+        backBtn.layer.shadowOpacity = 0.8
         //
         
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
-        collection.backgroundColor(.lightGray)
+        collection.backgroundColor(UIColor(hexString: "#F3F3F3")!)
         collection.showsHorizontalScrollIndicator = false
         collection.delegate = self
         collection.dataSource = self
@@ -177,35 +180,53 @@ class PSkProfileFrameToolView: UIView {
 //        }
         
         //
-        let sizeWidthLabel = UILabel()
-        sizeWidthLabel
-            .fontName(15, "AvenirNext-DemiBold")
-            .color(UIColor.black)
-            .text("Width:")
+        let sizeWidthImgV = UIImageView()
+        sizeWidthImgV
+            .image("i_profile_sizew")
             .adhere(toSuperview: contentV)
-        sizeWidthLabel.snp.makeConstraints {
-            $0.left.equalTo(contentV.snp.left).offset(30)
+        sizeWidthImgV.snp.makeConstraints {
+            $0.left.equalTo(contentV.snp.left).offset(24)
             $0.top.equalTo(collection.snp.bottom).offset(24)
-            $0.width.height.greaterThanOrEqualTo(1)
+            $0.width.height.greaterThanOrEqualTo(28)
         }
+        
+        //
+        widthJianBtn
+            .image(UIImage(named: "i_profile_size_jian"))
+            .adhere(toSuperview: contentV)
+        widthJianBtn.addTarget(self, action: #selector(widthJianBtnClickTouchUp(sender: )), for: .touchUpInside)
+        
+        let widthJianLongGes = UILongPressGestureRecognizer()
+        widthJianLongGes.addTarget(self, action: #selector(widthJianLongGesAction(ges: )))
+        widthJianBtn.addGestureRecognizer(widthJianLongGes)
+        
+        widthJianBtn.snp.makeConstraints {
+            $0.top.equalTo(sizeWidthImgV.snp.bottom).offset(24)
+            $0.left.equalTo(sizeWidthImgV.snp.left).offset(0)
+            $0.width.height.equalTo(34)
+        }
+        
         //
         
         sizeWidthCountLabel
-            .backgroundColor(.white)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
             .fontName(15, "AvenirNext-DemiBold")
+            .textAlignment(.center)
             .color(UIColor.black)
             .text("1024")
             .adhere(toSuperview: contentV)
         sizeWidthCountLabel.snp.makeConstraints {
-            $0.left.equalTo(sizeWidthLabel.snp.left).offset(30)
-            $0.top.equalTo(sizeWidthLabel.snp.bottom).offset(20)
-            $0.width.height.greaterThanOrEqualTo(1)
+            $0.left.equalTo(widthJianBtn.snp.right).offset(2)
+            $0.centerY.equalTo(widthJianBtn.snp.centerY).offset(0)
+            $0.width.equalTo(58)
+            $0.height.equalTo(24)
         }
+        sizeWidthCountLabel.layer.cornerRadius = 4
+        sizeWidthCountLabel.layer.masksToBounds = true
         //
         
         widthAddBtn
-            .text("+")
-            .titleColor(UIColor.orange)
+            .image(UIImage(named: "i_profile_size_jia"))
             .adhere(toSuperview: contentV)
         widthAddBtn.addTarget(self, action: #selector(widthAddBtnClickTouchUp(sender: )), for: .touchUpInside)
         let widthAddLongGes = UILongPressGestureRecognizer()
@@ -219,55 +240,57 @@ class PSkProfileFrameToolView: UIView {
         }
         
         //
-        widthJianBtn
-            .text("-")
-            .titleColor(UIColor.orange)
+        let sizeHeightImgV = UIImageView()
+        sizeHeightImgV
+            .image("i_profile_sizeh")
             .adhere(toSuperview: contentV)
-        widthJianBtn.addTarget(self, action: #selector(widthJianBtnClickTouchUp(sender: )), for: .touchUpInside)
+        sizeHeightImgV.snp.makeConstraints {
+            $0.left.equalTo(contentV.snp.centerX).offset(10)
+            $0.centerY.equalTo(sizeWidthImgV.snp.centerY)
+            $0.width.height.greaterThanOrEqualTo(28)
+        }
+        //
+
+        //
+        heightJianBtn
+            .image(UIImage(named: "i_profile_size_jian"))
+            .adhere(toSuperview: contentV)
+        heightJianBtn.addTarget(self, action: #selector(heightJianBtnClickTouchUp(sender: )), for: .touchUpInside)
+
+        //
+        let heightJianLongGes = UILongPressGestureRecognizer()
+        heightJianLongGes.addTarget(self, action: #selector(heightJianLongGesAction(ges: )))
+        heightJianBtn.addGestureRecognizer(heightJianLongGes)
         
-        let widthJianLongGes = UILongPressGestureRecognizer()
-        widthJianLongGes.addTarget(self, action: #selector(widthJianLongGesAction(ges: )))
-        widthJianBtn.addGestureRecognizer(widthJianLongGes)
-        
-        widthJianBtn.snp.makeConstraints {
-            $0.centerY.equalTo(sizeWidthCountLabel.snp.centerY)
-            $0.right.equalTo(sizeWidthCountLabel.snp.left).offset(-2)
+        //
+        heightJianBtn.snp.makeConstraints {
+            $0.centerY.equalTo(widthJianBtn.snp.centerY)
+            $0.left.equalTo(sizeHeightImgV.snp.left).offset(0)
             $0.width.height.equalTo(34)
         }
 
         
         //
-        let sizeHeightLabel = UILabel()
-        sizeHeightLabel
-            .fontName(15, "AvenirNext-DemiBold")
-            .color(UIColor.black)
-            .text("Height:")
-            .adhere(toSuperview: contentV)
-        sizeHeightLabel.snp.makeConstraints {
-            $0.left.equalTo(sizeWidthLabel.snp.right).offset(100 + 30)
-            $0.top.equalTo(sizeWidthLabel.snp.top)
-            $0.width.height.greaterThanOrEqualTo(1)
-        }
-        //
-
         sizeHeightCountLabel
-            .backgroundColor(.white)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
             .fontName(15, "AvenirNext-DemiBold")
+            .textAlignment(.center)
             .color(UIColor.black)
             .text("1024")
             .adhere(toSuperview: contentV)
         sizeHeightCountLabel.snp.makeConstraints {
-            $0.left.equalTo(sizeHeightLabel.snp.left)
-            $0.top.equalTo(sizeHeightLabel.snp.bottom).offset(20)
-            $0.width.height.greaterThanOrEqualTo(1)
+            $0.left.equalTo(heightJianBtn.snp.right).offset(2)
+            $0.centerY.equalTo(heightJianBtn.snp.centerY).offset(0)
+            $0.width.equalTo(58)
+            $0.height.equalTo(24)
         }
-        
+        sizeHeightCountLabel.layer.cornerRadius = 4
+        sizeHeightCountLabel.layer.masksToBounds = true
         //
         //
 
         heightAddBtn
-            .text("+")
-            .titleColor(UIColor.orange)
+            .image(UIImage(named: "i_profile_size_jia"))
             .adhere(toSuperview: contentV)
         heightAddBtn.addTarget(self, action: #selector(heightAddBtnClickTouchUp(sender: )), for: .touchUpInside)
 
@@ -282,25 +305,7 @@ class PSkProfileFrameToolView: UIView {
             $0.width.height.equalTo(34)
         }
 
-        //
-        heightJianBtn
-            .text("-")
-            .titleColor(UIColor.orange)
-            .adhere(toSuperview: contentV)
-        heightJianBtn.addTarget(self, action: #selector(heightJianBtnClickTouchUp(sender: )), for: .touchUpInside)
-
-        //
-        let heightJianLongGes = UILongPressGestureRecognizer()
-        heightJianLongGes.addTarget(self, action: #selector(heightJianLongGesAction(ges: )))
-        heightJianBtn.addGestureRecognizer(heightJianLongGes)
         
-        //
-        heightJianBtn.snp.makeConstraints {
-            $0.centerY.equalTo(sizeHeightCountLabel.snp.centerY)
-            $0.right.equalTo(sizeHeightCountLabel.snp.left).offset(-2)
-            $0.width.height.equalTo(34)
-        }
-
     }
     
 }
@@ -532,8 +537,8 @@ extension PSkProfileFrameToolView {
     }
     
     func updateWidthHeight()  {
-        sizeWidthCountLabel.text("\(currentWidth)")
-        sizeHeightCountLabel.text("\(currentHeight)")
+        sizeWidthCountLabel.text("\(Int(currentWidth))")
+        sizeHeightCountLabel.text("\(Int(currentHeight))")
         selectProfileFrameBlock?(currentWidth, currentHeight)
     }
     
@@ -546,9 +551,12 @@ extension PSkProfileFrameToolView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: PSkProfileFrameCell.self, for: indexPath)
         let item = frameTypeList[indexPath.item]
-        cell.nameLabel.text(item.titleStr)
-        cell.contentImgV.image(item.iconImgStr)
-        cell.contentImgV.backgroundColor(.darkGray)
+        
+        if currentFrameItem?.iconImgStr == item.iconImgStr {
+            cell.contentImgV.image(item.titleStr)
+        } else {
+            cell.contentImgV.image(item.iconImgStr)
+        }
         return cell
     }
     
@@ -565,7 +573,7 @@ extension PSkProfileFrameToolView: UICollectionViewDataSource {
 
 extension PSkProfileFrameToolView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 120, height: 120)
+        return CGSize(width: 65, height: 65)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -573,11 +581,11 @@ extension PSkProfileFrameToolView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 15
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 15
     }
     
 }
@@ -586,24 +594,19 @@ extension PSkProfileFrameToolView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = frameTypeList[indexPath.item]
         
-        currentWidth = item.pixWidth
-        currentHeight = item.pixHeight
+        currentFrameItem = item
+        collectionView.reloadData()
+        currentWidth = CGFloat(Int(item.pixWidth))
+        currentHeight = CGFloat(Int(item.pixHeight))
         
         self.updateWidthHeight()
         
         
-        if item.itemId == "0" {
-            widthAddBtn.isHidden = false
-            widthJianBtn.isHidden = false
-            heightAddBtn.isHidden = false
-            heightJianBtn.isHidden = false
-        } else {
-            widthAddBtn.isHidden = true
-            widthJianBtn.isHidden = true
-            heightAddBtn.isHidden = true
-            heightJianBtn.isHidden = true
-            
-        }
+//        widthAddBtn.isHidden = false
+//        widthJianBtn.isHidden = false
+//        heightAddBtn.isHidden = false
+//        heightJianBtn.isHidden = false
+        
         
     }
     
@@ -619,8 +622,8 @@ class PSkProfileFrameCell: UICollectionViewCell {
     
     
     let contentImgV = UIImageView()
-    let nameLabel: UILabel = UILabel().fontName(12, "AvenirNext-Regular").color(UIColor.orange).textAlignment(.center)
-    let selectedImgView = UIImageView().image("").backgroundColor(.clear)
+//    let nameLabel: UILabel = UILabel().fontName(12, "AvenirNext-Regular").color(UIColor.orange).textAlignment(.center)
+//    let selectedImgView = UIImageView().image("").backgroundColor(.clear)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -638,39 +641,38 @@ class PSkProfileFrameCell: UICollectionViewCell {
             .contentMode(.scaleAspectFit)
             .adhere(toSuperview: contentView)
         contentImgV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview()
-            $0.height.equalTo(90)
-            $0.width.equalTo(80)
+            $0.center.equalToSuperview()
+            $0.height.equalTo(64)
+            $0.width.equalTo(64)
         }
         //
         
         
-        nameLabel
-            .adjustsFontSizeToFitWidth()
-            .adhere(toSuperview: contentView)
-        nameLabel.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.top.equalTo(contentImgV.snp.bottom)
-            $0.bottom.equalTo(contentView.snp.bottom)
-        }
-        
-        selectedImgView
-            .adhere(toSuperview: contentView)
-        selectedImgView.isHidden = true
-        selectedImgView.snp.makeConstraints {
-            $0.top.bottom.left.right.equalTo(contentImgV)
-        }
-        
+//        nameLabel
+//            .adjustsFontSizeToFitWidth()
+//            .adhere(toSuperview: contentView)
+//        nameLabel.snp.makeConstraints {
+//            $0.left.right.equalToSuperview()
+//            $0.top.equalTo(contentImgV.snp.bottom)
+//            $0.bottom.equalTo(contentView.snp.bottom)
+//        }
+//
+//        selectedImgView
+//            .adhere(toSuperview: contentView)
+//        selectedImgView.isHidden = true
+//        selectedImgView.snp.makeConstraints {
+//            $0.top.bottom.left.right.equalTo(contentImgV)
+//        }
+//
         
     }
     
-    override var isSelected: Bool {
-        didSet {
-            selectedImgView.isHidden = !isSelected
-            
-        }
-    }
+//    override var isSelected: Bool {
+//        didSet {
+//            selectedImgView.isHidden = !isSelected
+//
+//        }
+//    }
     
     
 }

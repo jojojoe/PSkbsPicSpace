@@ -42,11 +42,14 @@ class PSkMagicCamVC: UIViewController {
         
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        camera.start()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        camera.start()
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -57,7 +60,7 @@ class PSkMagicCamVC: UIViewController {
     
     func setupView() {
         //
-        view.backgroundColor(.white)
+        view.backgroundColor(UIColor(hexString: "F4F4F4")!)
         
         //
         var topOffset: CGFloat = 80
@@ -71,7 +74,7 @@ class PSkMagicCamVC: UIViewController {
         
         metalView = BBMetalView(frame: CGRect(x: leftOffset, y: topOffset, width: width, height: height))
         metalView.adhere(toSuperview: view)
-        metalView.backgroundColor(.purple)
+        metalView.backgroundColor(.clear)
         //
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)
         camera.add(consumer: metalView)
@@ -82,12 +85,12 @@ class PSkMagicCamVC: UIViewController {
          */
         //
 
-        filterBar.backgroundColor(.lightText)
+        filterBar.backgroundColor(.white)
         filterBar.adhere(toSuperview: view)
         filterBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.top.equalTo(metalView.snp.bottom).offset(100)
-            $0.height.equalTo(70)
+            $0.height.equalTo(100)
         }
         filterBar.camFilterBarClickBlock = {
             [weak self] filterItem in
@@ -124,8 +127,7 @@ class PSkMagicCamVC: UIViewController {
         
         //
         takePhotoBtn
-            .image("")
-            .backgroundColor(UIColor.orange)
+            .image("i_cam_take")
             .adhere(toSuperview: bottomBar)
         takePhotoBtn.layer.cornerRadius = 90/2
         takePhotoBtn.snp.makeConstraints {
@@ -135,25 +137,32 @@ class PSkMagicCamVC: UIViewController {
         takePhotoBtn.addTarget(self, action: #selector(takePhotoBtnClick(sender: )), for: .touchUpInside)
         //
         backBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_cam_back"))
             .adhere(toSuperview: bottomBar)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender: )), for: .touchUpInside)
         backBtn.snp.makeConstraints {
             $0.centerY.equalTo(bottomBar.snp.centerY)
             $0.left.equalToSuperview().offset(25)
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(60)
         }
         //
         camPositionBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_cam_position"))
             .adhere(toSuperview: bottomBar)
         camPositionBtn.addTarget(self, action: #selector(camPositionBtnClick(sender: )), for: .touchUpInside)
         camPositionBtn.snp.makeConstraints {
             $0.centerY.equalTo(bottomBar.snp.centerY)
             $0.right.equalToSuperview().offset(-25)
-            $0.width.height.equalTo(50)
+            $0.width.height.equalTo(60)
+        }
+        
+        //
+        let bottomMaskV = UIView()
+        bottomMaskV.backgroundColor(.white)
+            .adhere(toSuperview: view)
+        bottomMaskV.snp.makeConstraints {
+            $0.left.right.bottom.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         
@@ -163,6 +172,7 @@ class PSkMagicCamVC: UIViewController {
     
 
 }
+
 
 extension PSkMagicCamVC {
     func updateFilterItem(item: CamFilterItem) {
@@ -315,7 +325,7 @@ extension PSkMagicCamVC {
         let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
             self?.openSystemAppSetting()
         }
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel) { (action) in
             
         }
         alert.addAction(okButton)

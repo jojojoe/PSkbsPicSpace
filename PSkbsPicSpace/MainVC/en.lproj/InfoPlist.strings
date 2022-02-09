@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  PSkbsPicSpace
+
+  Created by Joe on 2022/1/27.
+  
+*/
+"NSPhotoLibraryUsageDescription" = "In order to save wallpapers and icons or display your photos as widgets";
+"NSPhotoLibraryAddUsageDescription" = "In order to save wallpapers and icons or display your photos as widgets";
+"NSCameraUsageDescription" = "Allow the app to access camera to take a photo as widget";
+"CFBundleDisplayName" = "PicPli";

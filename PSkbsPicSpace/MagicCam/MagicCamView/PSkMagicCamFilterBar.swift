@@ -11,7 +11,7 @@ class PSkMagicCamFilterBar: UIView {
 
     var collection: UICollectionView!
     var camFilterBarClickBlock: ((CamFilterItem)->Void)?
-    
+    var currentItem: CamFilterItem?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,10 +55,16 @@ extension PSkMagicCamFilterBar: UICollectionViewDataSource {
         cell.contentView.layer.cornerRadius = 10
         cell.contentView.layer.masksToBounds = true
         cell.contentView
-            .backgroundColor(UIColor.darkGray)
-        cell.contentImgV
-            .image(item.thumbImgStr)
-        cell.nameL.text(item.thumbImgStr)
+            .backgroundColor(UIColor.clear)
+        cell.contentImgV.image = item.processImg(img: UIImage(named: "i_filterO")!)
+        
+        
+        if currentItem?.thumbImgStr == item.thumbImgStr {
+            cell.selectV.isHidden = false
+        } else {
+            cell.selectV.isHidden = true
+        }
+        
         return cell
     }
     
@@ -75,7 +81,7 @@ extension PSkMagicCamFilterBar: UICollectionViewDataSource {
 
 extension PSkMagicCamFilterBar: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 70, height: 70)
+        return CGSize(width: 74, height: 74)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -96,7 +102,8 @@ extension PSkMagicCamFilterBar: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = PSkMagicCamManager.default.camFilterList[indexPath.item]
         camFilterBarClickBlock?(item)
-        
+        currentItem = item
+        collectionView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -108,7 +115,7 @@ extension PSkMagicCamFilterBar: UICollectionViewDelegate {
 
 class PSkMagicCamFilterCell: UICollectionViewCell {
     let contentImgV = UIImageView()
-    let nameL = UILabel()
+    let selectV = UIView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -125,19 +132,33 @@ class PSkMagicCamFilterCell: UICollectionViewCell {
         contentView.addSubview(contentImgV)
         contentImgV.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.left.equalToSuperview().offset(6)
-            $0.top.equalToSuperview().offset(6)
+            $0.left.equalToSuperview().offset(0)
+            $0.top.equalToSuperview().offset(0)
         }
+        contentImgV.layer.cornerRadius = 10
+        contentImgV.layer.masksToBounds = true
         //
-        nameL
-            .fontName(10, "AvenirNext-DemiBold")
-            .adjustsFontSizeToFitWidth()
-            .color(UIColor.white)
-            .adhere(toSuperview: contentView)
-        nameL.snp.makeConstraints {
+        selectV.adhere(toSuperview: contentView)
+            .backgroundColor(.clear)
+        selectV.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.top.left.equalToSuperview()
+            $0.left.top.equalTo(contentImgV)
         }
+        selectV.layer.cornerRadius = 10
+        selectV.layer.borderColor = UIColor(hexString: "#EEAB00")?.cgColor
+        selectV.layer.borderWidth = 2
+//
+        
+        //
+//        nameL
+//            .fontName(10, "AvenirNext-DemiBold")
+//            .adjustsFontSizeToFitWidth()
+//            .color(UIColor.white)
+//            .adhere(toSuperview: contentView)
+//        nameL.snp.makeConstraints {
+//            $0.center.equalToSuperview()
+//            $0.top.left.equalToSuperview()
+//        }
         
     }
 }

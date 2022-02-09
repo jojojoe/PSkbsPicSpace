@@ -7,7 +7,7 @@
 
 import UIKit
 import Photos
-
+import ZKProgressHUD
 
 struct PhotoSlideItem {
     var slideType: SliderType = .slider1_3
@@ -28,6 +28,8 @@ class PSkPhotoSlideVC: UIViewController {
     let canvasBgView = UIView()
     var viewDidLayoutSubviewsOnce: Once = Once()
     var slideView: PSkPhotoSlideView?
+    let vipAlertView = PSkVipAlertView()
+    
     
     init(originalImg: UIImage) {
         self.originalImg = originalImg
@@ -45,7 +47,7 @@ class PSkPhotoSlideVC: UIViewController {
         setupData()
         setupView()
         setupCollection()
-        
+        setupVipAlertView()
         
     }
     
@@ -91,47 +93,49 @@ class PSkPhotoSlideVC: UIViewController {
     }
     
     func setupData() {
-        let slideType1 = PhotoSlideItem(slideType: .slider1_3, iconName: "", titleStr: "1x3")
-        let slideType2 = PhotoSlideItem(slideType: .slider2_3, iconName: "", titleStr: "2x3")
-        let slideType3 = PhotoSlideItem(slideType: .slider3_3, iconName: "", titleStr: "3x3")
-        let slideType4 = PhotoSlideItem(slideType: .slider3_2, iconName: "", titleStr: "3x2")
-        let slideType5 = PhotoSlideItem(slideType: .slider3_1, iconName: "", titleStr: "3x1")
+        let slideType1 = PhotoSlideItem(slideType: .slider1_3, iconName: "i_clip1_n", titleStr: "i_clip1_s")
+        let slideType2 = PhotoSlideItem(slideType: .slider2_3, iconName: "i_clip2_n", titleStr: "i_clip2_s")
+        let slideType3 = PhotoSlideItem(slideType: .slider3_3, iconName: "i_clip3_n", titleStr: "i_clip3_s")
+        let slideType4 = PhotoSlideItem(slideType: .slider3_2, iconName: "i_clip4_n", titleStr: "i_clip4_s")
+        let slideType5 = PhotoSlideItem(slideType: .slider3_1, iconName: "i_clip5_n", titleStr: "i_clip5_s")
         slideItemList = [slideType1, slideType2, slideType3, slideType4, slideType5]
         currentSlideItem = slideType3
     }
     
     func setupView() {
-        view.backgroundColor(.white)
+        view.backgroundColor(UIColor(hexString: "#F4F4F4")!)
+        //
+        let topBanner = UIView()
+        topBanner.backgroundColor(.white)
+            .adhere(toSuperview: view)
+        topBanner.snp.makeConstraints {
+            $0.left.right.top.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(54)
+        }
         
         backBtn
-            .backgroundColor(UIColor.lightGray)
-            .image(UIImage(named: ""))
-            .adhere(toSuperview: view)
+            .image(UIImage(named: "i_back"))
+            .adhere(toSuperview: topBanner)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender: )), for: .touchUpInside)
         backBtn.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.bottom.equalTo(topBanner.snp.bottom).offset(0)
             $0.left.equalTo(10)
             $0.width.height.equalTo(44)
         }
         //
         let saveBtn = UIButton(type: .custom)
         saveBtn
-            .backgroundColor(UIColor(hexString: "#999999")!)
-            .title("Save")
-            .font(16, "AvenirNext-DemiBold")
-            .titleColor(UIColor(hexString: "#111111")!)
-            .adhere(toSuperview: view)
-        saveBtn.layer.cornerRadius = 20
+            .image(UIImage(named: "i_download"))
+            .adhere(toSuperview: topBanner)
         saveBtn.addTarget(self, action: #selector(saveBtnClick(sender: )), for: .touchUpInside)
         saveBtn.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.bottom.equalTo(topBanner.snp.bottom).offset(0)
             $0.right.equalTo(-10)
-            $0.height.equalTo(40)
-            $0.width.greaterThanOrEqualTo(96)
+            $0.width.height.equalTo(44)
         }
         //
         bottomBar
-            .backgroundColor(UIColor.clear)
+            .backgroundColor(UIColor.white)
             .adhere(toSuperview: view)
         bottomBar.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -141,7 +145,7 @@ class PSkPhotoSlideVC: UIViewController {
         
         //
         canvasBgView
-            .backgroundColor(UIColor.lightGray)
+            .backgroundColor(UIColor.clear)
             .adhere(toSuperview: view)
             .clipsToBounds()
         canvasBgView.snp.makeConstraints {
@@ -178,11 +182,23 @@ extension PSkPhotoSlideVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: PSkSlideTypeCell.self, for: indexPath)
         let item = slideItemList[indexPath.item]
+        
         cell.udpateSlideType(slide: item)
         if item.slideType == currentSlideItem.slideType {
             cell.setupSelecStatus(isSele: true)
         } else {
             cell.setupSelecStatus(isSele: false)
+        }
+        
+        if item.slideType == .slider1_3 {
+            cell.vipImgV.isHidden = true
+        } else {
+            if PurchaseManager.share.inSubscription {
+                cell.vipImgV.isHidden = true
+            } else {
+                cell.vipImgV.isHidden = false
+            }
+            
         }
         
         return cell
@@ -201,7 +217,7 @@ extension PSkPhotoSlideVC: UICollectionViewDataSource {
 
 extension PSkPhotoSlideVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let btnWidth: CGFloat = 100
+        let btnWidth: CGFloat = 70
         return CGSize(width: btnWidth, height: btnWidth)
     }
     
@@ -246,11 +262,22 @@ extension PSkPhotoSlideVC {
     
     @objc func saveBtnClick(sender: UIButton) {
         if let imgs = slideView?.processSlideImages(), let fullImg = slideView?.processFullImage() {
-            showSavePopupView(images: imgs, fullImg: fullImg)
+            if currentSlideItem.slideType == .slider1_3 {
+                showSavePopupView(images: imgs, fullImg: fullImg)
+            } else {
+                if PurchaseManager.share.inSubscription {
+                    showSavePopupView(images: imgs, fullImg: fullImg)
+                } else {
+                    showSubscribeView()
+                }
+            }
+            
             
         }
         
     }
+    
+    
     
     func showSavePopupView(images: [UIImage], fullImg: UIImage) {
         let popupView = PSkPhotoSlideSavePopupView(frame: .zero, slideImgs: images, slideType: currentSlideItem.slideType)
@@ -366,8 +393,8 @@ extension PSkPhotoSlideVC {
         
         DispatchQueue.main.async {
             let title = ""
-            let message = "Photo saved successfully!"
-            let okText = "OK"
+            let message = "Photo saved successfully!".localized()
+            let okText = "OK".localized()
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             let okButton = UIAlertAction(title: okText, style: .cancel, handler: { (alert) in
                  DispatchQueue.main.async {
@@ -379,11 +406,11 @@ extension PSkPhotoSlideVC {
         
     }
     func albumPermissionsAlet() {
-        let alert = UIAlertController(title: "Ooops!", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "OK", style: .default) { [weak self] (actioin) in
+        let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "OK".localized(), style: .default) { [weak self] (actioin) in
             self?.openSystemAppSetting()
         }
-        let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+        let cancelButton = UIAlertAction(title: "Cancel".localized(), style: .cancel) { (action) in
             
         }
         alert.addAction(okButton)
@@ -400,12 +427,59 @@ extension PSkPhotoSlideVC {
     }
  
 }
+extension PSkPhotoSlideVC {
+    
+    func setupVipAlertView() {
+        
+        vipAlertView.alpha = 0
+        vipAlertView.adhere(toSuperview: view)
+        vipAlertView.snp.makeConstraints {
+            $0.left.right.bottom.top.equalToSuperview()
+        }
+        
+    }
 
+    func showSubscribeView() {
+        // show coin alert
+        UIView.animate(withDuration: 0.35) {
+            self.vipAlertView.alpha = 1
+        }
+        self.view.bringSubviewToFront(self.vipAlertView)
+        
+        vipAlertView.backBtnClickBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+        
+        vipAlertView.subscribeSuccessBlock = {
+            [weak self] purchaseDetail in
+            guard let `self` = self else {return}
+            ZKProgressHUD.showSuccess("Subscription successful!".localized(), maskStyle: nil, onlyOnceFont: nil, autoDismissDelay: 1.5, completion: nil)
+            //
+            UIView.animate(withDuration: 0.25) {
+                self.vipAlertView.alpha = 0
+            } completion: { finished in
+                if finished {
+                    
+                }
+            }
+        }
+    }
+    
+}
 
 
 class PSkSlideTypeCell: UICollectionViewCell {
     let iconImageV = UIImageView()
-    let nameLabel = UILabel()
+//    let nameLabel = UILabel()
+    var vipImgV = UIImageView()
     
     var slideItem: PhotoSlideItem?
     
@@ -419,41 +493,52 @@ class PSkSlideTypeCell: UICollectionViewCell {
     }
     
     func setupView() {
-        self.layer.cornerRadius = 8
-        self.layer.masksToBounds = true
+//        self.layer.cornerRadius = 8
+//        self.layer.masksToBounds = true
         //
-        nameLabel
-            .textAlignment(.center)
-            .fontName(16, "AvenirNext-Regular")
-            .color(UIColor(hexString: "#999999")!)
-            .adhere(toSuperview: contentView)
-        nameLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-16)
-            $0.width.height.greaterThanOrEqualTo(1)
-        }
+//        nameLabel
+//            .textAlignment(.center)
+//            .fontName(16, "AvenirNext-Regular")
+//            .color(UIColor(hexString: "#999999")!)
+//            .adhere(toSuperview: contentView)
+//        nameLabel.snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.bottom.equalToSuperview().offset(-16)
+//            $0.width.height.greaterThanOrEqualTo(1)
+//        }
         //
         iconImageV
             .contentMode(.scaleAspectFit)
             .adhere(toSuperview: contentView)
         iconImageV.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(nameLabel.snp.top).offset(-6)
-            $0.width.height.equalTo(37)
+            $0.center.equalToSuperview()
+            $0.left.top.equalToSuperview()
         }
+        
+        //
+        vipImgV
+            .image("i_viplog")
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: contentView)
+        vipImgV.snp.makeConstraints {
+            $0.top.right.equalToSuperview()
+            $0.width.equalTo(56/2)
+            $0.width.equalTo(37/2)
+        }
+        vipImgV.isHidden = true
         
     }
     
     func udpateSlideType(slide: PhotoSlideItem) {
         slideItem = slide
         iconImageV.image(slide.iconName)
-        nameLabel.text(slide.titleStr)
+        iconImageV.highlightedImage = UIImage(named: slide.titleStr)
     }
     func setupSelecStatus(isSele: Bool) {
         if isSele {
-            contentView.backgroundColor(UIColor(hexString: "#11F151")!)
+            iconImageV.isHighlighted = true
         } else {
-            contentView.backgroundColor(UIColor(hexString: "#F7FAED")!)
+            iconImageV.isHighlighted = false
         }
     }
     

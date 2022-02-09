@@ -506,22 +506,23 @@ extension PSStoreVC {
     
     @objc func startSubscribeBtnClick(sender: UIButton) {
         //
-        buySubscription(type: currentSubscribeType, source: self.source, page: self.purchase_page) {
-            //
-            [weak self] in
-            guard let `self` = self else {return}
-            DispatchQueue.main.async {
-                self.backBtnClick(sender: self.backBtn)
-                NotificationCenter.default.post(name: .buy, object: nil)
-            }
-
-        }
+//        buySubscription(type: currentSubscribeType, source: self.source, page: self.purchase_page) {
+//            //
+//            [weak self] in
+//            guard let `self` = self else {return}
+//            DispatchQueue.main.async {
+//                self.backBtnClick(sender: self.backBtn)
+//                NotificationCenter.default.post(name: .buy, object: nil)
+//            }
+//
+//        }
     }
     
     @objc func restoreButtonClick(button: UIButton) {
         PurchaseManager.share.restore {
             ZKProgressHUD.showSuccess()
             NotificationCenter.default.post(name: .buy, object: nil)
+            NotificationCenter.default.post(name: .PurchaseSubscrtionStateChange, object: nil)
             self.dismiss(animated: true, completion: nil)
         }
     }

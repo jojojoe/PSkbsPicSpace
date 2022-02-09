@@ -99,7 +99,7 @@ extension PSkProfileBgToolView {
         
         //
         contentV
-            .backgroundColor(UIColor.white)
+            .backgroundColor(UIColor(hexString: "#F3F3F3")!)
             .adhere(toSuperview: self)
         contentV.snp.makeConstraints {
             $0.left.right.equalToSuperview()
@@ -119,9 +119,8 @@ extension PSkProfileBgToolView {
         //
         let backBtn = UIButton(type: .custom)
         backBtn
-            .title("Back")
-            .image("")
-            .backgroundColor(.orange)
+            .image("i_profile_downview")
+            .backgroundColor(.white)
             .adhere(toSuperview: contentV)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender:)), for: .touchUpInside)
         backBtn.snp.makeConstraints {
@@ -130,28 +129,45 @@ extension PSkProfileBgToolView {
             $0.left.equalTo(contentV.snp.left).offset(0)
             $0.height.equalTo(35)
         }
+        backBtn.layer.shadowColor = UIColor(hexString: "#F3F3F3")!.cgColor
+        backBtn.layer.shadowOffset = CGSize(width: 0, height: -1)
+        backBtn.layer.shadowRadius = 8
+        backBtn.layer.shadowOpacity = 0.8
         
         //
-        
+        let collectionBgV = UIView()
+        collectionBgV.backgroundColor(UIColor(hexString: "#000000")!)
+            .adhere(toSuperview: contentV)
+        //
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         collection = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: layout)
-        collection.backgroundColor(.lightGray)
+        collection.backgroundColor(.clear)
         collection.showsHorizontalScrollIndicator = false
         collection.delegate = self
         collection.dataSource = self
         contentV.addSubview(collection)
         collection.snp.makeConstraints {
-            $0.right.equalToSuperview()
+            $0.right.equalToSuperview().offset(30)
             $0.top.equalTo(backBtn.snp.bottom).offset(20)
             $0.height.equalTo(60)
-            $0.left.equalTo(100)
+            $0.left.equalTo(125)
         }
         collection.register(cellWithClass: ITProfileBgColorCell.self)
         
         //
-         
+        collectionBgV.snp.makeConstraints {
+            $0.top.bottom.equalTo(collection)
+            $0.left.equalTo(collection.snp.left).offset(-8)
+            $0.right.equalToSuperview().offset(40)
+        }
+        collectionBgV.layer.cornerRadius = 60/2
+        collectionBgV.layer.masksToBounds = true
+        
+        collection.layer.cornerRadius = 60/2
+        collection.layer.masksToBounds = true
+        
         
     }
     
@@ -191,21 +207,21 @@ extension PSkProfileBgToolView {
         
         //
         redSlider.snp.makeConstraints {
-            $0.left.equalTo(40)
+            $0.left.equalTo(24)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(collection.snp.bottom).offset(30)
             $0.height.equalTo(30)
         }
         greenSlider.snp.makeConstraints {
-            $0.left.equalTo(40)
+            $0.left.equalTo(24)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(redSlider.snp.bottom).offset(30)
+            $0.top.equalTo(redSlider.snp.bottom).offset(12)
             $0.height.equalTo(30)
         }
         blueSlider.snp.makeConstraints {
-            $0.left.equalTo(40)
+            $0.left.equalTo(24)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(greenSlider.snp.bottom).offset(30)
+            $0.top.equalTo(greenSlider.snp.bottom).offset(12)
             $0.height.equalTo(30)
         }
         
@@ -264,7 +280,7 @@ extension PSkProfileBgToolView: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
+        return UIEdgeInsets(top: 0, left: 14, bottom: 0, right: 54)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

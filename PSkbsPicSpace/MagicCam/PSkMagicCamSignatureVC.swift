@@ -15,6 +15,7 @@ class PSkMagicCamSignatureVC: UIViewController {
     var okBtn = UIButton()
     var clearBtn = UIButton()
     var colorBtn = UIButton()
+    let colorCenterV = UIView()
     
     var camSignatureOkBlock: ((UIImage?)->Void)?
 
@@ -51,7 +52,7 @@ class PSkMagicCamSignatureVC: UIViewController {
 
 extension PSkMagicCamSignatureVC {
     func setupView() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(hexString: "#F4F4F4")
         //
         signatureVC.view.backgroundColor(UIColor.white)
         addChild(signatureVC)
@@ -68,8 +69,7 @@ extension PSkMagicCamSignatureVC {
         
         //
         okBtn
-            .backgroundColor(UIColor.yellow)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_sig_done"))
             .adhere(toSuperview: view)
         okBtn.addTarget(self, action: #selector(okBtnClick(sender: )), for: .touchUpInside)
         okBtn.snp.makeConstraints {
@@ -80,8 +80,7 @@ extension PSkMagicCamSignatureVC {
         
         //
         backBtn
-            .backgroundColor(UIColor.darkGray)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_sig_back"))
             .adhere(toSuperview: view)
         backBtn.addTarget(self, action: #selector(backBtnClick(sender: )), for: .touchUpInside)
         backBtn.snp.makeConstraints {
@@ -92,8 +91,7 @@ extension PSkMagicCamSignatureVC {
         
         //
         clearBtn
-            .backgroundColor(UIColor.blue)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_sig_clear"))
             .adhere(toSuperview: view)
         clearBtn.addTarget(self, action: #selector(clearBtnClick(sender: )), for: .touchUpInside)
         clearBtn.snp.makeConstraints {
@@ -104,8 +102,7 @@ extension PSkMagicCamSignatureVC {
         
         //
         colorBtn
-            .backgroundColor(UIColor.orange)
-            .image(UIImage(named: ""))
+            .image(UIImage(named: "i_sig_color"))
             .adhere(toSuperview: view)
         colorBtn.addTarget(self, action: #selector(colorBtnClick(sender: )), for: .touchUpInside)
         colorBtn.snp.makeConstraints {
@@ -113,6 +110,17 @@ extension PSkMagicCamSignatureVC {
             $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-10)
             $0.width.height.equalTo(44)
         }
+        
+        //
+        colorCenterV.backgroundColor(.black)
+            .adhere(toSuperview: colorBtn)
+        colorCenterV.snp.makeConstraints {
+            $0.centerX.equalTo(colorBtn.snp.centerX).offset(-3.7)
+            $0.centerY.equalTo(colorBtn.snp.centerY).offset(4.7)
+            $0.width.height.equalTo(6)
+        }
+        colorCenterV.layer.cornerRadius = 3
+        
         
     }
     
@@ -134,6 +142,7 @@ extension PSkMagicCamSignatureVC {
                 [weak self] in
                 guard let `self` = self else {return}
                 self.signatureVC.signatureColor = bgColor
+                self.colorCenterV.backgroundColor(bgColor)
             }
             
         }
@@ -156,8 +165,12 @@ extension PSkMagicCamSignatureVC {
     }
     
     @objc func okBtnClick(sender: UIButton) {
-        let img = signatureVC.fullSignatureImage
-        camSignatureOkBlock?(img)
+        if signatureVC.isEmpty {
+            camSignatureOkBlock?(nil)
+        } else {
+            let img = signatureVC.fullSignatureImage
+            camSignatureOkBlock?(img)
+        }
         backBtnClick(sender: backBtn)
     }
     

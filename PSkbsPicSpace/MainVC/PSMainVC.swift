@@ -48,64 +48,39 @@ class PSMainVC: UIViewController, UINavigationControllerDelegate {
 extension PSMainVC {
     func setupView() {
         view
-            .backgroundColor(UIColor.white)
+            .backgroundColor(UIColor(hexString: "#F4F4F4")!)
         //
 
         
-        let settingBtn = UIButton(type: .custom)
-        settingBtn
-            .backgroundColor(UIColor.lightGray)
-            .adhere(toSuperview: view)
-        settingBtn.addTarget(self, action: #selector(settingBtnClick(sender: )), for: .touchUpInside)
-        settingBtn.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(10)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            $0.width.equalTo(44)
-            $0.height.equalTo(44)
-        }
+        
         //
-        let vipBtn = UIButton(type: .custom)
-        vipBtn
-            .backgroundColor(UIColor.lightGray)
-            .adhere(toSuperview: view)
-        vipBtn.addTarget(self, action: #selector(storeBtnClick(sender: )), for: .touchUpInside)
-        vipBtn.snp.makeConstraints {
-            $0.right.equalToSuperview().offset(-10)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
-            $0.width.equalTo(64)
-            $0.height.equalTo(64)
-        }
+//        let vipBtn = UIButton(type: .custom)
+//        vipBtn
+//            .image(UIImage(named: "i_m_setting"))
+//            .adhere(toSuperview: view)
+//        vipBtn.addTarget(self, action: #selector(storeBtnClick(sender: )), for: .touchUpInside)
+//        vipBtn.snp.makeConstraints {
+//            $0.right.equalToSuperview().offset(-10)
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+//            $0.width.equalTo(64)
+//            $0.height.equalTo(64)
+//        }
         
         //
         //
         let magicCamBtn = UIButton(type: .custom)
         magicCamBtn
-            .text("Cam")
-            .backgroundColor(UIColor.lightGray)
-            .text("Cam")
+            .backgroundImage(UIImage(named: "i_m_camera"))
             .adhere(toSuperview: view)
         magicCamBtn.snp.makeConstraints {
-            $0.right.equalTo(view.snp.centerX).offset(-20)
-            $0.bottom.equalTo(view.snp.centerY).offset(-20)
-            $0.width.equalTo(140)
-            $0.height.equalTo(60)
+            $0.right.equalTo(view.snp.centerX).offset(-2)
+            $0.bottom.equalTo(view.snp.centerY).offset(40)
+            $0.left.equalToSuperview().offset(30)
+            $0.height.equalTo((UIScreen.width - 30 * 2 - 6))
         }
         magicCamBtn.addTarget(self, action: #selector(magicCamBtnClick(sender: )), for: .touchUpInside)
         
-        //
-        let slideBtn = UIButton(type: .custom)
-        slideBtn
-            .text("Slide")
-            .backgroundColor(UIColor.lightGray)
-            .text("Slid")
-            .adhere(toSuperview: view)
-        slideBtn.snp.makeConstraints {
-            $0.left.equalTo(view.snp.centerX).offset(20)
-            $0.top.equalTo(view.snp.centerY).offset(20)
-            $0.width.equalTo(140)
-            $0.height.equalTo(60)
-        }
-        slideBtn.addTarget(self, action: #selector(slideBtnClick(sender: )), for: .touchUpInside)
+        
         /*
         //
         let customPhotoBtn = UIButton(type: .custom)
@@ -125,19 +100,72 @@ extension PSMainVC {
         
         //
         let profileMakerBtn = UIButton(type: .custom)
-        profileMakerBtn
-            .text("Profile")
-            .backgroundColor(UIColor.lightGray)
-            .text("ProfileMake")
+        profileMakerBtn.backgroundImage(UIImage(named: "i_m_profile"))
             .adhere(toSuperview: view)
         profileMakerBtn.snp.makeConstraints {
-            $0.right.equalTo(view.snp.centerX).offset(-20)
-            $0.top.equalTo(slideBtn.snp.bottom).offset(40)
-            $0.width.equalTo(140)
-            $0.height.equalTo(60)
+            $0.left.equalTo(view.snp.centerX).offset(2)
+            $0.top.equalTo(magicCamBtn.snp.centerY).offset(0)
+            $0.right.equalToSuperview().offset(-30)
+            $0.height.equalTo((UIScreen.width - 30 * 2 - 6))
         }
         profileMakerBtn.addTarget(self, action: #selector(profileMakerBtnClick(sender: )), for: .touchUpInside)
         
+        //
+        let slideBtn = UIButton(type: .custom)
+        slideBtn
+            .image(UIImage(named: "i_m_clip"))
+            .adhere(toSuperview: view)
+        slideBtn.snp.makeConstraints {
+            $0.centerX.equalTo(profileMakerBtn.snp.centerX).offset(0)
+            $0.top.equalTo(magicCamBtn.snp.top).offset(0)
+            $0.width.equalTo(122)
+            $0.height.equalTo(122)
+        }
+        slideBtn.addTarget(self, action: #selector(slideBtnClick(sender: )), for: .touchUpInside)
+        
+        //
+        let settingBtn = UIButton(type: .custom)
+        settingBtn
+            .image(UIImage(named: "i_m_setting"))
+            .adhere(toSuperview: view)
+        settingBtn.addTarget(self, action: #selector(settingBtnClick(sender: )), for: .touchUpInside)
+        settingBtn.snp.makeConstraints {
+            $0.centerX.equalTo(magicCamBtn.snp.centerX)
+            $0.bottom.equalTo(profileMakerBtn.snp.bottom).offset(0)
+            $0.width.equalTo(66)
+            $0.height.equalTo(66)
+        }
+        
+        //
+        let logoBgV = UIView()
+        logoBgV.backgroundColor(.clear)
+            .adhere(toSuperview: view)
+        
+        //
+        let logoNameLabel = UILabel()
+        logoNameLabel.text("icPli")
+            .color(UIColor(hexString: "#000000")!)
+            .fontName(18, "Comfortaa-Light")
+            .adhere(toSuperview: view)
+        logoNameLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview().offset(11)
+            $0.width.greaterThanOrEqualTo(30)
+            $0.height.greaterThanOrEqualTo(2)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-14)
+        }
+        
+        
+        //
+        let logoImgV = UIImageView()
+        logoImgV.image("i_m_logo")
+            .contentMode(.scaleAspectFit)
+            .adhere(toSuperview: view)
+        logoImgV.snp.makeConstraints {
+            $0.width.equalTo(38/2)
+            $0.height.equalTo(66/2)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-14)
+            $0.right.equalTo(logoNameLabel.snp.left).offset(-1)
+        }
         
         
         
@@ -171,10 +199,10 @@ extension PSMainVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func storeBtnClick(sender: UIButton) {
-        let vc = PSStoreVC()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    @objc func storeBtnClick(sender: UIButton) {
+//        let vc = PSStoreVC()
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
     
 }
 
@@ -211,14 +239,14 @@ extension PSMainVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -229,14 +257,14 @@ extension PSMainVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -261,14 +289,14 @@ extension PSMainVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             
@@ -279,14 +307,14 @@ extension PSMainVC: UIImagePickerControllerDelegate {
                         DispatchQueue.main.async {
                             [weak self] in
                             guard let `self` = self else {return}
-                            let alert = UIAlertController(title: "Oops", message: "You have declined access to photos, please active it in Settings>Privacy>Photos.", preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: "Ok", style: .default, handler: { (goSettingAction) in
+                            let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: "OK".localized(), style: .default, handler: { (goSettingAction) in
                                 DispatchQueue.main.async {
                                     let url = URL(string: UIApplication.openSettingsURLString)!
                                     UIApplication.shared.open(url, options: [:])
                                 }
                             })
-                            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                            let cancelAction = UIAlertAction(title: "Cancel".localized(), style: .cancel)
                             alert.addAction(confirmAction)
                             alert.addAction(cancelAction)
                             

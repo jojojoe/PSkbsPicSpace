@@ -13,15 +13,30 @@
 		041901B5272C0B02001DC3B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 041901B3272C0B02001DC3B9 /* Main.storyboard */; };
 		041901B7272C0B03001DC3B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 041901B6272C0B03001DC3B9 /* Assets.xcassets */; };
 		041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */; };
-		D8E1A111275CE08D00AE43BE /* 曼谷.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A108275CE08C00AE43BE /* 曼谷.png */; };
+		D802792127A5249600628979 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D802792027A5249600628979 /* StoreKit.framework */; };
+		D832415B278D1CFA001AC6F1 /* Comfortaa-Bold-2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8324158278D1CF9001AC6F1 /* Comfortaa-Bold-2.ttf */; };
+		D832415C278D1CFA001AC6F1 /* Comfortaa-Light-3.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8324159278D1CF9001AC6F1 /* Comfortaa-Light-3.ttf */; };
+		D832415D278D1CFA001AC6F1 /* Comfortaa-Regular-1.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D832415A278D1CFA001AC6F1 /* Comfortaa-Regular-1.ttf */; };
+		D8562FA4279003990050467F /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8562FA3279003990050467F /* Montserrat-Medium.otf */; };
+		D8562FA6279003A20050467F /* Montserrat-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = D8562FA5279003A20050467F /* Montserrat-Light.otf */; };
+		D8562FA8279003B60050467F /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8562FA7279003B60050467F /* Montserrat-Regular.ttf */; };
+		D8562FAA279003BF0050467F /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D8562FA9279003BF0050467F /* Montserrat-SemiBold.ttf */; };
+		D86AE37F2796D0C8008CBC77 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D86AE37E2796D0C8008CBC77 /* Montserrat-Bold.otf */; };
+		D86AE3842797B4F8008CBC77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D86AE3862797B4F8008CBC77 /* Localizable.strings */; };
+		D86AE3892797F8AF008CBC77 /* PSkWebLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */; };
+		D86AE38B2799138C008CBC77 /* PSkVipAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */; };
+		D8E1A111275CE08D00AE43BE /* lut_mangu.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A108275CE08C00AE43BE /* lut_mangu.png */; };
 		D8E1A112275CE08D00AE43BE /* lut10.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A109275CE08C00AE43BE /* lut10.png */; };
-		D8E1A113275CE08D00AE43BE /* 棉花糖.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10A275CE08C00AE43BE /* 棉花糖.png */; };
+		D8E1A113275CE08D00AE43BE /* lut_mianhuatang.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10A275CE08C00AE43BE /* lut_mianhuatang.png */; };
 		D8E1A114275CE08D00AE43BE /* lut15.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10B275CE08C00AE43BE /* lut15.png */; };
-		D8E1A115275CE08D00AE43BE /* 藤蔓.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10C275CE08C00AE43BE /* 藤蔓.png */; };
+		D8E1A115275CE08D00AE43BE /* lut_tengman.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10C275CE08C00AE43BE /* lut_tengman.png */; };
 		D8E1A116275CE08D00AE43BE /* lut3.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10D275CE08C00AE43BE /* lut3.png */; };
 		D8E1A117275CE08D00AE43BE /* lut7.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10E275CE08C00AE43BE /* lut7.png */; };
 		D8E1A118275CE08D00AE43BE /* lookup_002.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10F275CE08C00AE43BE /* lookup_002.png */; };
-		D8E1A119275CE08D00AE43BE /* 日光.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A110275CE08C00AE43BE /* 日光.png */; };
+		D8E1A119275CE08D00AE43BE /* lut_riguang.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A110275CE08C00AE43BE /* lut_riguang.png */; };
+		D8E9EB9627A1441D0059F6E9 /* camPalideList.json in Resources */ = {isa = PBXBuildFile; fileRef = D8E9EB9527A1441D0059F6E9 /* camPalideList.json */; };
+		D8E9EB9927A1A8880059F6E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8E9EB9B27A1A8880059F6E9 /* InfoPlist.strings */; };
+		D8E9EC1327A2EB520059F6E9 /* PurchaseNotice.html in Resources */ = {isa = PBXBuildFile; fileRef = D8E9EC1527A2EB520059F6E9 /* PurchaseNotice.html */; };
 		DBE20E04214C9A7F82DF1DC6 /* Pods_PSkbsPicSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */; };
 		EB1416912761A99800A79CB7 /* PSkToolManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416902761A99800A79CB7 /* PSkToolManager.swift */; };
 		EB1416932761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1416922761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift */; };
@@ -50,7 +65,6 @@
 		EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */; };
 		EB8EE7822733F67A0021549B /* PSkProfileMakerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */; };
 		EB8EE7852733F6B80021549B /* PSkMagicCamVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7842733F6B80021549B /* PSkMagicCamVC.swift */; };
-		EB8EE7882733F6E50021549B /* PSkCustomPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7872733F6E50021549B /* PSkCustomPhoto.swift */; };
 		EB8EE7CE2735100B0021549B /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7BF2735100B0021549B /* Array+Extensions.swift */; };
 		EB8EE7CF2735100B0021549B /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7C02735100B0021549B /* Math.swift */; };
 		EB8EE7D02735100B0021549B /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EE7C12735100B0021549B /* UIImage+CVPixelBuffer.swift */; };
@@ -73,7 +87,6 @@
 		EB94530B27326ED20000F01A /* PSkPhotoSlideVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530A27326ED20000F01A /* PSkPhotoSlideVC.swift */; };
 		EB94530D27326EFE0000F01A /* PSkPhotoSlideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530C27326EFE0000F01A /* PSkPhotoSlideView.swift */; };
 		EB945310273271070000F01A /* PSkToolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94530F273271070000F01A /* PSkToolExtension.swift */; };
-		EB9453142732932A0000F01A /* PSkSlideSaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9453132732932A0000F01A /* PSkSlideSaveView.swift */; };
 		EBC38DF42760BC2800DA0FCD /* PSkMagicCamBorderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */; };
 		EBDC0E042745E881003010C2 /* PSkTouchMoveCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */; };
 		EBEC9C012745069B004C87AB /* PSkProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEC9C002745069B004C87AB /* PSkProfileManager.swift */; };
@@ -90,15 +103,39 @@
 		041901BB272C0B03001DC3B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1A0BA9E30F5CEDCF1B74EB53 /* Pods-PSkbsPicSpace.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSkbsPicSpace.debug.xcconfig"; path = "Target Support Files/Pods-PSkbsPicSpace/Pods-PSkbsPicSpace.debug.xcconfig"; sourceTree = "<group>"; };
 		5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PSkbsPicSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8E1A108275CE08C00AE43BE /* 曼谷.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "曼谷.png"; sourceTree = "<group>"; };
+		D802792027A5249600628979 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		D8044DB527A429200061EFD0 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		D8044DB827A4EA760061EFD0 /* PSkbsPicSpace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PSkbsPicSpace.entitlements; sourceTree = "<group>"; };
+		D8044DB927A4EA870061EFD0 /* PSkbsPicSpaceRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PSkbsPicSpaceRelease.entitlements; sourceTree = "<group>"; };
+		D8324158278D1CF9001AC6F1 /* Comfortaa-Bold-2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Bold-2.ttf"; sourceTree = "<group>"; };
+		D8324159278D1CF9001AC6F1 /* Comfortaa-Light-3.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Light-3.ttf"; sourceTree = "<group>"; };
+		D832415A278D1CFA001AC6F1 /* Comfortaa-Regular-1.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Regular-1.ttf"; sourceTree = "<group>"; };
+		D8562FA3279003990050467F /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.otf"; sourceTree = "<group>"; };
+		D8562FA5279003A20050467F /* Montserrat-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.otf"; sourceTree = "<group>"; };
+		D8562FA7279003B60050467F /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		D8562FA9279003BF0050467F /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		D86AE37E2796D0C8008CBC77 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.otf"; sourceTree = "<group>"; };
+		D86AE3822797B4E6008CBC77 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		D86AE3832797B4E7008CBC77 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		D86AE3852797B4F8008CBC77 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D86AE3872797B54A008CBC77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkWebLinkVC.swift; sourceTree = "<group>"; };
+		D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkVipAlertView.swift; sourceTree = "<group>"; };
+		D8E1A108275CE08C00AE43BE /* lut_mangu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_mangu.png; sourceTree = "<group>"; };
 		D8E1A109275CE08C00AE43BE /* lut10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut10.png; sourceTree = "<group>"; };
-		D8E1A10A275CE08C00AE43BE /* 棉花糖.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "棉花糖.png"; sourceTree = "<group>"; };
+		D8E1A10A275CE08C00AE43BE /* lut_mianhuatang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_mianhuatang.png; sourceTree = "<group>"; };
 		D8E1A10B275CE08C00AE43BE /* lut15.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut15.png; sourceTree = "<group>"; };
-		D8E1A10C275CE08C00AE43BE /* 藤蔓.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "藤蔓.png"; sourceTree = "<group>"; };
+		D8E1A10C275CE08C00AE43BE /* lut_tengman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_tengman.png; sourceTree = "<group>"; };
 		D8E1A10D275CE08C00AE43BE /* lut3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut3.png; sourceTree = "<group>"; };
 		D8E1A10E275CE08C00AE43BE /* lut7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut7.png; sourceTree = "<group>"; };
 		D8E1A10F275CE08C00AE43BE /* lookup_002.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_002.png; sourceTree = "<group>"; };
-		D8E1A110275CE08C00AE43BE /* 日光.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "日光.png"; sourceTree = "<group>"; };
+		D8E1A110275CE08C00AE43BE /* lut_riguang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_riguang.png; sourceTree = "<group>"; };
+		D8E9EB9527A1441D0059F6E9 /* camPalideList.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = camPalideList.json; sourceTree = "<group>"; };
+		D8E9EB9A27A1A8880059F6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D8E9EB9C27A1A88B0059F6E9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		D8E9EC1427A2EB520059F6E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/PurchaseNotice.html; sourceTree = "<group>"; };
+		D8E9EC1627A2EB540059F6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/PurchaseNotice.html; sourceTree = "<group>"; };
+		D8E9EC1727A2EB570059F6E9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "zh-Hans"; path = "zh-Hans.lproj/PurchaseNotice.html"; sourceTree = "<group>"; };
 		EB1416902761A99800A79CB7 /* PSkToolManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkToolManager.swift; sourceTree = "<group>"; };
 		EB1416922761D9AF00A79CB7 /* PSkMagicCamSignatureVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamSignatureVC.swift; sourceTree = "<group>"; };
 		EB1416942761EC4200A79CB7 /* PSkMagicCamColorBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamColorBar.swift; sourceTree = "<group>"; };
@@ -126,7 +163,6 @@
 		EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideSavePopupView.swift; sourceTree = "<group>"; };
 		EB8EE7812733F67A0021549B /* PSkProfileMakerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileMakerVC.swift; sourceTree = "<group>"; };
 		EB8EE7842733F6B80021549B /* PSkMagicCamVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamVC.swift; sourceTree = "<group>"; };
-		EB8EE7872733F6E50021549B /* PSkCustomPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkCustomPhoto.swift; sourceTree = "<group>"; };
 		EB8EE7BF2735100B0021549B /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		EB8EE7C02735100B0021549B /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		EB8EE7C12735100B0021549B /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
@@ -149,7 +185,6 @@
 		EB94530A27326ED20000F01A /* PSkPhotoSlideVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideVC.swift; sourceTree = "<group>"; };
 		EB94530C27326EFE0000F01A /* PSkPhotoSlideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkPhotoSlideView.swift; sourceTree = "<group>"; };
 		EB94530F273271070000F01A /* PSkToolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkToolExtension.swift; sourceTree = "<group>"; };
-		EB9453132732932A0000F01A /* PSkSlideSaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkSlideSaveView.swift; sourceTree = "<group>"; };
 		EBC38DF32760BC2800DA0FCD /* PSkMagicCamBorderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkMagicCamBorderBar.swift; sourceTree = "<group>"; };
 		EBDC0E032745E881003010C2 /* PSkTouchMoveCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkTouchMoveCanvasView.swift; sourceTree = "<group>"; };
 		EBEC9C002745069B004C87AB /* PSkProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkProfileManager.swift; sourceTree = "<group>"; };
@@ -162,6 +197,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBE20E04214C9A7F82DF1DC6 /* Pods_PSkbsPicSpace.framework in Frameworks */,
+				D802792127A5249600628979 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,9 +225,10 @@
 		041901AC272C0B02001DC3B9 /* PSkbsPicSpace */ = {
 			isa = PBXGroup;
 			children = (
+				D8044DB927A4EA870061EFD0 /* PSkbsPicSpaceRelease.entitlements */,
+				D8044DB827A4EA760061EFD0 /* PSkbsPicSpace.entitlements */,
 				EB8EE7BD27350FF40021549B /* 3Part */,
 				EB94530E273270F70000F01A /* ToolExtension */,
-				EB8EE7862733F6CF0021549B /* CustomPhoto */,
 				EB8EE7832733F6830021549B /* MagicCam */,
 				EB8EE7802733F6610021549B /* ProfileMake */,
 				EB94530927326EB40000F01A /* PhotoSlide */,
@@ -205,6 +242,7 @@
 		5A2FFA1FE1B93AF26E473ACC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D802792027A5249600628979 /* StoreKit.framework */,
 				5FC45B97C73FB70C9072F6DE /* Pods_PSkbsPicSpace.framework */,
 			);
 			name = Frameworks;
@@ -266,7 +304,6 @@
 			isa = PBXGroup;
 			children = (
 				EB94530C27326EFE0000F01A /* PSkPhotoSlideView.swift */,
-				EB9453132732932A0000F01A /* PSkSlideSaveView.swift */,
 				EB8EE77E2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift */,
 			);
 			path = PhoSlidView;
@@ -276,11 +313,12 @@
 			isa = PBXGroup;
 			children = (
 				EB1F2B0E2758AE3400A33CE4 /* PSkMagicCamManager.swift */,
+				D8E9EB9527A1441D0059F6E9 /* camPalideList.json */,
 				EB7FB2EE275A11C5007BCED8 /* lookup1.png */,
-				D8E1A108275CE08C00AE43BE /* 曼谷.png */,
-				D8E1A10A275CE08C00AE43BE /* 棉花糖.png */,
-				D8E1A110275CE08C00AE43BE /* 日光.png */,
-				D8E1A10C275CE08C00AE43BE /* 藤蔓.png */,
+				D8E1A108275CE08C00AE43BE /* lut_mangu.png */,
+				D8E1A10A275CE08C00AE43BE /* lut_mianhuatang.png */,
+				D8E1A110275CE08C00AE43BE /* lut_riguang.png */,
+				D8E1A10C275CE08C00AE43BE /* lut_tengman.png */,
 				D8E1A10F275CE08C00AE43BE /* lookup_002.png */,
 				D8E1A10D275CE08C00AE43BE /* lut3.png */,
 				D8E1A10E275CE08C00AE43BE /* lut7.png */,
@@ -297,11 +335,20 @@
 				041901AF272C0B02001DC3B9 /* SceneDelegate.swift */,
 				041901B1272C0B02001DC3B9 /* ViewController.swift */,
 				041901B3272C0B02001DC3B9 /* Main.storyboard */,
+				D8324158278D1CF9001AC6F1 /* Comfortaa-Bold-2.ttf */,
+				D8324159278D1CF9001AC6F1 /* Comfortaa-Light-3.ttf */,
+				D832415A278D1CFA001AC6F1 /* Comfortaa-Regular-1.ttf */,
 				041901B6272C0B03001DC3B9 /* Assets.xcassets */,
 				041901B8272C0B03001DC3B9 /* LaunchScreen.storyboard */,
 				EB8EE7DD273510190021549B /* profile3.jpg */,
 				EB369DA92763343200216A2B /* promax.png */,
 				041901BB272C0B03001DC3B9 /* Info.plist */,
+				D8562FA9279003BF0050467F /* Montserrat-SemiBold.ttf */,
+				D8562FA7279003B60050467F /* Montserrat-Regular.ttf */,
+				D86AE37E2796D0C8008CBC77 /* Montserrat-Bold.otf */,
+				D8562FA5279003A20050467F /* Montserrat-Light.otf */,
+				D8562FA3279003990050467F /* Montserrat-Medium.otf */,
+				D8044DB527A429200061EFD0 /* Configuration.storekit */,
 			);
 			name = Root;
 			sourceTree = "<group>";
@@ -312,6 +359,11 @@
 				EB8B38B5272C0EE50001C20B /* PSMainVC.swift */,
 				EB369DAB27633D7000216A2B /* PSStoreVC.swift */,
 				EB369DAD27633D7E00216A2B /* PSSettingVC.swift */,
+				D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */,
+				D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */,
+				D8E9EC1527A2EB520059F6E9 /* PurchaseNotice.html */,
+				D86AE3862797B4F8008CBC77 /* Localizable.strings */,
+				D8E9EB9B27A1A8880059F6E9 /* InfoPlist.strings */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -336,14 +388,6 @@
 				EB1F2B102758C49E00A33CE4 /* MagicCamView */,
 			);
 			path = MagicCam;
-			sourceTree = "<group>";
-		};
-		EB8EE7862733F6CF0021549B /* CustomPhoto */ = {
-			isa = PBXGroup;
-			children = (
-				EB8EE7872733F6E50021549B /* PSkCustomPhoto.swift */,
-			);
-			path = CustomPhoto;
 			sourceTree = "<group>";
 		};
 		EB8EE7BD27350FF40021549B /* 3Part */ = {
@@ -459,6 +503,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 041901A1272C0B02001DC3B9;
 			productRefGroup = 041901AB272C0B02001DC3B9 /* Products */;
@@ -475,18 +520,30 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8E1A115275CE08D00AE43BE /* 藤蔓.png in Resources */,
-				D8E1A111275CE08D00AE43BE /* 曼谷.png in Resources */,
+				D8E1A115275CE08D00AE43BE /* lut_tengman.png in Resources */,
+				D8E9EB9627A1441D0059F6E9 /* camPalideList.json in Resources */,
+				D8E1A111275CE08D00AE43BE /* lut_mangu.png in Resources */,
+				D8E9EB9927A1A8880059F6E9 /* InfoPlist.strings in Resources */,
+				D832415D278D1CFA001AC6F1 /* Comfortaa-Regular-1.ttf in Resources */,
 				D8E1A116275CE08D00AE43BE /* lut3.png in Resources */,
 				D8E1A112275CE08D00AE43BE /* lut10.png in Resources */,
-				D8E1A113275CE08D00AE43BE /* 棉花糖.png in Resources */,
+				D8E1A113275CE08D00AE43BE /* lut_mianhuatang.png in Resources */,
 				041901BA272C0B03001DC3B9 /* LaunchScreen.storyboard in Resources */,
 				D8E1A114275CE08D00AE43BE /* lut15.png in Resources */,
 				EB369DAA2763343300216A2B /* promax.png in Resources */,
+				D86AE37F2796D0C8008CBC77 /* Montserrat-Bold.otf in Resources */,
+				D8562FA8279003B60050467F /* Montserrat-Regular.ttf in Resources */,
+				D8E9EC1327A2EB520059F6E9 /* PurchaseNotice.html in Resources */,
 				041901B7272C0B03001DC3B9 /* Assets.xcassets in Resources */,
+				D832415B278D1CFA001AC6F1 /* Comfortaa-Bold-2.ttf in Resources */,
+				D86AE3842797B4F8008CBC77 /* Localizable.strings in Resources */,
+				D8562FAA279003BF0050467F /* Montserrat-SemiBold.ttf in Resources */,
 				041901B5272C0B02001DC3B9 /* Main.storyboard in Resources */,
-				D8E1A119275CE08D00AE43BE /* 日光.png in Resources */,
+				D8562FA4279003990050467F /* Montserrat-Medium.otf in Resources */,
+				D8E1A119275CE08D00AE43BE /* lut_riguang.png in Resources */,
 				EB8EE7DE273510190021549B /* profile3.jpg in Resources */,
+				D8562FA6279003A20050467F /* Montserrat-Light.otf in Resources */,
+				D832415C278D1CFA001AC6F1 /* Comfortaa-Light-3.ttf in Resources */,
 				EB7FB2EF275A11C5007BCED8 /* lookup1.png in Resources */,
 				D8E1A117275CE08D00AE43BE /* lut7.png in Resources */,
 				D8E1A118275CE08D00AE43BE /* lookup_002.png in Resources */,
@@ -570,10 +627,10 @@
 				EB8EE7822733F67A0021549B /* PSkProfileMakerVC.swift in Sources */,
 				EB94530B27326ED20000F01A /* PSkPhotoSlideVC.swift in Sources */,
 				EB8EE7D72735100B0021549B /* MLModel+Images.swift in Sources */,
+				D86AE3892797F8AF008CBC77 /* PSkWebLinkVC.swift in Sources */,
 				EB8EE7D02735100B0021549B /* UIImage+CVPixelBuffer.swift in Sources */,
 				EB1F2B0F2758AE3400A33CE4 /* PSkMagicCamManager.swift in Sources */,
 				EBDC0E042745E881003010C2 /* PSkTouchMoveCanvasView.swift in Sources */,
-				EB8EE7882733F6E50021549B /* PSkCustomPhoto.swift in Sources */,
 				041901AE272C0B02001DC3B9 /* AppDelegate.swift in Sources */,
 				EB8B38B6272C0EE50001C20B /* PSMainVC.swift in Sources */,
 				EB8EE77F2733AF3C0021549B /* PSkPhotoSlideSavePopupView.swift in Sources */,
@@ -593,8 +650,8 @@
 				EB369DAE27633D7E00216A2B /* PSSettingVC.swift in Sources */,
 				EB6DA2B0273CB33000D121B2 /* PSkProfileBgToolView.swift in Sources */,
 				EB8EE7D22735100B0021549B /* UIImage+Extensions.swift in Sources */,
-				EB9453142732932A0000F01A /* PSkSlideSaveView.swift in Sources */,
 				EB6DA2B2273CB34F00D121B2 /* PSkProfilePhotoToolView.swift in Sources */,
+				D86AE38B2799138C008CBC77 /* PSkVipAlertView.swift in Sources */,
 				EB8EE7CF2735100B0021549B /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,6 +663,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				041901B4272C0B02001DC3B9 /* Base */,
+				D86AE3822797B4E6008CBC77 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -614,8 +672,37 @@
 			isa = PBXVariantGroup;
 			children = (
 				041901B9272C0B03001DC3B9 /* Base */,
+				D86AE3832797B4E7008CBC77 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		D86AE3862797B4F8008CBC77 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D86AE3852797B4F8008CBC77 /* zh-Hans */,
+				D86AE3872797B54A008CBC77 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		D8E9EB9B27A1A8880059F6E9 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8E9EB9A27A1A8880059F6E9 /* en */,
+				D8E9EB9C27A1A88B0059F6E9 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D8E9EC1527A2EB520059F6E9 /* PurchaseNotice.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8E9EC1427A2EB520059F6E9 /* Base */,
+				D8E9EC1627A2EB540059F6E9 /* en */,
+				D8E9EC1727A2EB570059F6E9 /* zh-Hans */,
+			);
+			name = PurchaseNotice.html;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -625,6 +712,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -686,6 +774,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -743,8 +832,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0;
+				CODE_SIGN_ENTITLEMENTS = PSkbsPicSpace/PSkbsPicSpace.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.0.0.1;
 				DEVELOPMENT_TEAM = 53ADUL6525;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PSkbsPicSpace/Info.plist;
@@ -754,8 +845,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.superegg.okeydokey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.picpli.paliide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = picpli_develop;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -767,8 +859,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.0;
+				CODE_SIGN_ENTITLEMENTS = PSkbsPicSpace/PSkbsPicSpaceRelease.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.0.0.1;
 				DEVELOPMENT_TEAM = 53ADUL6525;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = PSkbsPicSpace/Info.plist;
@@ -778,8 +872,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.superegg.okeydokey;
+				PRODUCT_BUNDLE_IDENTIFIER = com.picpli.paliide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = picpli_dis;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
