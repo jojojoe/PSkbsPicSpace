@@ -155,9 +155,6 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         canvasV.layer.shadowRadius = 6
         canvasV.layer.shadowOpacity = 0.8
         
-        
-        
-        
         //
         let bottomBarHeight: CGFloat = 130
         let bottomBar = UIView()
@@ -379,6 +376,7 @@ extension PSkProfileMakerVC {
     
     @objc func backBtnClick(sender: UIButton) {
         PSkProfileManager.default.clearPhotosListData()
+        
         if self.navigationController != nil {
             self.navigationController?.popViewController()
         } else {
@@ -471,7 +469,45 @@ extension PSkProfileMakerVC {
 }
 
 extension PSkProfileMakerVC {
+    func showSubPopupView() {
+        let popupV = PSPopupStoreView()
+        view.addSubview(popupV)
+        popupV.snp.makeConstraints {
+            $0.left.top.right.bottom.equalToSuperview()
+        }
+        popupV.cancelBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                for item_m in PSkProfileManager.default.userPhotosItem {
+                    let index = PSkProfileManager.default.userPhotosItem.firstIndex(of: item_m)
+                    PSkProfileManager.default.userPhotosItem.removeAll(item_m)
+                    //
+                    let imgV = self.touchMoveCanvasV.subViewList[Int(index ?? 0)]
+                    imgV.removeFromSuperview()
+                    self.touchMoveCanvasV.subViewList.removeAll(imgV)
+                }
+                
+                PSkProfileManager.default.clearPhotosListData()
+                popupV.removeFromSuperview()
+            }
+        }
+        popupV.buySuccessBlock = {
+            [weak self] in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async {
+                popupV.removeFromSuperview()
+            }
+        }
+    }
+}
+
+extension PSkProfileMakerVC {
+    
     func addNewPhotos(img: UIImage) {
+        
+       
+        
         
         HUD.show()
         DispatchQueue.global().async {
@@ -492,6 +528,11 @@ extension PSkProfileMakerVC {
             
             DispatchQueue.main.async {
                 HUD.hide()
+                
+                if !PurchaseManager.share.inSubscription {
+                    self.showSubPopupView()
+                }
+                
                 self.photoBar.collection.reloadData()
                 
                 //

@@ -403,8 +403,8 @@ extension PSkPhotoSlideVC {
             alert.addAction(okButton)
             self.present(alert, animated: true, completion: nil)
         }
-        
     }
+    
     func albumPermissionsAlet() {
         let alert = UIAlertController(title: "Ooops!".localized(), message: "You have declined access to photos, please active it in Settings>Privacy>Photos.".localized(), preferredStyle: .alert)
         let okButton = UIAlertAction(title: "OK".localized(), style: .default) { [weak self] (actioin) in

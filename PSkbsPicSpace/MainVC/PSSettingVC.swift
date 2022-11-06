@@ -518,12 +518,12 @@ class PSSettingVipCard: UIButton, SubscriptionBaseProtocol {
         nowTryLabel.fontName(14, "Montserrat-Bold")
             .color(UIColor(hexString: "#BAA867")!)
             .backgroundColor(UIColor.white)
-            .text("Try Now".localized())
+            .text("Subscribe now".localized())
             .textAlignment(.center)
             .adhere(toSuperview: self)
         nowTryLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-28)
+            $0.bottom.equalToSuperview().offset(-32)
             $0.width.equalTo(130)
             $0.height.equalTo(32)
         }
@@ -561,21 +561,20 @@ class PSSettingVipCard: UIButton, SubscriptionBaseProtocol {
         
         
         //
-        let free3DayLabel = UILabel()
-        free3DayLabel
-            .fontName(12, "Montserrat-Regular")
-            .textAlignment(.center)
-            .text("3-day Free Trial".localized())
-            .color(UIColor.white)
-            .adjustsFontSizeToFitWidth()
-            .adhere(toSuperview: self)
-        free3DayLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(nowTryLabel.snp.top).offset(-5)
-            $0.width.height.greaterThanOrEqualTo(20)
-        }
+//        let free3DayLabel = UILabel()
+//        free3DayLabel
+//            .fontName(12, "Montserrat-Regular")
+//            .textAlignment(.center)
+//            .text("3-day Free Trial".localized())
+//            .color(UIColor.white)
+//            .adjustsFontSizeToFitWidth()
+//            .adhere(toSuperview: self)
+//        free3DayLabel.snp.makeConstraints {
+//            $0.centerX.equalToSuperview()
+//            $0.bottom.equalTo(nowTryLabel.snp.top).offset(-5)
+//            $0.width.height.greaterThanOrEqualTo(20)
+//        }
         
-       
         //
         let cancelLabel = UILabel()
         cancelLabel

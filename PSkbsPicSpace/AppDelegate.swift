@@ -11,6 +11,22 @@ import SwifterSwift
 import AppTrackingTransparency
 
 
+/*
+ 
+ 图像抠图：1607282610
+ 需求修改
+ 设计：宣传图和IOCN需修改，参考APP
+ https://apps.apple.com/us/app/id1422471180
+ ASO：主标题：Cutout cam—Photo Editor副标题：Vintage Film & Polaroid
+ 产品内修改【订阅逻辑】：
+ 抠图功能：不要给用户显示机会，导入图片后做一个3～5秒的假时间缓冲，然后弹订阅；
+ 拍立得功能：所有模版和文字输入功能圈免费使用，等用户保存时弹订阅，如果用户没有点订阅，第二次进来时，不给编辑机会，直接弹订阅；
+ 拼图功能：所有模版免费，用户点击保存时弹订阅，如果用户没有点订阅，第二次进来时，不给编辑机会，直接弹订阅；
+
+ 根据一个月定决价格判断是否是在审核期 判断货币符号是否是美国区的货币符号 然后判断现在的价格是否是1.99 如果是1.99 那就是审核状态 如果不是1.99就是非审核状态
+ */
+
+
 public var flyerDevKey: String = ""
 public var flyerAppID: String = ""
 

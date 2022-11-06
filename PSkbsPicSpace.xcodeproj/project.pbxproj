@@ -25,6 +25,7 @@
 		D86AE3842797B4F8008CBC77 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D86AE3862797B4F8008CBC77 /* Localizable.strings */; };
 		D86AE3892797F8AF008CBC77 /* PSkWebLinkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */; };
 		D86AE38B2799138C008CBC77 /* PSkVipAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */; };
+		D89D056129169F0D009A74BD /* PSPopupStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89D056029169F0D009A74BD /* PSPopupStoreView.swift */; };
 		D8E1A111275CE08D00AE43BE /* lut_mangu.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A108275CE08C00AE43BE /* lut_mangu.png */; };
 		D8E1A112275CE08D00AE43BE /* lut10.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A109275CE08C00AE43BE /* lut10.png */; };
 		D8E1A113275CE08D00AE43BE /* lut_mianhuatang.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E1A10A275CE08C00AE43BE /* lut_mianhuatang.png */; };
@@ -121,6 +122,7 @@
 		D86AE3872797B54A008CBC77 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkWebLinkVC.swift; sourceTree = "<group>"; };
 		D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSkVipAlertView.swift; sourceTree = "<group>"; };
+		D89D056029169F0D009A74BD /* PSPopupStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PSPopupStoreView.swift; sourceTree = "<group>"; };
 		D8E1A108275CE08C00AE43BE /* lut_mangu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_mangu.png; sourceTree = "<group>"; };
 		D8E1A109275CE08C00AE43BE /* lut10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut10.png; sourceTree = "<group>"; };
 		D8E1A10A275CE08C00AE43BE /* lut_mianhuatang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lut_mianhuatang.png; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				EB369DAD27633D7E00216A2B /* PSSettingVC.swift */,
 				D86AE3882797F8AF008CBC77 /* PSkWebLinkVC.swift */,
 				D86AE38A2799138C008CBC77 /* PSkVipAlertView.swift */,
+				D89D056029169F0D009A74BD /* PSPopupStoreView.swift */,
 				D8E9EC1527A2EB520059F6E9 /* PurchaseNotice.html */,
 				D86AE3862797B4F8008CBC77 /* Localizable.strings */,
 				D8E9EB9B27A1A8880059F6E9 /* InfoPlist.strings */,
@@ -600,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB945310273271070000F01A /* PSkToolExtension.swift in Sources */,
+				D89D056129169F0D009A74BD /* PSPopupStoreView.swift in Sources */,
 				EB8EE7D82735100B0021549B /* CoreML+Combine.swift in Sources */,
 				EB8EE7D32735100B0021549B /* CGImagePropertyOrientation.swift in Sources */,
 				EB8EE7E3273510EB0021549B /* UIImage+Segmentation.swift in Sources */,

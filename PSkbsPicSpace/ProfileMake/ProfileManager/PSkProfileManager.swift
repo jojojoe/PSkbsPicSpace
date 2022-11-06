@@ -89,7 +89,8 @@ class PSkProfileManager: NSObject {
     }
     
     func clearPhotosListData() {
-        PSkProfileManager.default.photoItemList = []
+        PSkProfileManager.default.userPhotosItem = []
+        PSkProfileManager.default.processUserPhotosItemList()
     }
     
     func processRemoveImageBg(originImg: UIImage) -> UIImage {

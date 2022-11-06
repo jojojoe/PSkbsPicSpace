@@ -25,11 +25,7 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "A456EE70",
-          "introductoryOffer" : {
-            "internalID" : "99AFA253",
-            "paymentMode" : "free",
-            "subscriptionPeriod" : "P3D"
-          },
+          "introductoryOffer" : null,
           "localizations" : [
             {
               "description" : "",
@@ -37,7 +33,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.picpli.pailide.month1",
+          "productID" : "com.picpli.pailide.month",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly VIP",
           "subscriptionGroupID" : "B16989B1",
