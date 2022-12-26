@@ -181,11 +181,11 @@ extension PSMainVC {
     }
     
     @objc func magicCamBtnClick(sender: UIButton) {
-//        let vc = PSkMagicCamVC()
-//        self.navigationController?.pushViewController(vc, animated: true)
-        
-        let vc = PSkMagicCamEditVC(origImg: UIImage(named: "profile3.jpg")!)
+        let vc = PSkMagicCamVC()
         self.navigationController?.pushViewController(vc, animated: true)
+        
+//        let vc = PSkMagicCamEditVC(origImg: UIImage(named: "profile3.jpg")!)
+//        self.navigationController?.pushViewController(vc, animated: true)
         
     }
     
