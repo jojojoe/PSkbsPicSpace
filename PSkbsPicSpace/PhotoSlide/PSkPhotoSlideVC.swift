@@ -31,6 +31,8 @@ class PSkPhotoSlideVC: UIViewController {
     let vipAlertView = PSkVipAlertView()
     
     
+    
+    
     init(originalImg: UIImage) {
         self.originalImg = originalImg
         super.init(nibName: nil, bundle: nil)
@@ -49,6 +51,13 @@ class PSkPhotoSlideVC: UIViewController {
         setupCollection()
         setupVipAlertView()
         
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            if !PurchaseManager.share.isFirstLaunch {
+                if !PurchaseManager.share.inSubscription {
+                    self.showSubscribeView()
+                }
+            }
+        }
     }
     
     
@@ -190,16 +199,17 @@ extension PSkPhotoSlideVC: UICollectionViewDataSource {
             cell.setupSelecStatus(isSele: false)
         }
         
-        if item.slideType == .slider1_3 {
-            cell.vipImgV.isHidden = true
-        } else {
-            if PurchaseManager.share.inSubscription {
-                cell.vipImgV.isHidden = true
-            } else {
-                cell.vipImgV.isHidden = false
-            }
-            
-        }
+        cell.vipImgV.isHidden = true
+        
+//        if item.slideType == .slider1_3 {
+//            cell.vipImgV.isHidden = true
+//        } else {
+//            if PurchaseManager.share.inSubscription {
+//                cell.vipImgV.isHidden = true
+//            } else {
+//                cell.vipImgV.isHidden = false
+//            }
+//        }
         
         return cell
     }
@@ -262,16 +272,27 @@ extension PSkPhotoSlideVC {
     
     @objc func saveBtnClick(sender: UIButton) {
         if let imgs = slideView?.processSlideImages(), let fullImg = slideView?.processFullImage() {
-            if currentSlideItem.slideType == .slider1_3 {
+//            if currentSlideItem.slideType == .slider1_3 {
+//                showSavePopupView(images: imgs, fullImg: fullImg)
+//            } else {
+//                if PurchaseManager.share.inSubscription {
+//                    showSavePopupView(images: imgs, fullImg: fullImg)
+//                } else {
+//                    showSubscribeView()
+//                }
+//            }
+            
+            if PurchaseManager.share.isFirstLaunch && !PurchaseManager.share.hasEnterSlide {
+                PurchaseManager.share.hasEnterSlide = true
+                showSavePopupView(images: imgs, fullImg: fullImg)
+                return
+            }
+            if PurchaseManager.share.inSubscription {
                 showSavePopupView(images: imgs, fullImg: fullImg)
             } else {
-                if PurchaseManager.share.inSubscription {
-                    showSavePopupView(images: imgs, fullImg: fullImg)
-                } else {
-                    showSubscribeView()
-                }
+                showSubscribeView()
             }
-            
+
             
         }
         

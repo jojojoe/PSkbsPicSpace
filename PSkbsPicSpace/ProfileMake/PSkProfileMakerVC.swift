@@ -76,14 +76,25 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
         let topOffset: CGFloat = (canvasheight - fineH) / 2
         
         canvasV.frame = CGRect(x: canvasLeft, y: topOffset, width: fineW, height: fineH)
-         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-            [weak self] in
-            guard let `self` = self else {return}
-            self.viewDidLayoutSubviewsOnce.run({
-                self.checkAlbumAuthorization()
-            })
-        }
+        self.viewDidLayoutSubviewsOnce.run({
+            
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                [weak self] in
+                guard let `self` = self else {return}
+                if PurchaseManager.share.isFirstLaunch {
+                    self.showAlert(title: "Open the album".localized(), message: "Please choice a photo with a portrait".localized(), buttonTitles: ["Cancel".localized(), "OK".localized()], highlightedButtonIndex: 1) {[weak self] btn in
+                        guard let `self` = self else {return}
+                        if btn == 1 {
+                            DispatchQueue.main.async {
+                                self.checkAlbumAuthorization()
+                            }
+                        }
+                    }
+                } else {
+                    self.checkAlbumAuthorization()
+                }
+            }
+        })
     }
    
     
@@ -282,7 +293,6 @@ class PSkProfileMakerVC: UIViewController, UINavigationControllerDelegate {
     func setupTouchMoveCanvasV() {
         
         touchMoveCanvasV
-            
             .backgroundColor(.white)
             .adhere(toSuperview: canvasV)
         touchMoveCanvasV.snp.makeConstraints {
@@ -386,7 +396,7 @@ extension PSkProfileMakerVC {
     
     @objc func saveBtnClick(sender: UIButton) {
         
-        if PSkProfileManager.default.photoItemList.count >= 4 {
+        if PSkProfileManager.default.photoItemList.count >= 1 {
             if PurchaseManager.share.inSubscription {
                 processBigImg()
             } else {
@@ -430,7 +440,7 @@ extension PSkProfileMakerVC {
         }
         
     }
-
+    
     func showSubscribeView() {
         // show coin alert
         UIView.animate(withDuration: 0.35) {
@@ -490,6 +500,7 @@ extension PSkProfileMakerVC {
                 
                 PSkProfileManager.default.clearPhotosListData()
                 popupV.removeFromSuperview()
+                self.photoBar.collection.reloadData()
             }
         }
         popupV.buySuccessBlock = {
@@ -505,9 +516,6 @@ extension PSkProfileMakerVC {
 extension PSkProfileMakerVC {
     
     func addNewPhotos(img: UIImage) {
-        
-       
-        
         
         HUD.show()
         DispatchQueue.global().async {

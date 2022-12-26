@@ -68,15 +68,17 @@ extension PSkMagicCamBorderBar: UICollectionViewDataSource {
             cell.selectV.isHidden = true
         }
         
-        if indexPath.item <= 1 {
-            cell.vipImgV.isHidden = true
-        } else {
-            if PurchaseManager.share.inSubscription {
-                cell.vipImgV.isHidden = true
-            } else {
-                cell.vipImgV.isHidden = false
-            }
-        }
+        cell.vipImgV.isHidden = true
+        
+//        if indexPath.item <= 1 {
+//            cell.vipImgV.isHidden = true
+//        } else {
+//            if PurchaseManager.share.inSubscription {
+//                cell.vipImgV.isHidden = true
+//            } else {
+//                cell.vipImgV.isHidden = false
+//            }
+//        }
         
         
         return cell

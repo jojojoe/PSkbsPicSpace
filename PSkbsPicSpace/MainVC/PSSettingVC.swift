@@ -549,7 +549,7 @@ class PSSettingVipCard: UIButton, SubscriptionBaseProtocol {
         priceLabel
             .fontName(16, "Montserrat-Medium")
             .textAlignment(.center)
-            .text("$2.99/\("Month".localized())")
+            .text("$9.99/\("Month".localized())")
             .color(UIColor.white)
             .adjustsFontSizeToFitWidth()
             .adhere(toSuperview: self)

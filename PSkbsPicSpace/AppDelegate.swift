@@ -52,10 +52,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func prepareInit() {
         // init af
-        initAfLib()
+//        initAfLib()
+        //
+        PurchaseManager.share.checkFirstInitLaunch()
         // IAP
         PurchaseManager.share.setUp()
-
     }
 
     @objc func applicDidBecomeActiveNotifi(_ notifi: Notification) {

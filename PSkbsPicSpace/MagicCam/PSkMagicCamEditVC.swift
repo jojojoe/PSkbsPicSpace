@@ -52,6 +52,14 @@ class PSkMagicCamEditVC: UIViewController {
         setupVipAlertView()
         
         updateSignatureVipStatus()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            if !PurchaseManager.share.isFirstLaunch {
+                if !PurchaseManager.share.inSubscription {
+                    self.showSubscribeView()
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,11 +96,11 @@ class PSkMagicCamEditVC: UIViewController {
     }
     
     func updateSignatureVipStatus() {
-        if PurchaseManager.share.inSubscription {
-            sigVipImgV.isHidden = true
-        } else {
-            sigVipImgV.isHidden = false
-        }
+//        if PurchaseManager.share.inSubscription {
+//            sigVipImgV.isHidden = true
+//        } else {
+//            sigVipImgV.isHidden = false
+//        }
         borderBar.collection.reloadData()
     }
     
@@ -205,7 +213,7 @@ class PSkMagicCamEditVC: UIViewController {
             $0.width.equalTo(37/2)
         }
         
-        sigVipImgV.isHidden = false
+        sigVipImgV.isHidden = true
         
         //
         contentBgV.snp.makeConstraints {
@@ -526,50 +534,68 @@ extension PSkMagicCamEditVC {
 extension PSkMagicCamEditVC {
     
     @objc func saveAlbumBtnClick(sender: UIButton) {
-        //
-        var isVip = false
-        
-        if isVipSignature == true {
-            isVip = true
-        } else if borderBar.isVipBorder == true {
-            isVip = true
-        }
-        
-        if isVip {
-            if PurchaseManager.share.inSubscription {
-                let saveImg = processImg()
-                saveImgsToAlbum(imgs: [saveImg])
-            } else {
-                showSubscribeView()
-            }
-        } else {
+       
+        if PurchaseManager.share.inSubscription {
             let saveImg = processImg()
             saveImgsToAlbum(imgs: [saveImg])
+        } else {
+            showSubscribeView()
         }
+        
+        //
+//        var isVip = false
+//
+//        if isVipSignature == true {
+//            isVip = true
+//        } else if borderBar.isVipBorder == true {
+//            isVip = true
+//        }
+        
+//        if isVip {
+//            if PurchaseManager.share.inSubscription {
+//                let saveImg = processImg()
+//                saveImgsToAlbum(imgs: [saveImg])
+//            } else {
+//                showSubscribeView()
+//            }
+//        } else {
+//            let saveImg = processImg()
+//            saveImgsToAlbum(imgs: [saveImg])
+//        }
         
     }
     
     @objc func shareBtnClick(sender: UIButton) {
+        if PurchaseManager.share.isFirstLaunch && !PurchaseManager.share.hasEnterCamera {
+            PurchaseManager.share.hasEnterCamera = true
+            shareAction()
+            return
+        }
+        if PurchaseManager.share.inSubscription {
+            shareAction()
+        } else {
+            showSubscribeView()
+        }
         
         
         //
-        var isVip = false
-        
-        if isVipSignature == true {
-            isVip = true
-        } else if borderBar.isVipBorder == true {
-            isVip = true
-        }
-        
-        if isVip {
-            if PurchaseManager.share.inSubscription {
-                shareAction()
-            } else {
-                showSubscribeView()
-            }
-        } else {
-            shareAction()
-        }
+//        var isVip = false
+//
+//        if isVipSignature == true {
+//            isVip = true
+//        } else if borderBar.isVipBorder == true {
+//            isVip = true
+//        }
+//
+//        if isVip {
+//            if PurchaseManager.share.inSubscription {
+//                shareAction()
+//            } else {
+//                showSubscribeView()
+//            }
+//        } else {
+//            shareAction()
+//        }
     }
     
     @objc func backBtnClick(sender: UIButton) {

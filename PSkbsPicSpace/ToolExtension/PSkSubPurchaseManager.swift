@@ -89,6 +89,11 @@ class PurchaseManager {
     
     var purchaseFailBlock: (_ error: String)->() = {_ in}
     
+    var isFirstLaunch = true
+    var hasEnterSlide = false
+    var hasEnterCamera = false
+
+    
     func setUp() {
         //
         SwiftyStoreKit.completeTransactions { purchases in
@@ -341,6 +346,16 @@ class PurchaseManager {
         case .expired, .notPurchased:
             return false
         }
+    }
+    
+    func checkFirstInitLaunch() {
+        if let _ = UserDefaults.standard.string(forKey: "isFirstInitLaunch1") {
+            isFirstLaunch = false
+        } else {
+            isFirstLaunch = true
+            UserDefaults.standard.set("is", forKey: "isFirstInitLaunch1")
+        }
+        
     }
     
 }
